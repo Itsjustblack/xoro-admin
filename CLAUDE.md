@@ -27,6 +27,16 @@ This project uses pnpm as the package manager (see `pnpm-workspace.yaml` and `pn
 - **Tables**: TanStack Table v8 with drag-and-drop sorting via @dnd-kit
 - **Validation**: Zod v4
 
+### API Implementation
+
+When implementing APIs, follow the conventions in [API-GUIDELINES.md](./API-GUIDELINES.md). Key patterns include:
+
+- API files live under `lib/api/v1/`, organized by resource
+- `queries.ts` for GET operations, `actions.ts` for mutations
+- Query keys defined in `lib/api/v1/query-key-factory.ts`
+- Types centralized in `lib/api/v1/types.ts`
+- Use the pre-configured axios client from `@/lib/api/v1/axios`
+
 ## File Placement Guidelines
 
 ### `lib/` - Shared Utilities and Data
