@@ -64,6 +64,7 @@
   --color-text-light: var(--color-text-light);
 
   --color-brand-primary: var(--color-brand-primary);
+  --color-brand-primary-dark: var(--color-brand-primary-dark);
   --color-surface-dark: var(--color-surface-dark);
 
   --color-legal: var(--color-legal);
@@ -134,6 +135,7 @@
   --color-text-light: #c7d2fe;
 
   --color-brand-primary: #2d1087;
+  --color-brand-primary-dark: #2e1089;
   --color-surface-dark: #0f172a;
   --color-legal: #80ab7d;
   --color-success-1: #00a63e;
@@ -187,6 +189,20 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
+
+  input[type="password"]::-webkit-credentials-auto-fill-button,
+  input[type="password"]::-webkit-contacts-auto-fill-button,
+  input[type="password"]::-webkit-textfield-decoration-container {
+    display: none;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   body {
     @apply bg-background text-foreground font-primary;
   }

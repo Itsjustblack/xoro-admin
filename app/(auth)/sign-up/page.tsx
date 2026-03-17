@@ -5,7 +5,7 @@ import { XoroPayLogo } from "@/components/icons";
 export default function SignUpPage() {
   return (
     <div className="h-screen grid grid-cols-2 w-full">
-      <div className="bg-surface-1 h-full flex flex-col justify-center px-14 py-10 overflow-y-auto">
+      <div className="bg-surface-1 h-full flex flex-col px-14 py-23">
         <div className="max-w-md w-full mx-auto">
           <XoroPayLogo />
           <div className="mt-10">

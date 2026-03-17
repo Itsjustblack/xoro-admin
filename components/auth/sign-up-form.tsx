@@ -1,12 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -15,14 +8,21 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Input } from "@/components/ui/input";
 import { signUpSchema, type SignUpFormValues } from "@/lib/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function SignUpForm() {
   const router = useRouter();
@@ -223,7 +223,7 @@ export function SignUpForm() {
                 >
                   <Checkbox
                     id="signup-terms"
-                    className="rounded-full data-checked:bg-brand-primary data-checked:border-brand-primary"
+                    className="rounded-full data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary *:data-[slot=checkbox-indicator]:text-white!"
                     checked={field.value}
                     onCheckedChange={(checked) =>
                       field.onChange(checked === true)

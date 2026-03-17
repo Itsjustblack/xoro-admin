@@ -1,11 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, LockKeyhole } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -14,14 +8,20 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Input } from "@/components/ui/input";
 import { type LoginFormValues, loginSchema } from "@/lib/schemas/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, LockKeyhole } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -93,7 +93,7 @@ export function LoginForm() {
                   </FieldLabel>
                   <Link
                     href="#"
-                    className="text-sm text-brand-primary font-medium hover:underline"
+                    className="text-sm text-brand-primary-dark font-medium hover:underline"
                   >
                     Forgot password?
                   </Link>
@@ -120,9 +120,9 @@ export function LoginForm() {
                       }
                     >
                       {showPassword ? (
-                        <EyeOff className="size-7" />
+                        <EyeOff className="size-5" />
                       ) : (
-                        <Eye className="size-7" />
+                        <Eye className="size-5" />
                       )}
                     </InputGroupButton>
                   </InputGroupAddon>
@@ -141,7 +141,7 @@ export function LoginForm() {
               <Field orientation="horizontal" className="items-center gap-2.5">
                 <Checkbox
                   id="login-remember"
-                  className="rounded-sm data-checked:bg-brand-primary data-checked:border-brand-primary"
+                  className="rounded-sm data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary *:data-[slot=checkbox-indicator]:text-white!"
                   checked={field.value}
                   onCheckedChange={(checked) =>
                     field.onChange(checked === true)
