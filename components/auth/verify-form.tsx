@@ -162,11 +162,17 @@ export function VerifyForm({ email }: VerifyFormProps) {
       </p> */}
 
       <div className="mt-18 flex items-center justify-center gap-6 text-sm font-primary text-text-muted">
-        <Link href="#" className="inline-flex items-center gap-1.5 hover:text-brand-primary">
+        <Link
+          href="#"
+          className="inline-flex items-center gap-1.5 hover:text-brand-primary"
+        >
           <CircleHelp className="size-4" />
           Help Center
         </Link>
-        <Link href="#" className="inline-flex items-center gap-1.5 hover:text-brand-primary">
+        <Link
+          href="#"
+          className="inline-flex items-center gap-1.5 hover:text-brand-primary"
+        >
           <Shield className="size-4" />
           Security Policy
         </Link>
