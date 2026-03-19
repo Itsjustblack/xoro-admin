@@ -1,224 +1,250 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Download } from "lucide-react";
 import { useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "../ui/card";
-import {
-	ChartConfig,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from "../ui/chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  type TooltipProps,
+} from "recharts";
+import { Button } from "../ui/button";
 
-const chartData = [
-	{ date: "2024-04-01", desktop: 222, mobile: 150 },
-	{ date: "2024-04-02", desktop: 97, mobile: 180 },
-	{ date: "2024-04-03", desktop: 167, mobile: 120 },
-	{ date: "2024-04-04", desktop: 242, mobile: 260 },
-	{ date: "2024-04-05", desktop: 373, mobile: 290 },
-	{ date: "2024-04-06", desktop: 301, mobile: 340 },
-	{ date: "2024-04-07", desktop: 245, mobile: 180 },
-	{ date: "2024-04-08", desktop: 409, mobile: 320 },
-	{ date: "2024-04-09", desktop: 59, mobile: 110 },
-	{ date: "2024-04-10", desktop: 261, mobile: 190 },
-	{ date: "2024-04-11", desktop: 327, mobile: 350 },
-	{ date: "2024-04-12", desktop: 292, mobile: 210 },
-	{ date: "2024-04-13", desktop: 342, mobile: 380 },
-	{ date: "2024-04-14", desktop: 137, mobile: 220 },
-	{ date: "2024-04-15", desktop: 120, mobile: 170 },
-];
+const revenueData = {
+  "this-year": [
+    { month: "JAN", grossSales: 0, netProfit: 0 },
+    { month: "FEB", grossSales: 0, netProfit: 0 },
+    { month: "MAR", grossSales: 520000, netProfit: 150000 },
+    { month: "APR", grossSales: 0, netProfit: 0 },
+    { month: "MAY", grossSales: 0, netProfit: 0 },
+    { month: "JUN", grossSales: 0, netProfit: 0 },
+    { month: "JUL", grossSales: 0, netProfit: 0 },
+    { month: "AUG", grossSales: 0, netProfit: 0 },
+    { month: "SEP", grossSales: 0, netProfit: 0 },
+    { month: "OCT", grossSales: 0, netProfit: 0 },
+    { month: "NOV", grossSales: 0, netProfit: 0 },
+    { month: "DEC", grossSales: 380000, netProfit: 160000 },
+  ],
+  "last-year": [
+    { month: "JAN", grossSales: 0, netProfit: 0 },
+    { month: "FEB", grossSales: 0, netProfit: 0 },
+    { month: "MAR", grossSales: 180000, netProfit: 120000 },
+    { month: "APR", grossSales: 0, netProfit: 0 },
+    { month: "MAY", grossSales: 0, netProfit: 0 },
+    { month: "JUN", grossSales: 0, netProfit: 0 },
+    { month: "JUL", grossSales: 0, netProfit: 0 },
+    { month: "AUG", grossSales: 0, netProfit: 0 },
+    { month: "SEP", grossSales: 0, netProfit: 0 },
+    { month: "OCT", grossSales: 0, netProfit: 0 },
+    { month: "NOV", grossSales: 0, netProfit: 0 },
+    { month: "DEC", grossSales: 310000, netProfit: 140000 },
+  ],
+};
 
-const chartConfig = {
-	desktop: {
-		label: "Desktop",
-		color: "var(--primary)",
-	},
-	mobile: {
-		label: "Mobile",
-		color: "var(--primary)",
-	},
-} satisfies ChartConfig;
+const formatAxisCurrency = (value: number) => {
+  if (value >= 1000000) {
+    return `₦${value / 1000000}M`;
+  }
 
-export function ChartAreaInteractive() {
-	const [timeRange, setTimeRange] = useState("90d");
+  if (value === 0) {
+    return "₦0";
+  }
 
-	const filteredData = chartData.filter((item) => {
-		const date = new Date(item.date);
-		const referenceDate = new Date("2024-04-15");
-		let daysToSubtract = 90;
-		if (timeRange === "30d") {
-			daysToSubtract = 30;
-		} else if (timeRange === "7d") {
-			daysToSubtract = 7;
-		}
-		const startDate = new Date(referenceDate);
-		startDate.setDate(startDate.getDate() - daysToSubtract);
-		return date >= startDate;
-	});
+  return `₦${value / 1000}k`;
+};
 
-	return (
-		<Card className="@container/card">
-			<CardHeader>
-				<CardTitle>Total Visitors</CardTitle>
-				<CardDescription>
-					<span className="hidden @[540px]/card:block">
-						Total for the last 3 months
-					</span>
-					<span className="@[540px]/card:hidden">Last 3 months</span>
-				</CardDescription>
-				<CardAction>
-					<ToggleGroup
-						type="multiple"
-						value={[timeRange]}
-						onValueChange={(value: string[]) => {
-							if (value.length > 0) {
-								setTimeRange(value[0]);
-							}
-						}}
-						variant="outline"
-						className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
-					>
-						<ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-						<ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-						<ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
-					</ToggleGroup>
-					<Select
-						value={timeRange}
-						onValueChange={(value) => {
-							if (value) {
-								setTimeRange(value);
-							}
-						}}
-					>
-						<SelectTrigger
-							className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
-							size="sm"
-							aria-label="Select a value"
-						>
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent className="rounded-xl">
-							<SelectItem
-								value="90d"
-								className="rounded-lg"
-							>
-								Last 3 months
-							</SelectItem>
-							<SelectItem
-								value="30d"
-								className="rounded-lg"
-							>
-								Last 30 days
-							</SelectItem>
-							<SelectItem
-								value="7d"
-								className="rounded-lg"
-							>
-								Last 7 days
-							</SelectItem>
-						</SelectContent>
-					</Select>
-				</CardAction>
-			</CardHeader>
-			<CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-				<ChartContainer
-					config={chartConfig}
-					className="aspect-auto h-[250px] w-full"
-				>
-					<AreaChart data={filteredData}>
-						<defs>
-							<linearGradient
-								id="fillDesktop"
-								x1="0"
-								y1="0"
-								x2="0"
-								y2="1"
-							>
-								<stop
-									offset="5%"
-									stopColor="var(--color-desktop)"
-									stopOpacity={1.0}
-								/>
-								<stop
-									offset="95%"
-									stopColor="var(--color-desktop)"
-									stopOpacity={0.1}
-								/>
-							</linearGradient>
-							<linearGradient
-								id="fillMobile"
-								x1="0"
-								y1="0"
-								x2="0"
-								y2="1"
-							>
-								<stop
-									offset="5%"
-									stopColor="var(--color-mobile)"
-									stopOpacity={0.8}
-								/>
-								<stop
-									offset="95%"
-									stopColor="var(--color-mobile)"
-									stopOpacity={0.1}
-								/>
-							</linearGradient>
-						</defs>
-						<CartesianGrid vertical={false} />
-						<XAxis
-							dataKey="date"
-							tickLine={false}
-							axisLine={false}
-							tickMargin={8}
-							minTickGap={32}
-							tickFormatter={(value) => {
-								const date = new Date(value);
-								return date.toLocaleDateString("en-US", {
-									month: "short",
-									day: "numeric",
-								});
-							}}
-						/>
-						<ChartTooltip
-							cursor={false}
-							content={
-								<ChartTooltipContent
-									labelFormatter={(value) => {
-										return new Date(value).toLocaleDateString("en-US", {
-											month: "short",
-											day: "numeric",
-										});
-									}}
-									indicator="dot"
-								/>
-							}
-						/>
-						<Area
-							dataKey="mobile"
-							type="natural"
-							fill="url(#fillMobile)"
-							stroke="var(--color-mobile)"
-							stackId="a"
-						/>
-						<Area
-							dataKey="desktop"
-							type="natural"
-							fill="url(#fillDesktop)"
-							stroke="var(--color-desktop)"
-							stackId="a"
-						/>
-					</AreaChart>
-				</ChartContainer>
-			</CardContent>
-		</Card>
-	);
-}
+const formatTooltipCurrency = (value: number) => {
+  return `₦${value.toLocaleString()}`;
+};
+
+const monthFullNames: Record<string, string> = {
+  JAN: "January",
+  FEB: "February",
+  MAR: "March",
+  APR: "April",
+  MAY: "May",
+  JUN: "June",
+  JUL: "July",
+  AUG: "August",
+  SEP: "September",
+  OCT: "October",
+  NOV: "November",
+  DEC: "December",
+};
+
+const RevenueTooltip = ({
+  active,
+  payload,
+  label,
+}: TooltipProps<number, string>) => {
+  if (!active || !payload?.length) {
+    return null;
+  }
+
+  const grossSales =
+    payload.find((item) => item.dataKey === "grossSales")?.value ?? 0;
+  const netProfit =
+    payload.find((item) => item.dataKey === "netProfit")?.value ?? 0;
+
+  const fullMonthName = monthFullNames[label as string] || label;
+
+  return (
+    <div className="min-w-41 rounded-2xl bg-surface-dark px-4 py-3 text-xs text-surface-1 shadow-lg">
+      <p className="mb-2 font-semibold tracking-[0.02em] text-surface-1/90">
+        {fullMonthName}
+      </p>
+      <div className="space-y-1.5 text-surface-1/90">
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-brand-primary" />
+            Gross:
+          </span>
+          <span className="font-semibold">
+            {formatTooltipCurrency(Number(grossSales))}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-legal" />
+            Net:
+          </span>
+          <span className="font-semibold">
+            {formatTooltipCurrency(Number(netProfit))}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const InteractiveChart = () => {
+  const [timeRange, setTimeRange] =
+    useState<keyof typeof revenueData>("this-year");
+
+  return (
+    <Card className="rounded-3xl border border-brand-primary-dark/5 bg-surface-1 p-0 ring-0 shadow-sm">
+      <div className="flex flex-col gap-5 p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-1">
+            <h2 className="text-lg leading-none font-bold text-text-primary">
+              Revenue Analytics
+            </h2>
+            <p className="text-sm text-text-secondary">
+              Gross sales vs net profit performance
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 self-start">
+            <Select
+              value={timeRange}
+              onValueChange={(value) =>
+                setTimeRange(value as keyof typeof revenueData)
+              }
+            >
+              <SelectTrigger className="h-8 rounded-full border-0 bg-surface-5 px-3 text-xs font-semibold text-text-muted-3 shadow-none focus-visible:ring-2">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="this-year">This Year</SelectItem>
+                <SelectItem value="last-year">Last Year</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Button
+              variant="ghost"
+              type="button"
+              aria-label="Download revenue report"
+              className="flex size-10 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-5 hover:text-text-primary focus-visible:outline-none"
+            >
+              <Download className="size-4" strokeWidth={3} />
+            </Button>
+          </div>
+        </div>
+
+        <div className="h-72 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={revenueData[timeRange]}
+              barCategoryGap="70%"
+              barGap={8}
+              margin={{
+                top: 28,
+                right: 10,
+                left: 0,
+                bottom: 8,
+              }}
+            >
+              <CartesianGrid vertical={false} stroke="var(--color-surface-2)" />
+              <XAxis
+                axisLine={false}
+                dataKey="month"
+                tick={{
+                  fill: "var(--color-text-muted)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+                tickLine={false}
+                tickMargin={16}
+              />
+              <YAxis
+                axisLine={{ stroke: "var(--color-surface-2)" }}
+                domain={[0, 1000000]}
+                tick={{
+                  fill: "var(--color-text-muted)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                }}
+                tickFormatter={formatAxisCurrency}
+                tickLine={false}
+                tickMargin={14}
+                ticks={[0, 250000, 500000, 750000, 1000000]}
+                width={58}
+              />
+              <Tooltip
+                content={<RevenueTooltip />}
+                cursor={{ fill: "transparent" }}
+              />
+              <Bar
+                dataKey="grossSales"
+                fill="var(--color-brand-primary)"
+                maxBarSize={12}
+                radius={[6, 6, 0, 0]}
+              />
+              <Bar
+                dataKey="netProfit"
+                fill="var(--color-legal)"
+                maxBarSize={12}
+                radius={[6, 6, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-6 border-t border-surface-2 pt-4 text-xs font-semibold text-text-secondary">
+          <div className="flex items-center gap-2">
+            <span className="size-3 rounded-xs bg-brand-primary" />
+            Gross Sales
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="size-3 rounded-xs bg-legal" />
+            Net Profit
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+export default InteractiveChart;
