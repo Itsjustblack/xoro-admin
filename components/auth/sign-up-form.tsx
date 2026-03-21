@@ -52,12 +52,12 @@ export function SignUpForm() {
   return (
     <>
       <form
-        className="mt-7"
+        className="mt-5"
         onSubmit={form.handleSubmit(onSubmit)}
         noValidate
         id="signup-form"
       >
-        <FieldGroup className="gap-5">
+        <FieldGroup className="gap-3 sm:gap-5">
           <Controller
             name="fullName"
             control={form.control}
@@ -112,7 +112,7 @@ export function SignUpForm() {
             )}
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Controller
               name="password"
               control={form.control}
@@ -131,8 +131,7 @@ export function SignUpForm() {
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       autoComplete="new-password"
-                      aria-invalid={fieldState.invalid}
-                      className="h-12 text-sm text-text-primary placeholder:text-text-muted font-primary"
+                      className="h-full text-sm text-text-primary placeholder:text-text-muted font-primary"
                     />
                     <InputGroupAddon align="inline-end">
                       <InputGroupButton
@@ -178,8 +177,7 @@ export function SignUpForm() {
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••••"
                       autoComplete="new-password"
-                      aria-invalid={fieldState.invalid}
-                      className="h-12 text-sm text-text-primary placeholder:text-text-muted font-primary"
+                      className="h-full text-sm text-text-primary placeholder:text-text-muted font-primary"
                     />
                     <InputGroupAddon align="inline-end">
                       <InputGroupButton
@@ -231,7 +229,7 @@ export function SignUpForm() {
                   />
                   <FieldLabel
                     htmlFor="signup-terms"
-                    className="text-sm text-text-secondary gap-0.5 font-primary font-normal"
+                    className="text-sm text-text-secondary font-primary font-normal block leading-tight"
                   >
                     I agree to the{" "}
                     <Link
@@ -269,7 +267,7 @@ export function SignUpForm() {
         Already have an account?{" "}
         <Link
           href="/login"
-          className="text-brand-primary font-semibold hover:underline"
+          className="text-brand-primary font-semibold hover-underline"
         >
           Log in
         </Link>

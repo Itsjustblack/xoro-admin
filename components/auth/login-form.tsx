@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/input-group";
 import { type LoginFormValues, loginSchema } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, LockKeyhole } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -51,7 +51,7 @@ export function LoginForm() {
         noValidate
         id="login-form"
       >
-        <FieldGroup className="gap-6">
+        <FieldGroup className="gap-3 sm:gap-4">
           <Controller
             name="email"
             control={form.control}
@@ -93,7 +93,7 @@ export function LoginForm() {
                   </FieldLabel>
                   <Link
                     href="#"
-                    className="text-sm text-brand-primary-dark font-medium hover:underline"
+                    className="text-sm text-brand-primary-dark font-medium hover-underline"
                   >
                     Forgot password?
                   </Link>
@@ -105,8 +105,7 @@ export function LoginForm() {
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     autoComplete="current-password"
-                    aria-invalid={fieldState.invalid}
-                    className="h-12 text-sm  text-text-primary placeholder:text-text-muted font-primary"
+                    className="h-full text-sm text-text-primary placeholder:text-text-muted font-primary"
                   />
                   <InputGroupAddon align="inline-end" className="pr-3">
                     <InputGroupButton
@@ -169,18 +168,11 @@ export function LoginForm() {
         Don&apos;t have an account?{" "}
         <Link
           href="/sign-up"
-          className="text-brand-primary font-bold hover:underline"
+          className="text-brand-primary font-bold hover-underline"
         >
           Create an account
         </Link>
       </p>
-
-      <div className="mt-8 border-t border-surface-3 pt-8 flex items-center justify-center gap-2 text-text-muted">
-        <LockKeyhole className="size-3.5" />
-        <span className="text-xs tracking-widest uppercase font-medium">
-          Secure SSL Encrypted Connection
-        </span>
-      </div>
     </>
   );
 }

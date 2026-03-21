@@ -105,15 +105,14 @@ export function VerifyForm({ email }: VerifyFormProps) {
                   value={field.value}
                   onChange={field.onChange}
                   aria-invalid={fieldState.invalid}
-                  containerClassName="justify-start"
-                  className="gap-2"
+                  containerClassName="w-full"
                 >
-                  <InputOTPGroup className="gap-[22.4px]">
+                  <InputOTPGroup className="w-full justify-between sm:justify-start gap-2 sm:gap-[22.4px]">
                     {[...Array(6)].map((_, index) => (
                       <InputOTPSlot
                         key={index}
                         index={index}
-                        className="h-16 w-14 rounded-xl! bg-surface-1 border-2! text-text-primary border-surface-6 text-base"
+                        className="flex-1 h-12 sm:flex-none sm:h-16 sm:w-14 rounded-xl! bg-surface-1 border-2! text-text-primary border-surface-6 text-base"
                       />
                     ))}
                   </InputOTPGroup>
@@ -134,12 +133,12 @@ export function VerifyForm({ email }: VerifyFormProps) {
         </FieldGroup>
       </form>
 
-      <div className="mt-8 flex items-center justify-center gap-2 text-sm text-text-secondary font-primary">
-        <Timer className="size-4" />
-        <span>{countdownLabel}</span>
-      </div>
+      <div className="mt-8 flex items-center justify-center gap-4 text-sm font-primary">
+        <div className="flex items-center gap-2 text-text-secondary">
+          <Timer className="size-4" />
+          <span>{countdownLabel}</span>
+        </div>
 
-      <div className="mt-3 text-center text-sm font-primary">
         <Button
           type="button"
           variant="link"

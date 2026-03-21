@@ -12,11 +12,11 @@ export default async function VerifyPage({ searchParams }: VerifyPageProps) {
 
   return (
     <div className="h-screen grid grid-cols-1 lg:grid-cols-2 w-full">
-      <div className="bg-surface-4 h-full flex flex-col justify-center px-6 sm:px-14 py-10 overflow-y-auto">
+      <div className="bg-surface-4 h-full flex flex-col justify-center px-4 sm:px-14 py-8 sm:py-10 overflow-y-auto">
         <div className="max-w-md w-full mx-auto">
           <XoroPayLogo />
-          <div className="mt-10">
-            <h1 className="font-secondary font-bold text-4xl text-text-primary leading-tight">
+          <div className="mt-6 sm:mt-10">
+            <h1 className="font-secondary font-bold text-2xl sm:text-4xl text-text-primary leading-tight">
               Verify your account
             </h1>
           </div>
@@ -24,7 +24,7 @@ export default async function VerifyPage({ searchParams }: VerifyPageProps) {
         </div>
       </div>
 
-      <div className="hidden lg:block">
+      <div className="hidden lg:block relative">
         <AuthPanel />
       </div>
     </div>
