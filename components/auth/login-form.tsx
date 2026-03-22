@@ -15,15 +15,20 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { loginUser } from "@/lib/api/v1/auth/actions";
 import { type LoginFormValues, loginSchema } from "@/lib/schemas/auth";
+import { useAuthActions } from "@/store/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export function LoginForm() {
+  const router = useRouter();
+  const { setLoginCredentials } = useAuthActions();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -35,12 +40,16 @@ export function LoginForm() {
     },
   });
 
+  const { mutate: registerUser, isPending } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: () => {
+      router.push("/verify-otp");
+    },
+  });
+
   const onSubmit = async (data: LoginFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    toast("Login submitted", {
-      description: data.email,
-      position: "bottom-right",
-    });
+    setLoginCredentials(data);
+    registerUser(data);
   };
 
   return (
@@ -159,7 +168,7 @@ export function LoginForm() {
           <AuthSubmitButton
             idleText="Sign In"
             loadingText="Logging in..."
-            isLoading={form.formState.isSubmitting}
+            isLoading={isPending}
           />
         </FieldGroup>
       </form>

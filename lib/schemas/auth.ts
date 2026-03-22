@@ -18,8 +18,6 @@ export const loginSchema = z.object({
   remember: z.boolean().optional(),
 });
 
-export type LoginFormValues = z.infer<typeof loginSchema>;
-
 export const signUpSchema = z
   .object({
     fullName: z.string().min(2, "Full name must be at least 2 characters"),
@@ -35,8 +33,6 @@ export const signUpSchema = z
     path: ["confirmPassword"],
   });
 
-export type SignUpFormValues = z.infer<typeof signUpSchema>;
-
 export const verifySchema = z.object({
   otp: z
     .string()
@@ -45,3 +41,5 @@ export const verifySchema = z.object({
 });
 
 export type VerifyFormValues = z.infer<typeof verifySchema>;
+export type LoginFormValues = z.infer<typeof loginSchema>;
+export type SignUpFormValues = z.infer<typeof signUpSchema>;

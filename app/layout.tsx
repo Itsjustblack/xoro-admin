@@ -1,3 +1,4 @@
+import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
 import {
   Inter,
   JetBrains_Mono,
@@ -6,6 +7,7 @@ import {
 } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 
 const inter = Inter({
   variable: "--font-primary",
@@ -29,6 +31,11 @@ const robotoMono = Roboto_Mono({
   weight: ["400", "700"],
 });
 
+export const metadata: Metadata = {
+	title: "XoroPay",
+	description: "Seamless Payments, Zero Downtime.",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,7 +46,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} antialiased`}
       >
-        {children}
+        <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         <Toaster richColors />
       </body>
     </html>

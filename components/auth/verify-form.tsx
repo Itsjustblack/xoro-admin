@@ -1,12 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CircleHelp, Timer } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
@@ -15,7 +8,21 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { verifyLoginOtp, verifySignupOtp } from "@/lib/api/v1/auth/actions";
 import { verifySchema, type VerifyFormValues } from "@/lib/schemas/auth";
+import {
+  useAuthActions,
+  useLoginCredentials,
+  useSignupCredentials,
+} from "@/store/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { CircleHelp, Timer } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Shield } from "../icons";
 
 type VerifyFormProps = {
@@ -31,9 +38,17 @@ function maskEmail(email: string) {
 
 export function VerifyForm({ email }: VerifyFormProps) {
   const router = useRouter();
+  const signupCredentials = useSignupCredentials();
+  const loginCredentials = useLoginCredentials();
+  const { clearCredentials } = useAuthActions();
   const [secondsRemaining, setSecondsRemaining] = useState(60);
 
-  const maskedEmail = useMemo(() => maskEmail(email), [email]);
+  const activeEmail = useMemo(() => {
+    if (email) return email;
+    return loginCredentials?.email ?? signupCredentials?.email ?? "";
+  }, [email, loginCredentials?.email, signupCredentials?.email]);
+
+  const maskedEmail = useMemo(() => maskEmail(activeEmail), [activeEmail]);
   const countdownLabel = useMemo(() => {
     const minutes = Math.floor(secondsRemaining / 60);
     const seconds = secondsRemaining % 60;
@@ -61,20 +76,56 @@ export function VerifyForm({ email }: VerifyFormProps) {
     return () => window.clearInterval(intervalId);
   }, [secondsRemaining]);
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    toast("Account verified", {
-      description: email || "Verification successful",
-      position: "bottom-right",
-    });
-    router.push("/");
+  useEffect(() => {
+    if (!loginCredentials && !signupCredentials) {
+      router.push("/login");
+    }
+  }, [loginCredentials, signupCredentials, router]);
+
+  const { mutate: login, isPending: isLoginPending } = useMutation({
+    mutationFn: verifyLoginOtp,
+    onSuccess: () => {
+      clearCredentials();
+      toast.success("OTP verified successfully");
+      router.push("/");
+    },
+  });
+
+  const { mutate: signUp, isPending: isSignupPending } = useMutation({
+    mutationFn: verifySignupOtp,
+    onSuccess: () => {
+      clearCredentials();
+      toast.success("OTP verified successfully");
+      router.push("/");
+    },
+  });
+
+  const onSubmit = (data: VerifyFormValues) => {
+    if (loginCredentials) {
+      login({
+        ...loginCredentials,
+        otp: data.otp,
+      });
+      return;
+    }
+
+    if (signupCredentials) {
+      signUp({
+        ...signupCredentials,
+        otp: data.otp,
+      });
+      return;
+    }
+
+    toast.error("Missing verification context. Please log in again.");
+    router.push("/login");
   };
 
   const handleResend = () => {
     setSecondsRemaining(60);
     form.reset({ otp: "" });
     toast("Verification code resent", {
-      description: email || "Please check your inbox",
+      description: activeEmail || "Please check your inbox",
       position: "bottom-right",
     });
   };
@@ -82,8 +133,8 @@ export function VerifyForm({ email }: VerifyFormProps) {
   return (
     <>
       <p className="mt-4 text-text-secondary font-primary">
-        {email
-          ? `Enter the 6-digit code sent to ${maskedEmail || email}. Please enter it below to ensure its you`
+        {activeEmail
+          ? `Enter the 6-digit code sent to ${maskedEmail || activeEmail}. Please enter it below to ensure it's you`
           : "Enter the 6-digit code sent to your email address. Please enter it below to ensure its you"}
       </p>
 
@@ -127,7 +178,7 @@ export function VerifyForm({ email }: VerifyFormProps) {
           <AuthSubmitButton
             idleText="Verify account"
             loadingText="Verifying..."
-            isLoading={form.formState.isSubmitting}
+            isLoading={isLoginPending || isSignupPending}
             showArrow={false}
           />
         </FieldGroup>

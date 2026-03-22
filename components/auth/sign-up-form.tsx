@@ -15,17 +15,20 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { signupUser } from "@/lib/api/v1/auth/actions";
 import { signUpSchema, type SignUpFormValues } from "@/lib/schemas/auth";
+import { useAuthActions } from "@/store/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export function SignUpForm() {
   const router = useRouter();
+  const { setSignupCredentials } = useAuthActions();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -40,13 +43,16 @@ export function SignUpForm() {
     },
   });
 
+  const { mutate: registerUser, isPending } = useMutation({
+    mutationFn: signupUser,
+    onSuccess: () => {
+      router.push("/verify-otp");
+    },
+  });
+
   const onSubmit = async (data: SignUpFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    toast("Account setup submitted", {
-      description: data.email,
-      position: "bottom-right",
-    });
-    router.push(`/verify?email=${encodeURIComponent(data.email)}`);
+    registerUser(data);
+    setSignupCredentials(data);
   };
 
   return (
@@ -258,7 +264,7 @@ export function SignUpForm() {
           <AuthSubmitButton
             idleText="Create account"
             loadingText="Creating account..."
-            isLoading={form.formState.isSubmitting}
+            isLoading={isPending}
           />
         </FieldGroup>
       </form>

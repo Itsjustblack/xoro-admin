@@ -1,68 +1,89 @@
+export interface IUser {
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+  is_verified: boolean;
+}
+
+export type LoginCredentials = {
+  email: string;
+  password: string;
+  remember?: boolean;
+};
+
+export type SignupCredentials = {
+  fullName: string;
+  email: string;
+  password: string;
+  terms: boolean;
+};
+
 export interface ChatItem {
-	id: string;
-	name: string;
-	avatar: string;
-	lastMessage: string;
-	timeAway: string;
-	unread: number;
+  id: string;
+  name: string;
+  avatar: string;
+  lastMessage: string;
+  timeAway: string;
+  unread: number;
 }
 
 export interface Message {
-	id: string;
-	content: string;
-	timestamp: string;
-	isAgent: boolean;
+  id: string;
+  content: string;
+  timestamp: string;
+  isAgent: boolean;
 }
 
 export interface CustomerData {
-	id: string;
-	name: string;
-	avatar: string;
-	email: string;
-	phone: string;
-	joinDate: string;
-	totalOrders: number;
-	totalSpent: string;
-	lastPurchase: string;
-	status: "active" | "inactive" | "pending";
+  id: string;
+  name: string;
+  avatar: string;
+  email: string;
+  phone: string;
+  joinDate: string;
+  totalOrders: number;
+  totalSpent: string;
+  lastPurchase: string;
+  status: "active" | "inactive" | "pending";
 }
 
 export interface Product {
-	id: string;
-	name: string;
-	image?: string;
-	price: string;
-	stock: number;
-	category: string;
-	description: string;
-	sku: string;
+  id: string;
+  name: string;
+  image?: string;
+  price: string;
+  stock: number;
+  category: string;
+  description: string;
+  sku: string;
 }
 
 export interface OrderItem {
-	productId: string;
-	productName: string;
-	quantity: number;
-	price: string;
+  productId: string;
+  productName: string;
+  quantity: number;
+  price: string;
 }
 
 export interface Order {
-	id: string;
-	orderNumber: string;
-	customerName: string;
-	customerEmail: string;
-	items: OrderItem[];
-	totalAmount: string;
-	status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
-	paymentStatus: "paid" | "unpaid" | "refunded";
-	orderDate: string;
-	shippingAddress: string;
+  id: string;
+  orderNumber: string;
+  customerName: string;
+  customerEmail: string;
+  items: OrderItem[];
+  totalAmount: string;
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled";
+  paymentStatus: "paid" | "unpaid" | "refunded";
+  orderDate: string;
+  shippingAddress: string;
 }
 
 export interface Notification {
-	id: string;
-	title: string;
-	description: string;
-	timestamp: string;
-	read: boolean;
-	type: "info" | "warning" | "success" | "order";
+  id: string;
+  title: string;
+  description: string;
+  timestamp: string;
+  read: boolean;
+  type: "info" | "warning" | "success" | "order";
 }
