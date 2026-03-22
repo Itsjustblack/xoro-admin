@@ -1,7 +1,6 @@
-import apiClient from "@/lib/axios";
+import apiClient, { handleApiError } from "@/lib/axios";
 import { LoginFormValues, SignUpFormValues } from "@/lib/schemas/auth";
 import { IUser, LoginCredentials, SignupCredentials } from "@/lib/types";
-import axios, { AxiosError } from "axios";
 
 // Define response types
 interface AuthResponse {
@@ -12,14 +11,6 @@ interface AuthResponse {
 interface MessageResponse {
   message: string;
 }
-
-// Helper for consistent error handling
-const handleApiError = (error: unknown): never => {
-  if (axios.isAxiosError(error)) {
-    throw error;
-  }
-  throw new AxiosError("An unexpected error occurred");
-};
 
 export async function signupUser(payload: SignUpFormValues): Promise<MessageResponse> {
   try {

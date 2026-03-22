@@ -19,6 +19,19 @@ export type SignupCredentials = {
   terms: boolean;
 };
 
+export interface IMerchant {
+	id: string;
+	name: string;
+	email: string;
+	is_verified: boolean;
+	is_active: boolean;
+	joined_at: string;
+	test_balance: number;
+	live_balance: number;
+	percentage_charge: number;
+	flat_charge: number;
+}
+
 export interface ChatItem {
   id: string;
   name: string;

@@ -40,6 +40,14 @@ export const verifySchema = z.object({
     .regex(/^\d+$/, "Code must contain only numbers"),
 });
 
+export const merchantSchema = z.object({
+  merchantName: z
+    .string()
+    .min(2, "Merchant name must be at least 2 characters"),
+  email: z.email("Enter a valid email address"),
+});
+
 export type VerifyFormValues = z.infer<typeof verifySchema>;
 export type LoginFormValues = z.infer<typeof loginSchema>;
 export type SignUpFormValues = z.infer<typeof signUpSchema>;
+export type MerchantFormValues = z.infer<typeof merchantSchema>;

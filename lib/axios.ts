@@ -8,6 +8,13 @@ export const koraApiClient = axios.create({
   },
 });
 
+export const handleApiError = (error: unknown): never => {
+  if (axios.isAxiosError(error)) {
+    throw error;
+  }
+  throw new AxiosError("An unexpected error occurred");
+};
+
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const apiClient = axios.create({

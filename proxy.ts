@@ -10,6 +10,7 @@ export function proxy(request: NextRequest) {
   const publicPaths = [
     "/login",
     "/sign-up",
+    "/merchant",
     "/verify-otp",
     "/pay",
     "/forgot-password",
