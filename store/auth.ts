@@ -1,15 +1,16 @@
-import { IUser, LoginCredentials, SignupCredentials } from "@/lib/types";
+import { LoginFormValues, SignUpFormValues } from "@/lib/schemas/auth";
+import { IUser } from "@/lib/types";
 import { create } from "zustand";
 
 //TODO: Use the hook usemutationdata instead of logincredentils => See how it goes
 interface AuthStoreProps {
 	user: IUser | null;
-	signupCredentials: SignupCredentials | null;
-	loginCredentials: LoginCredentials | null;
+	signupCredentials: SignUpFormValues | null;
+	loginCredentials: LoginFormValues | null;
 	actions: {
 		setUser: (user: IUser) => void;
-		setLoginCredentials: (payload: LoginCredentials) => void;
-		setSignupCredentials: (payload: SignupCredentials) => void;
+		setLoginCredentials: (payload: LoginFormValues) => void;
+		setSignupCredentials: (payload: SignUpFormValues) => void;
 		clearCredentials: () => void;
 		logout: () => void;
 	};

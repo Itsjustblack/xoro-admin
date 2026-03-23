@@ -1,38 +1,29 @@
-// middleware.ts
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+const PUBLIC_PATHS = [
+	"/login",
+	"/sign-up",
+	"/verify-otp",
+	"/forgot-password",
+	"/reset-password",
+];
+
 export function proxy(request: NextRequest) {
-  const token = request.cookies.get("auth_token")?.value;
-  const { pathname } = request.nextUrl;
+	const token = request.cookies.get("auth_token")?.value;
+	const { pathname } = request.nextUrl;
+	const isPublicPath =
+		PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/pay/");
 
-  // Define routes that don't require authentication
-  const publicPaths = [
-    "/login",
-    "/sign-up",
-    "/merchant",
-    "/verify-otp",
-    "/pay",
-    "/forgot-password",
-    "/reset-password",
-  ];
+	if (isPublicPath || token) {
+		return NextResponse.next();
+	}
 
-  // Allow if pathname is in publicPaths or starts with /pay/
-  if (publicPaths.includes(pathname) || pathname.startsWith("/pay/")) {
-    return NextResponse.next();
-  }
-
-  // If the token is not present, redirect to the login page
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  // If the token is present, allow the request
-  return NextResponse.next();
+	return NextResponse.redirect(new URL("/login", request.url));
 }
 
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)",
-  ],
+	matcher: [
+		"/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)",
+	],
 };
