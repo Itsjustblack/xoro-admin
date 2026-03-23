@@ -53,6 +53,7 @@ export async function verifyLoginOtp(
 		const cookieStore = await cookies();
 		cookieStore.set("auth_token", res.data.access_token, {
 			secure: process.env.NODE_ENV === "production",
+			httpOnly: true,
 			sameSite: "strict",
 			maxAge: 3600,
 			path: "/",
@@ -76,6 +77,7 @@ export async function verifySignupOtp(
 		const cookieStore = await cookies();
 		cookieStore.set("auth_token", res.data.access_token, {
 			secure: process.env.NODE_ENV === "production",
+			httpOnly: true,
 			sameSite: "strict",
 			maxAge: 3600,
 			path: "/",
