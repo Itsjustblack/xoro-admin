@@ -5,10 +5,18 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
 const koraBaseUrl = process.env.NEXT_PUBLIC_KORA_API_BASE_URL;
 
 export const handleApiError = (error: unknown): never => {
-	if (axios.isAxiosError(error)) {
-		throw error;
-	}
-	throw new AxiosError("An unexpected error occurred");
+  if (axios.isAxiosError(error)) {
+    throw new Error(JSON.stringify({
+      message: error.message,
+      status: error.response?.status ?? null,
+      data: error.response?.data ?? null,
+    }));
+  }
+  throw new Error(JSON.stringify({
+    message: "An unexpected error occurred",
+    status: null,
+    data: null,
+  }));
 };
 
 export const koraApiClient = axios.create({

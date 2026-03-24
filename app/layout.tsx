@@ -1,4 +1,5 @@
 import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import {
 	Inter,
 	JetBrains_Mono,
@@ -7,7 +8,6 @@ import {
 } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 
 const inter = Inter({
 	variable: "--font-primary",
