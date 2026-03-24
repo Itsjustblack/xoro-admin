@@ -28,154 +28,154 @@ import { toast } from "sonner";
 import { Shield } from "../icons";
 
 type VerifyFormProps = {
-	email: string;
+  email: string;
 };
 
 export function VerifyForm({ email }: VerifyFormProps) {
-	const router = useRouter();
-	const signupCredentials = useSignupCredentials();
-	const loginCredentials = useLoginCredentials();
+  const router = useRouter();
+  const signupCredentials = useSignupCredentials();
+  const loginCredentials = useLoginCredentials();
 
-	const { clearCredentials } = useAuthActions();
-	const {
-		secondsLeft: secondsRemaining,
-		minutes: countdownMinutes,
-		seconds: countdownSeconds,
-		reset: resetCountdown,
-	} = useCountdown(60);
+  const { clearCredentials } = useAuthActions();
+  const {
+    secondsLeft: secondsRemaining,
+    minutes: countdownMinutes,
+    seconds: countdownSeconds,
+    reset: resetCountdown,
+  } = useCountdown(60);
 
-	const maskedEmail = useMemo(() => maskEmail(email), [email]);
+  const maskedEmail = useMemo(() => maskEmail(email), [email]);
 
-	const form = useForm<VerifyFormValues>({
-		resolver: zodResolver(verifySchema),
-		defaultValues: {
-			otp: "",
-		},
-	});
+  const form = useForm<VerifyFormValues>({
+    resolver: zodResolver(verifySchema),
+    defaultValues: {
+      otp: "",
+    },
+  });
 
-	useEffect(() => {
-		if (!loginCredentials && !signupCredentials) {
-			router.push("/login");
-		}
-	}, []);
+  useEffect(() => {
+    if (!loginCredentials && !signupCredentials) {
+      router.push("/login");
+    }
+  });
 
-	const { mutate: login, isPending: isLoginPending } = useMutation({
-		mutationFn: verifyLoginOtp,
-		onSuccess: () => {
-			toast.success("OTP verified successfully");
-			router.push("/merchant");
-			clearCredentials();
-		},
-	});
+  const { mutate: login, isPending: isLoginPending } = useMutation({
+    mutationFn: verifyLoginOtp,
+    onSuccess: () => {
+      toast.success("OTP verified successfully");
+      router.push("/merchant");
+      clearCredentials();
+    },
+  });
 
-	const { mutate: signUp, isPending: isSignupPending } = useMutation({
-		mutationFn: verifySignupOtp,
-		onSuccess: () => {
-			toast.success("OTP verified successfully");
-			router.push("/merchant");
-			clearCredentials();
-		},
-	});
+  const { mutate: signUp, isPending: isSignupPending } = useMutation({
+    mutationFn: verifySignupOtp,
+    onSuccess: () => {
+      toast.success("OTP verified successfully");
+      router.push("/merchant");
+      clearCredentials();
+    },
+  });
 
-	const onSubmit = (data: VerifyFormValues) => {
-		if (loginCredentials) {
-			login({
-				...loginCredentials,
-				otp: data.otp,
-			});
-			return;
-		}
+  const onSubmit = (data: VerifyFormValues) => {
+    if (loginCredentials) {
+      login({
+        ...loginCredentials,
+        otp: data.otp,
+      });
+      return;
+    }
 
-		if (signupCredentials) {
-			signUp({
-				...signupCredentials,
-				otp: data.otp,
-			});
-			return;
-		}
-	};
+    if (signupCredentials) {
+      signUp({
+        ...signupCredentials,
+        otp: data.otp,
+      });
+      return;
+    }
+  };
 
-	const handleResend = () => {
-		resetCountdown();
-		form.reset({ otp: "" });
-		toast("Verification code resent", {
-			description: email || "Please check your inbox",
-			position: "bottom-right",
-		});
-	};
+  const handleResend = () => {
+    resetCountdown();
+    form.reset({ otp: "" });
+    toast("Verification code resent", {
+      description: email || "Please check your inbox",
+      position: "bottom-right",
+    });
+  };
 
-	return (
-		<>
-			<p className="mt-4 text-text-secondary font-primary">
-				{email
-					? `Enter the 6-digit code sent to ${maskedEmail || email}. Please enter it below to ensure it's you`
-					: "Enter the 6-digit code sent to your email address. Please enter it below to ensure its you"}
-			</p>
+  return (
+    <>
+      <p className="mt-4 text-text-secondary font-primary">
+        {email
+          ? `Enter the 6-digit code sent to ${maskedEmail || email}. Please enter it below to ensure it's you`
+          : "Enter the 6-digit code sent to your email address. Please enter it below to ensure its you"}
+      </p>
 
-			<form
-				className="mt-10"
-				onSubmit={form.handleSubmit(onSubmit)}
-				noValidate
-				id="verify-form"
-			>
-				<FieldGroup className="gap-8">
-					<Controller
-						name="otp"
-						control={form.control}
-						render={({ field, fieldState }) => (
-							<Field data-invalid={fieldState.invalid}>
-								<InputOTP
-									id="verify-otp"
-									maxLength={6}
-									value={field.value}
-									onChange={field.onChange}
-									aria-invalid={fieldState.invalid}
-									containerClassName="w-full"
-								>
-									<InputOTPGroup className="w-full justify-between sm:justify-start gap-2 sm:gap-[22.4px]">
-										{[...Array(6)].map((_, index) => (
-											<InputOTPSlot
-												key={index}
-												index={index}
-												className="flex-1 h-12 sm:flex-none sm:h-16 sm:w-14 rounded-xl! bg-surface-1 border-2! text-text-primary border-surface-6 text-base"
-											/>
-										))}
-									</InputOTPGroup>
-								</InputOTP>
-								{fieldState.invalid && (
-									<FieldError errors={[fieldState.error]} />
-								)}
-							</Field>
-						)}
-					/>
+      <form
+        className="mt-10"
+        onSubmit={form.handleSubmit(onSubmit)}
+        noValidate
+        id="verify-form"
+      >
+        <FieldGroup className="gap-8">
+          <Controller
+            name="otp"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <InputOTP
+                  id="verify-otp"
+                  maxLength={6}
+                  value={field.value}
+                  onChange={field.onChange}
+                  aria-invalid={fieldState.invalid}
+                  containerClassName="w-full"
+                >
+                  <InputOTPGroup className="w-full justify-between sm:justify-start gap-2 sm:gap-[22.4px]">
+                    {[...Array(6)].map((_, index) => (
+                      <InputOTPSlot
+                        key={index}
+                        index={index}
+                        className="flex-1 h-12 sm:flex-none sm:h-16 sm:w-14 rounded-xl! bg-surface-1 border-2! text-text-primary border-surface-6 text-base"
+                      />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
 
-					<AuthSubmitButton
-						idleText="Verify account"
-						loadingText="Verifying..."
-						isLoading={isLoginPending || isSignupPending}
-						showArrow={false}
-					/>
-				</FieldGroup>
-			</form>
+          <AuthSubmitButton
+            idleText="Verify account"
+            loadingText="Verifying..."
+            isLoading={isLoginPending || isSignupPending}
+            showArrow={false}
+          />
+        </FieldGroup>
+      </form>
 
-			<div className="mt-8 flex items-center justify-center gap-4 text-sm font-primary">
-				<div className="flex items-center gap-2 text-text-secondary">
-					<Timer className="size-4" />
-					<span>{`Resend in ${countdownMinutes.toString().padStart(2, "0")}:${countdownSeconds.toString().padStart(2, "0")}`}</span>
-				</div>
+      <div className="mt-8 flex items-center justify-center gap-4 text-sm font-primary">
+        <div className="flex items-center gap-2 text-text-secondary">
+          <Timer className="size-4" />
+          <span>{`Resend in ${countdownMinutes.toString().padStart(2, "0")}:${countdownSeconds.toString().padStart(2, "0")}`}</span>
+        </div>
 
-				<Button
-					type="button"
-					variant="link"
-					className="h-auto p-0 text-brand-primary font-semibold"
-					onClick={handleResend}
-					disabled={secondsRemaining > 0}
-				>
-					Resend code
-				</Button>
-			</div>
+        <Button
+          type="button"
+          variant="link"
+          className="h-auto p-0 text-brand-primary font-semibold"
+          onClick={handleResend}
+          disabled={secondsRemaining > 0}
+        >
+          Resend code
+        </Button>
+      </div>
 
-			{/* <p className="mt-4 text-center text-sm text-text-secondary font-primary">
+      {/* <p className="mt-4 text-center text-sm text-text-secondary font-primary">
         Wrong email?{" "}
         <Link
           href="/sign-up"
@@ -185,22 +185,22 @@ export function VerifyForm({ email }: VerifyFormProps) {
         </Link>
       </p> */}
 
-			<div className="mt-18 flex items-center justify-center gap-6 text-sm font-primary text-text-muted">
-				<Link
-					href="#"
-					className="inline-flex items-center gap-1.5 hover:text-brand-primary"
-				>
-					<CircleHelp className="size-4" />
-					Help Center
-				</Link>
-				<Link
-					href="#"
-					className="inline-flex items-center gap-1.5 hover:text-brand-primary"
-				>
-					<Shield className="size-4" />
-					Security Policy
-				</Link>
-			</div>
-		</>
-	);
+      <div className="mt-18 flex items-center justify-center gap-6 text-sm font-primary text-text-muted">
+        <Link
+          href="#"
+          className="inline-flex items-center gap-1.5 hover:text-brand-primary"
+        >
+          <CircleHelp className="size-4" />
+          Help Center
+        </Link>
+        <Link
+          href="#"
+          className="inline-flex items-center gap-1.5 hover:text-brand-primary"
+        >
+          <Shield className="size-4" />
+          Security Policy
+        </Link>
+      </div>
+    </>
+  );
 }

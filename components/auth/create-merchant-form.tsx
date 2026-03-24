@@ -18,10 +18,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CircleHelp } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Shield } from "../icons";
-import { useRouter } from "next/navigation";
 
 export function CreateMerchantForm() {
 	const queryClient = useQueryClient();
@@ -45,7 +45,7 @@ export function CreateMerchantForm() {
 			queryClient.invalidateQueries({
 				queryKey: userQueryKeys.current,
 			});
-			router.push("/");
+			router.push("/dashboard");
 		},
 	});
 

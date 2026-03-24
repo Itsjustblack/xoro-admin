@@ -53,7 +53,7 @@ const MetricCard = ({
               {title}
             </p>
             <div className="space-y-1.5">
-              <p className="text-2xl leading-none font-bold text-text-primary">
+              <p className="text-2xl font-secondary leading-none font-black text-text-primary">
                 {value}
               </p>
               <p className="max-w-40 text-sm leading-5">
