@@ -1,47 +1,54 @@
+import ReactQueryClientProvider from "@/providers/ReactQueryClientProvider";
 import {
-  Inter,
-  JetBrains_Mono,
-  Roboto_Mono,
-  Space_Grotesk,
+	Inter,
+	JetBrains_Mono,
+	Roboto_Mono,
+	Space_Grotesk,
 } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 
 const inter = Inter({
-  variable: "--font-primary",
-  subsets: ["latin"],
+	variable: "--font-primary",
+	subsets: ["latin"],
 });
 
 const spaceGrotesk = Space_Grotesk({
-  variable: "--font-secondary",
-  subsets: ["latin"],
+	variable: "--font-secondary",
+	subsets: ["latin"],
 });
 
 const spaceMono = JetBrains_Mono({
-  variable: "--font-tertiary",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+	variable: "--font-tertiary",
+	subsets: ["latin"],
+	weight: ["400", "700"],
 });
 
 const robotoMono = Roboto_Mono({
-  variable: "--font-code",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+	variable: "--font-code",
+	subsets: ["latin"],
+	weight: ["400", "700"],
 });
 
+export const metadata: Metadata = {
+	title: "XoroPay",
+	description: "Seamless Payments, Zero Downtime.",
+};
+
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} antialiased`}
-      >
-        {children}
-        <Toaster richColors />
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<body
+				className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} antialiased`}
+			>
+				<ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+				<Toaster richColors />
+			</body>
+		</html>
+	);
 }

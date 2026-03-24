@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(find /Users/jxaghedo/Desktop/jason-projects/xoro-admin -type f -name \"*.tsx\" -path \"*app/\\(auth\\)*\")",
+      "Bash(ls /Users/jxaghedo/Desktop/jason-projects/xoro-admin/app/\\\\\\(auth\\\\\\)/)",
+      "Bash(grep -r koraApiClient /Users/jxaghedo/Desktop/jason-projects/xoro-admin --include=*.ts --include=*.tsx)"
     ]
   }
 }

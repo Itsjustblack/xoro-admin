@@ -1,3 +1,26 @@
+export interface IUser {
+	name: string;
+	email: string;
+	created_at: string;
+	updated_at: string;
+	is_verified: boolean;
+}
+
+export interface IMerchant {
+	id: string;
+	name: string;
+	email: string;
+	is_verified: boolean;
+	is_active: boolean;
+	joined_at: string;
+	test_balance: number;
+	live_balance: number;
+	percentage_charge: number;
+	flat_charge: number;
+	role: string;
+}
+
+// REMOVE LATER, NOT NEEDED
 export interface ChatItem {
 	id: string;
 	name: string;
