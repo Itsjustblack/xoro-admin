@@ -4,19 +4,20 @@ import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import {
-	InputOTP,
-	InputOTPGroup,
-	InputOTPSlot,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useCountdown } from "@/hooks/use-count-down";
 import { verifyLoginOtp, verifySignupOtp } from "@/lib/api/v1/auth/actions";
 import { verifySchema, type VerifyFormValues } from "@/lib/schemas/auth";
 import { maskEmail } from "@/lib/utils";
 import {
-	useAuthActions,
-	useLoginCredentials,
-	useSignupCredentials,
+  useAuthActions,
+  useLoginCredentials,
+  useSignupCredentials,
 } from "@/store/auth";
+import { useMerchantActions } from "@/store/merchant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { CircleHelp, Timer } from "lucide-react";
@@ -37,6 +38,7 @@ export function VerifyForm({ email }: VerifyFormProps) {
   const loginCredentials = useLoginCredentials();
 
   const { clearCredentials } = useAuthActions();
+  const { setMerchants } = useMerchantActions();
   const {
     secondsLeft: secondsRemaining,
     minutes: countdownMinutes,
@@ -53,29 +55,69 @@ export function VerifyForm({ email }: VerifyFormProps) {
     },
   });
 
-  useEffect(() => {
-    if (!loginCredentials && !signupCredentials) {
-      router.push("/login");
-    }
-  });
+  const resolvePostLoginRoute = (data: {
+    data?: {
+      merchant?: unknown;
+      merchants?: unknown[];
+    };
+  }) => {
+    const hasMerchant =
+      Boolean(data.data?.merchant) ||
+      (Array.isArray(data.data?.merchants) && data.data.merchants.length > 0);
 
-  const { mutate: login, isPending: isLoginPending } = useMutation({
+    return hasMerchant ? "/dashboard" : "/merchant";
+  };
+
+  const {
+    mutate: login,
+    isPending: isLoginPending,
+    isSuccess: isLoginSuccess,
+  } = useMutation({
     mutationFn: verifyLoginOtp,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Initialize merchant store with merchants from auth response
+      if (data.data?.merchants && data.data.merchants.length > 0) {
+        setMerchants(data.data.merchants);
+      }
+      router.replace(resolvePostLoginRoute(data));
       toast.success("OTP verified successfully");
-      router.push("/merchant");
-      clearCredentials();
     },
   });
 
-  const { mutate: signUp, isPending: isSignupPending } = useMutation({
+  const {
+    mutate: signUp,
+    isPending: isSignupPending,
+    isSuccess: isSignupSuccess,
+  } = useMutation({
     mutationFn: verifySignupOtp,
     onSuccess: () => {
       toast.success("OTP verified successfully");
-      router.push("/merchant");
-      clearCredentials();
+      router.replace("/merchant");
     },
   });
+
+  useEffect(() => {
+    if (
+      !loginCredentials &&
+      !signupCredentials &&
+      !isLoginSuccess &&
+      !isSignupSuccess
+    ) {
+      router.replace("/login");
+    }
+  }, [
+    isLoginSuccess,
+    isSignupSuccess,
+    loginCredentials,
+    router,
+    signupCredentials,
+  ]);
+
+  useEffect(() => {
+    if (isLoginSuccess || isSignupSuccess) {
+      clearCredentials();
+    }
+  }, [clearCredentials, isLoginSuccess, isSignupSuccess]);
 
   const onSubmit = (data: VerifyFormValues) => {
     if (loginCredentials) {

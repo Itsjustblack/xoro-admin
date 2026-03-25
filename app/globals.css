@@ -79,6 +79,16 @@
   --color-warning-3: var(--color-warning-3);
   --color-warning-4: var(--color-warning-4);
   --color-warning-5: var(--color-warning-5);
+  --color-accent-blue: var(--color-accent-blue);
+  --color-accent-blue-soft: var(--color-accent-blue-soft);
+  --color-accent-violet: var(--color-accent-violet);
+  --color-accent-violet-soft: var(--color-accent-violet-soft);
+  --color-status-success: var(--color-status-success);
+  --color-status-success-soft: var(--color-status-success-soft);
+  --color-status-warning: var(--color-status-warning);
+  --color-status-warning-soft: var(--color-status-warning-soft);
+  --color-status-danger: var(--color-status-danger);
+  --color-status-danger-soft: var(--color-status-danger-soft);
   --color-border-light: var(--color-border-light);
 }
 
@@ -124,7 +134,7 @@
   --color-surface-6: #e2e8f0;
   --color-surface-7: #f3f4f6;
   --color-surface-8: #e0e7ff;
-  
+
   --color-text-primary: #0f172a;
   --color-text-secondary: #64748b;
   --color-text-subtitle: #475569;
@@ -145,6 +155,17 @@
   --color-success-2: #22c55e;
   --color-success-3: #34d399;
   --color-success-4: #10b981;
+  --color-status-success: #059669;
+  --color-status-success-soft: #d1fae5;
+  --color-status-warning: #ea580c;
+  --color-status-warning-soft: #ffedd5;
+  --color-status-danger: #dc2626;
+  --color-status-danger-soft: #fee2e2;
+
+  --color-accent-blue: #2563eb;
+  --color-accent-blue-soft: #dbeafe;
+  --color-accent-violet: #9333ea;
+  --color-accent-violet-soft: #f3e8ff;
 
   --color-border-light: #cbd5e1;
 
@@ -254,5 +275,58 @@
     after:transition-all after:duration-300
     hover:after:w-full;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 
+/* ============================================
+   Custom Scrollbar Styling
+   ============================================ */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+  margin: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: oklch(0.922 0 0 / 0.3); /* Very subtle by default */
+  border-radius: 10px;
+  transition:
+    opacity 200ms ease-in-out,
+    background-color 200ms ease-in-out;
+}
+
+/* Show scrollbar on container hover */
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: oklch(0.556 0 0 / 0.7); /* Muted gray, more visible */
+}
+
+/* Show brand color on direct scrollbar hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-primary); /* Brand indigo */
+  opacity: 1;
+}
+
+/* Firefox support */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(0.922 0 0 / 0.3) transparent;
+}
+
+.custom-scrollbar:hover {
+  scrollbar-color: oklch(0.556 0 0 / 0.7) transparent;
+}

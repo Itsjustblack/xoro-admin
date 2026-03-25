@@ -1,12 +1,25 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useCurrentMode, useMerchantActions } from "@/store/merchant";
+import { useRouter } from "next/navigation";
 
 const OPTIONS = ["live", "test"] as const;
 
 const EnvironmentToggle = () => {
-  const [environment, setEnvironment] = useState<"live" | "test">("live");
+  const environment = useCurrentMode();
+  const { toogleMode } = useMerchantActions();
+  const router = useRouter();
+
+  const handleSelectEnvironment = (option: (typeof OPTIONS)[number]) => {
+    if (option === environment) {
+      return;
+    }
+
+    document.cookie = `dashboard_mode=${option}; path=/; samesite=lax`;
+    toogleMode();
+    router.refresh();
+  };
 
   return (
     <div
@@ -17,7 +30,7 @@ const EnvironmentToggle = () => {
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full border border-surface-6 bg-surface-1 shadow-[0_10px_24px_rgba(157,173,196,0.26),inset_0_1px_0_rgba(255,255,255,0.95)] transition-transform duration-300 ease-out",
+          "pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full border border-surface-6 bg-surface-1 shadow-sm transition-transform duration-300 ease-out",
           environment === "test" && "translate-x-full",
         )}
       />
@@ -30,7 +43,7 @@ const EnvironmentToggle = () => {
             type="button"
             role="tab"
             aria-selected={isActive}
-            onClick={() => setEnvironment(option)}
+            onClick={() => handleSelectEnvironment(option)}
             className={cn(
               "relative z-10 flex h-full items-center justify-center rounded-full px-0 text-xs font-bold capitalize transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30",
               isActive

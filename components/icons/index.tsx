@@ -9,6 +9,29 @@ export type IconComponent = React.ComponentType<
   { size?: number; className?: string } & SVGProps<SVGSVGElement>
 >;
 
+type SparklineIconProps = {
+  points: string;
+  className?: string;
+};
+
+export const SparklineIcon = ({
+  points,
+  className = "",
+}: SparklineIconProps) => {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 78 30" className="h-7.5 w-19.5">
+      <polyline
+        className={`stroke-current ${className}`}
+        fill="none"
+        points={points}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.2"
+      />
+    </svg>
+  );
+};
+
 export function XoroPayLogo() {
   return (
     <div className="flex items-center gap-2.5">

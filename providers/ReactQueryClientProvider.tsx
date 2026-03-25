@@ -27,7 +27,7 @@ export default function ReactQueryClientProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const handleErrors = (error: Error) => {
+  const handleErrors = (error: AxiosError<ErrorResponse>) => {
     const parsed = JSON.parse(error.message);
     const data = parsed.data as ErrorResponse | null;
 

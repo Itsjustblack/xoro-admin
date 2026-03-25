@@ -3,12 +3,11 @@
 import ApiClient, { handleApiError } from "@/lib/api-client";
 import { IMerchant } from "@/lib/types";
 
-export async function createNewMerchant(payload: {
-  name: string;
-  email: string;
-}) {
+export async function getMerchantData(merchantId: string) {
   try {
-    const res = await ApiClient.post<IMerchant>("/create-merchant", payload);
+    const res = await ApiClient.get<IMerchant>("/get-merchant", {
+      params: { merchant_id: merchantId },
+    });
     return res.data;
   } catch (error) {
     throw handleApiError(error);

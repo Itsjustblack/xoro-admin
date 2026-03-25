@@ -8,15 +8,18 @@ import { redirect } from "next/navigation";
 
 // Define response types
 interface AuthResponse {
-  user: IUser;
+  status: boolean;
+  message: string;
   access_token: string;
+  token_type: string;
+  data: IUser;
 }
 
 //QUERY FUNCTIONS
 export async function getCurrentUser() {
   try {
-    const res = await ApiClient.get<{ user: IUser }>("/auth/me");
-    return res.data.user;
+    const res = await ApiClient.get<IUser>("/get-user");
+    return res.data;
   } catch (error) {
     throw handleApiError(error);
   }
@@ -62,7 +65,6 @@ export async function verifyLoginOtp(
       maxAge: 3600,
       path: "/",
     });
-
     return res.data;
   } catch (error) {
     throw handleApiError(error);

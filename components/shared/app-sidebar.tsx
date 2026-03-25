@@ -6,16 +6,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Headset } from "../icons";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+	Sidebar,
+	SidebarContent,
+	SidebarFooter,
+	SidebarGroup,
+	SidebarGroupLabel,
+	SidebarHeader,
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
 } from "../ui/sidebar";
+import MerchantSwitcher from "./merchant-switcher";
 
 const AppSidebar = () => {
   const pathname = usePathname();
@@ -23,16 +24,11 @@ const AppSidebar = () => {
 
   return (
     <Sidebar className="border-r-brand-primary-dark/10">
-      <SidebarHeader className="p-0">
-        <div className="p-6 flex flex-col gap-1">
-          <span className="font-bold text-xl text-brand-primary-dark">
-            XoroPay
-          </span>
-          <span className="tracking-widest text-brand-primary-dark/60 font-medium text-xs">
-            MERCHANT DASHBOARD
-          </span>
-        </div>
-      </SidebarHeader>
+		<SidebarHeader className="p-0">
+			<div className="p-3">
+				<MerchantSwitcher />
+			</div>
+		</SidebarHeader>
       <SidebarContent className="px-4">
         {NAV.map((nav) => (
           <SidebarGroup key={nav.section} className="px-0">
@@ -61,7 +57,7 @@ const AppSidebar = () => {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <SidebarFooter className="p-4 pt-2 group-data-[collapsible=icon]:hidden">
+      <SidebarFooter className="p-4 border-t border-brand-primary-dark/10 group-data-[collapsible=icon]:hidden">
         <button className="flex w-full items-center gap-4 rounded-xl bg-brand-primary-dark/5 p-4 text-left transition-colors">
           <div className="rounded-full size-10 flex items-center justify-center bg-brand-primary-dark/10">
             <Headset size={20} className="text-brand-primary-dark" />
