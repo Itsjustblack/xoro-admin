@@ -3,25 +3,8 @@ import MetricCard from "@/components/dashboard/metric-card";
 import TransactionsTable from "@/components/dashboard/transactions-table";
 import { BadgeCheck } from "@/components/icons";
 import type { IDashboardAnalytics, IRevenueAnalytics } from "@/lib/types";
+import { formatCount, formatCurrency, formatPercent } from "@/lib/utils";
 import { ArrowRightLeft, CornerUpLeft, TrendingUp } from "lucide-react";
-
-const formatCurrency = (value: number, currency?: string) => {
-  try {
-    return new Intl.NumberFormat("en-NG", {
-      style: currency ? "currency" : "decimal",
-      currency,
-      maximumFractionDigits: 2,
-    }).format(value);
-  } catch {
-    return new Intl.NumberFormat("en-NG", {
-      maximumFractionDigits: 2,
-    }).format(value);
-  }
-};
-
-const formatCount = (value: number) => new Intl.NumberFormat().format(value);
-
-const formatPercent = (value: number) => `${value.toFixed(1)}%`;
 
 type DashboardContentProps = {
   dashboardAnalytics?: IDashboardAnalytics | null;
@@ -38,29 +21,29 @@ const DashboardContent = ({
   const transactionSeries =
     revenueAnalytics?.time_series.map((point) => point.count) ?? [];
   const currency =
-    revenueAnalytics?.currency ?? dashboardAnalytics?.top_currency.currency;
+    revenueAnalytics?.currency ?? dashboardAnalytics?.top_currency?.currency;
 
   const metricCards = [
     {
       title: "Total Revenue",
       value: formatCurrency(revenueMetrics?.total_revenue ?? 0, currency),
       change: formatCurrency(revenueMetrics?.net_revenue ?? 0, currency),
-      changeLabel: "net revenue",
+      changeLabel: "vs last month",
       icon: <TrendingUp className="size-4" />,
-      iconClassName: "text-success-4",
+      iconClassName: "text-brand-primary-dark",
       changeClassName: "text-success-4",
-      borderClassName: "border-success-4",
-      sparklineClassName: "text-success-4",
+      borderClassName: "border-brand-primary-dark",
+      sparklineClassName: "text-brand-primary-dark",
       sparklineValues: revenueSeries,
     },
     {
-      title: "Transactions",
+      title: "Monthly Transactions",
       value: formatCount(revenueMetrics?.total_transactions ?? 0),
       change: formatCurrency(
         revenueMetrics?.average_transaction_value ?? 0,
         currency,
       ),
-      changeLabel: "avg transaction",
+      changeLabel: "vs last month",
       icon: <ArrowRightLeft className="size-4" />,
       iconClassName: "text-brand-primary",
       changeClassName: "text-success-4",
@@ -69,23 +52,23 @@ const DashboardContent = ({
       sparklineValues: transactionSeries,
     },
     {
-      title: "Successful\nPayments",
+      title: "Successful Payments",
       value: formatPercent(revenueMetrics?.success_rate ?? 0),
       change: formatCount(transactionBreakdown?.successful ?? 0),
-      changeLabel: "successful transactions",
+      changeLabel: "vs last month",
       icon: <BadgeCheck className="size-4" />,
       iconClassName: "text-success-4",
       changeClassName: "text-success-4",
       borderClassName: "border-success-4",
     },
     {
-      title: "Pending\nPayouts",
+      title: "Refund Volume",
       value: formatCount(dashboardAnalytics?.pending_payouts ?? 0),
       change: formatCurrency(
         dashboardAnalytics?.pending_payout_amount ?? 0,
         currency,
       ),
-      changeLabel: "awaiting settlement",
+      changeLabel: "vs last month",
       icon: <CornerUpLeft className="size-4" />,
       iconClassName: "text-warning-5",
       changeClassName: "text-warning-5",

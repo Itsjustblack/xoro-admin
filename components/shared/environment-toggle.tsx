@@ -2,23 +2,19 @@
 
 import { cn } from "@/lib/utils";
 import { useCurrentMode, useMerchantActions } from "@/store/merchant";
-import { useRouter } from "next/navigation";
 
 const OPTIONS = ["live", "test"] as const;
 
 const EnvironmentToggle = () => {
   const environment = useCurrentMode();
   const { toogleMode } = useMerchantActions();
-  const router = useRouter();
 
   const handleSelectEnvironment = (option: (typeof OPTIONS)[number]) => {
     if (option === environment) {
       return;
     }
 
-    document.cookie = `dashboard_mode=${option}; path=/; samesite=lax`;
     toogleMode();
-    router.refresh();
   };
 
   return (

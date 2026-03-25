@@ -55,7 +55,7 @@ export interface IDashboardAnalytics {
   period: string;
   revenue_metrics: IRevenueMetrics;
   transaction_breakdown: ITransactionBreakdown;
-  top_currency: ITopCurrencyAnalytics;
+  top_currency: ITopCurrencyAnalytics | null;
   wallet_count: number;
   total_balance: number;
   pending_payouts: number;
