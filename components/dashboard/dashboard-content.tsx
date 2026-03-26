@@ -6,9 +6,9 @@ import TransactionsTable from "@/components/dashboard/transactions-table"
 import { BadgeCheck } from "@/components/icons"
 import { getDashboardAnalytics, getRevenueAnalytics } from "@/lib/api/v1/analytics/queries"
 import { analyticsQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { formatCount, formatCurrency, formatPercent } from "@/lib/utils"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
 import { useQuery } from "@tanstack/react-query"
-import { formatCount, formatCurrency, formatPercent } from "@/lib/utils"
 import { ArrowRightLeft, CornerUpLeft, TrendingUp } from "lucide-react"
 
 const DashboardContent = () => {

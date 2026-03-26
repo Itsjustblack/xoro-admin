@@ -1,12 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { mockNotifications } from "@/lib/mock-data"
 import { BellIcon } from "lucide-react"
+import { useState } from "react"
+import { NotificationPane } from "./notifications/notification-pane"
 import { Button } from "./ui/button"
 import { Separator } from "./ui/separator"
 import { SidebarTrigger } from "./ui/sidebar"
-import { NotificationPane } from "./notifications/notification-pane"
-import { mockNotifications } from "@/lib/mock-data"
 
 export function SiteHeader() {
   const [notificationsOpen, setNotificationsOpen] = useState(false)

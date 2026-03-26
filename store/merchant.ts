@@ -1,6 +1,6 @@
 import { IMerchant, Mode } from "@/lib/types"
 import { create } from "zustand"
-import { persist, createJSONStorage } from "zustand/middleware"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 interface MerchantStoreProps {
   merchants: IMerchant[]
@@ -10,7 +10,7 @@ interface MerchantStoreProps {
   actions: {
     switchMerchant: (merchantId: string) => void
     setMerchants: (merchants: IMerchant[]) => void
-    toogleMode: () => void
+    toggleMode: () => void
     clearPersistedMerchant: () => void
     clearMerchants: () => void
   }
@@ -58,7 +58,7 @@ const useMerchantStore = create<MerchantStoreProps>()(
           }
         },
 
-        toogleMode: () =>
+        toggleMode: () =>
           set({ mode: get().mode === "test" ? "live" : "test" }),
 
         clearPersistedMerchant: () => {

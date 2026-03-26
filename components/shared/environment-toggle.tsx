@@ -7,14 +7,14 @@ const OPTIONS = ["live", "test"] as const
 
 const EnvironmentToggle = () => {
   const environment = useCurrentMode()
-  const { toogleMode } = useMerchantActions()
+  const { toggleMode } = useMerchantActions()
 
   const handleSelectEnvironment = (option: (typeof OPTIONS)[number]) => {
     if (option === environment) {
       return
     }
 
-    toogleMode()
+    toggleMode()
   }
 
   return (
