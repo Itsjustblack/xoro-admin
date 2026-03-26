@@ -1,4 +1,4 @@
-import { ChatItem, CustomerData, Message, Notification, Order, Product } from "@/lib/types";
+import { BalanceTransaction, ChatItem, CustomerData, Message, Notification, Order, Product } from "@/lib/types";
 
 export const mockChats: ChatItem[] = [
 	{
@@ -818,4 +818,103 @@ export const mockNotifications: Notification[] = [
 		read: true,
 		type: "success",
 	},
+];
+
+export const mockBalanceTransactions: BalanceTransaction[] = [
+  {
+    id: "1",
+    type: "Payout",
+    reference: "#TRX-948201",
+    amount: "$2,500.00",
+    status: "Completed",
+    date: "Oct 24, 2023, 14:20",
+  },
+  {
+    id: "2",
+    type: "Sales Income",
+    reference: "#TRX-948199",
+    amount: "$120.50",
+    status: "Pending",
+    date: "Oct 24, 2023, 11:05",
+  },
+  {
+    id: "3",
+    type: "Refund",
+    reference: "#TRX-948190",
+    amount: "-$45.00",
+    status: "Completed",
+    date: "Oct 23, 2023, 09:45",
+  },
+  {
+    id: "4",
+    type: "Sales Income",
+    reference: "#TRX-948185",
+    amount: "$1,100.00",
+    status: "Completed",
+    date: "Oct 23, 2023, 08:30",
+  },
+  {
+    id: "5",
+    type: "Payout",
+    reference: "#TRX-948170",
+    amount: "$4,000.00",
+    status: "Completed",
+    date: "Oct 22, 2023, 16:15",
+  },
+  {
+    id: "6",
+    type: "Top-up",
+    reference: "#TRX-948160",
+    amount: "$500.00",
+    status: "Completed",
+    date: "Oct 22, 2023, 10:00",
+  },
+  {
+    id: "7",
+    type: "Sales Income",
+    reference: "#TRX-948155",
+    amount: "$340.00",
+    status: "Pending",
+    date: "Oct 21, 2023, 14:30",
+  },
+  {
+    id: "8",
+    type: "Refund",
+    reference: "#TRX-948150",
+    amount: "-$12.50",
+    status: "Failed",
+    date: "Oct 21, 2023, 09:15",
+  },
+  {
+    id: "9",
+    type: "Payout",
+    reference: "#TRX-948145",
+    amount: "$1,200.00",
+    status: "Completed",
+    date: "Oct 20, 2023, 11:45",
+  },
+  {
+    id: "10",
+    type: "Sales Income",
+    reference: "#TRX-948140",
+    amount: "$890.00",
+    status: "Completed",
+    date: "Oct 19, 2023, 16:20",
+  },
+  {
+    id: "11",
+    type: "Sales Income",
+    reference: "#TRX-948135",
+    amount: "$430.00",
+    status: "Completed",
+    date: "Oct 19, 2023, 12:10",
+  },
+  {
+    id: "12",
+    type: "Payout",
+    reference: "#TRX-948130",
+    amount: "$3,000.00",
+    status: "Completed",
+    date: "Oct 18, 2023, 09:00",
+  }
 ];

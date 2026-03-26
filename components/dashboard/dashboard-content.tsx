@@ -59,7 +59,7 @@ const DashboardContent = ({
       icon: <BadgeCheck className="size-4" />,
       iconClassName: "text-success-4",
       changeClassName: "text-success-4",
-      borderClassName: "border-success-4",
+      borderClassName: "border-legal",
     },
     {
       title: "Refund Volume",

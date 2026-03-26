@@ -254,3 +254,12 @@ export interface Notification {
   read: boolean;
   type: "info" | "warning" | "success" | "order";
 }
+
+export interface BalanceTransaction {
+  id: string;
+  type: "Payout" | "Sales Income" | "Refund" | "Top-up";
+  reference: string;
+  amount: string;
+  status: "Completed" | "Pending" | "Failed";
+  date: string;
+}

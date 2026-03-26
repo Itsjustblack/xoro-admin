@@ -25,14 +25,14 @@ import {
   IconChevronsRight,
 } from "@tabler/icons-react";
 import {
-  ColumnDef,
-  Table as TanStackTable,
-  Row,
   Cell,
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   getGroupedRowModel,
   getPaginationRowModel,
+  Row,
+  Table as TanStackTable,
   useReactTable,
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction } from "react";

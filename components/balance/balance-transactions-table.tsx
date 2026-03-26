@@ -1,0 +1,233 @@
+"use client";
+
+import { DataTable } from "@/components/data-table";
+import { Button } from "@/components/ui/button";
+import { BalanceTransaction } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import type { ColumnDef } from "@tanstack/react-table";
+import {
+  ArrowDownCircle,
+  ArrowDownToLine,
+  ChevronLeft,
+  ChevronRight,
+  CornerUpLeft,
+  FilterIcon,
+  ShoppingCart,
+  type LucideIcon,
+} from "lucide-react";
+import { useState } from "react";
+import { StatusBadge } from "../dashboard/transactions-table";
+
+type TransactionTypeConfig = {
+  icon: LucideIcon;
+  className: string;
+};
+
+const transactionTypeMap: Record<string, TransactionTypeConfig> = {
+  payout: {
+    icon: ArrowDownToLine,
+    className: "bg-green-100 text-green-500",
+  },
+  refund: {
+    icon: CornerUpLeft,
+    className: "bg-red-100 text-red-500",
+  },
+  "sales income": {
+    icon: ShoppingCart,
+    className: "bg-purple-100 text-purple-600",
+  },
+  "top-up": {
+    icon: ArrowDownCircle,
+    className: "bg-blue-100 text-blue-500",
+  },
+};
+
+const columns: ColumnDef<BalanceTransaction>[] = [
+  {
+    accessorKey: "type",
+    header: () => (
+      <span className="text-[12px] font-semibold uppercase text-text-muted">
+        Type
+      </span>
+    ),
+    cell: ({ row }) => {
+      const type = row.getValue("type") as string;
+      const config = transactionTypeMap[type.toLowerCase()] ?? {
+        icon: ArrowDownCircle,
+        className: "bg-blue-100 text-blue-500",
+      };
+      const Icon = config.icon;
+
+      return (
+        <div className="flex items-center gap-3">
+          <div
+            className={cn(
+              "flex size-8 items-center justify-center rounded-full",
+              config.className,
+            )}
+          >
+            <Icon className="size-4" />
+          </div>
+          <span className="font-bold text-text-primary">{type}</span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "reference",
+    header: () => (
+      <span className="text-[12px] font-semibold uppercase text-text-muted">
+        Reference
+      </span>
+    ),
+    cell: ({ row }) => (
+      <span className="font-mono text-sm text-text-secondary">
+        {row.getValue("reference")}
+      </span>
+    ),
+  },
+  {
+    accessorKey: "amount",
+    header: () => (
+      <span className="text-[12px] font-semibold uppercase text-text-muted">
+        Amount
+      </span>
+    ),
+    cell: ({ row }) => {
+      const amount = row.getValue("amount") as string;
+
+      return (
+        <span
+          className={cn(
+            "font-bold",
+            amount.startsWith("-") ? "text-red-500" : "text-text-primary",
+          )}
+        >
+          {amount}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: () => (
+      <span className="text-[12px] font-semibold uppercase text-text-muted">
+        Status
+      </span>
+    ),
+    cell: ({ row }) => <StatusBadge status={row.getValue("status")} />,
+  },
+  {
+    accessorKey: "date",
+    header: () => (
+      <span className="text-[12px] font-semibold uppercase text-text-muted">
+        Date
+      </span>
+    ),
+    cell: ({ row }) => (
+      <span className="text-text-secondary">{row.getValue("date")}</span>
+    ),
+  },
+];
+
+interface BalanceTransactionsTableProps {
+  data: BalanceTransaction[];
+}
+
+const PAGE_SIZE = 5;
+
+export default function BalanceTransactionsTable({
+  data,
+}: BalanceTransactionsTableProps) {
+  const [pageIndex, setPageIndex] = useState(0);
+
+  const paginatedData = data.slice(
+    pageIndex * PAGE_SIZE,
+    (pageIndex + 1) * PAGE_SIZE,
+  );
+  const pageCount = Math.ceil(data.length / PAGE_SIZE);
+  const startRange = data.length === 0 ? 0 : pageIndex * PAGE_SIZE + 1;
+  const endRange = Math.min((pageIndex + 1) * PAGE_SIZE, data.length);
+
+  return (
+    <div className="flex flex-col rounded-3xl border border-surface-border bg-surface-subtle">
+      <section className="overflow-hidden rounded-t-3xl bg-surface-card">
+        <div className="flex items-center justify-between gap-4 px-6 py-6">
+          <h2 className="text-lg font-bold text-text-primary">
+            Transaction History
+          </h2>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="h-9 rounded-full border-0 bg-surface-muted px-4 text-sm font-semibold"
+            >
+              Export CSV
+            </Button>
+            <Button
+              variant="outline"
+              className="h-9 rounded-lg px-4 text-text-subtitle border-border-soft text-sm font-semibold"
+            >
+              <FilterIcon className="h-4 w-4" />
+              Filter
+            </Button>
+          </div>
+        </div>
+
+        <DataTable
+          data={paginatedData}
+          columns={columns}
+          isPending={false}
+          getRowId={(row) => row.id}
+          withPagination={true}
+          tableWrapperClassName="w-full overflow-x-auto"
+          headerClassName="sticky top-0 z-10 bg-surface-subtle"
+          headerRowClassName="border-y border-surface-muted bg-surface-subtle hover:bg-surface-subtle"
+          headClassName="h-auto bg-surface-subtle px-4 py-3 font-bold sm:px-8 sm:py-4"
+          bodyRowClassName="border-b border-surface-muted transition-colors duration-100 hover:bg-surface-subtle/40 last:border-0"
+          bodyCellClassName="px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4"
+          emptyStateClassName="h-24 text-center"
+        />
+      </section>
+
+      <div className="flex items-center justify-between rounded-b-3xl border-t border-surface-border px-5 py-4">
+        <p className="text-sm font-medium text-text-secondary">
+          Showing {startRange} to {endRange} of {data.length} transactions
+        </p>
+
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full"
+            disabled={pageIndex === 0}
+            onClick={() => setPageIndex((current) => current - 1)}
+          >
+            <ChevronLeft className="size-4" />
+          </Button>
+          {Array.from({ length: pageCount }).map((_, index) => (
+            <Button
+              key={index}
+              variant={pageIndex === index ? "default" : "outline"}
+              className={cn(
+                "h-8 w-8 rounded-full",
+                pageIndex === index && "bg-indigo-900 text-white",
+              )}
+              onClick={() => setPageIndex(index)}
+            >
+              {index + 1}
+            </Button>
+          ))}
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full"
+            disabled={pageIndex === pageCount - 1 || pageCount === 0}
+            onClick={() => setPageIndex((current) => current + 1)}
+          >
+            <ChevronRight className="size-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

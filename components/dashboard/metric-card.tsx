@@ -57,7 +57,7 @@ const MetricCard = ({
     : "";
 
   return (
-    <Card className="rounded-3xl border border-brand-primary-dark/10 bg-surface-1 p-0 ring-0 shadow">
+    <Card className="rounded-3xl border border-brand-primary-dark/10 bg-surface-card p-0 ring-0 shadow">
       <div className={cn("flex min-h-40 sm:h-41.5 flex-col justify-between border-t-[5px] gap-4 p-4 sm:p-6", borderClassName)}>
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-3 sm:space-y-4">

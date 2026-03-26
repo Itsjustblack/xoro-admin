@@ -1,8 +1,8 @@
 "use client";
 
+import { DataTable } from "@/components/data-table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { DataTable } from "@/components/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import type { ReactNode } from "react";
 
@@ -119,7 +119,7 @@ function CustomerAvatar({ name }: { name: string }) {
 
   return (
     <Avatar className="h-8 w-8 shrink-0">
-      <AvatarFallback className="bg-surface-6 text-[11px] font-semibold text-text-primary">
+      <AvatarFallback className="bg-surface-border text-[11px] font-semibold text-text-primary">
         {initials}
       </AvatarFallback>
     </Avatar>
@@ -168,7 +168,7 @@ function DashboardDataTable<TData extends Record<string, unknown>>({
     typeof rowKey === "function" ? rowKey : (row: TData) => String(row[rowKey]);
 
   return (
-    <section className="overflow-hidden rounded-3xl border border-brand-primary-dark/5 bg-surface-1 shadow-sm">
+    <section className="overflow-hidden rounded-3xl border border-surface-border bg-surface-card shadow-sm">
       <div className="flex items-center justify-between gap-4 px-6 py-6">
         <h2 className="text-lg font-bold text-text-primary">{title}</h2>
         {headerActions ? (
@@ -183,10 +183,10 @@ function DashboardDataTable<TData extends Record<string, unknown>>({
         getRowId={getRowId}
         withPagination={false}
         tableWrapperClassName="w-full overflow-x-auto"
-        headerClassName="sticky top-0 z-10 bg-surface-2"
-        headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
-        headClassName="h-auto bg-surface-2 font-bold px-4 sm:px-8 py-3 sm:py-4"
-        bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
+        headerClassName="sticky top-0 z-10 bg-surface-subtle"
+        headerRowClassName="border-y border-surface-muted bg-surface-subtle hover:bg-surface-subtle"
+        headClassName="h-auto bg-surface-subtle px-4 py-3 font-bold sm:px-8 sm:py-4"
+        bodyRowClassName="border-b border-surface-muted transition-colors duration-100 hover:bg-surface-subtle/40 last:border-0"
         bodyCellClassName="px-4 sm:px-8 py-3 sm:py-4 text-sm text-text-primary"
         emptyStateClassName="h-24 text-center"
       />
