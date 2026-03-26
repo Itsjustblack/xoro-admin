@@ -19,14 +19,14 @@ const EnvironmentToggle = () => {
 
   return (
     <div
-      className="relative grid h-9 w-[116.77px] grid-cols-2 items-center rounded-full border border-surface-border bg-surface-muted p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]"
+      className="relative grid h-9 w-[116.77px] grid-cols-2 items-center rounded-full border border-surface-6 bg-surface-3 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]"
       role="tablist"
       aria-label="Environment switch"
     >
       <span
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full border border-surface-border bg-surface-card shadow-sm transition-transform duration-300 ease-out",
+          "pointer-events-none absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full border border-surface-6 bg-surface-1 shadow-sm transition-transform duration-300 ease-out",
           environment === "test" && "translate-x-full",
         )}
       />

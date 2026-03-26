@@ -28,11 +28,11 @@ const Header = () => {
       .toUpperCase() ?? "XP"
 
   return (
-    <div className="sticky top-0 left-0 right-0 z-50 flex h-16 w-full items-center border-b border-b-brand-primary-dark/10 bg-surface-card px-4 lg:px-6 xl:px-8">
+    <div className="sticky top-0 left-0 right-0 z-50 flex h-16 w-full items-center border-b border-b-brand-primary-dark/10 bg-surface-1 px-4 lg:px-6 xl:px-8">
       <header className="flex w-full items-center justify-between gap-2 sm:gap-4">
         <div className="flex items-center gap-2 sm:gap-4 truncate">
           <SidebarTrigger className="text-text-subtitle shrink-0" />
-          <span className="truncate font-bold text-surface-inverse">
+          <span className="truncate font-bold text-surface-dark">
             {currentPage}
           </span>
         </div>

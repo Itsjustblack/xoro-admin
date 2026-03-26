@@ -179,7 +179,7 @@ export function VerifyForm({ email }: VerifyFormProps) {
                       <InputOTPSlot
                         key={index}
                         index={index}
-                        className="h-12 flex-1 rounded-xl! border-2! border-surface-border bg-surface-card text-base text-text-primary sm:h-16 sm:w-14 sm:flex-none"
+                        className="h-12 flex-1 rounded-xl! border-2! border-surface-6 bg-surface-1 text-base text-text-primary sm:h-16 sm:w-14 sm:flex-none"
                       />
                     ))}
                   </InputOTPGroup>

@@ -63,11 +63,11 @@ const RevenueTooltip = ({
   const count = payload.find((item) => item.dataKey === "count")?.value ?? 0
 
   return (
-    <div className="min-w-41 rounded-2xl bg-surface-inverse px-4 py-3 text-xs text-surface-card shadow-lg">
-      <p className="mb-2 font-semibold tracking-[0.02em] text-surface-card/90">
+    <div className="min-w-41 rounded-2xl bg-surface-dark px-4 py-3 text-xs text-surface-1 shadow-lg">
+      <p className="mb-2 font-semibold tracking-[0.02em] text-surface-1/90">
         {label}
       </p>
-      <div className="space-y-1.5 text-surface-card/90">
+      <div className="space-y-1.5 text-surface-1/90">
         <div className="flex items-center justify-between gap-4">
           <span className="flex items-center gap-2">
             <span className="size-2 rounded-full bg-brand-primary" />
@@ -96,7 +96,7 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
   const currency = revenueAnalytics?.currency
 
   return (
-    <Card className="rounded-3xl border border-brand-primary-dark/5 bg-surface-card p-0 ring-0 shadow-sm">
+    <Card className="rounded-3xl border border-brand-primary-dark/5 bg-surface-1 p-0 ring-0 shadow-sm">
       <div className="flex flex-col gap-5 p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-1">
@@ -112,7 +112,7 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
             variant="ghost"
             type="button"
             aria-label="Download revenue report"
-            className="flex size-10 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-page hover:text-text-primary focus-visible:outline-none"
+            className="flex size-10 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-5 hover:text-text-primary focus-visible:outline-none"
           >
             <Download className="size-4" strokeWidth={3} />
           </Button>
@@ -135,7 +135,7 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
                 >
                   <CartesianGrid
                     vertical={false}
-                    stroke="var(--color-surface-subtle)"
+                    stroke="var(--color-surface-2)"
                   />
                   <XAxis
                     axisLine={false}
@@ -149,7 +149,7 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
                     tickMargin={16}
                   />
                   <YAxis
-                    axisLine={{ stroke: "var(--color-surface-subtle)" }}
+                    axisLine={{ stroke: "var(--color-surface-2)" }}
                     tick={{
                       fill: "var(--color-text-muted)",
                       fontSize: 12,
@@ -176,13 +176,13 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-surface-muted text-sm text-text-muted">
+            <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-surface-3 text-sm text-text-muted">
               No revenue data available yet.
             </div>
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-6 border-t border-surface-subtle pt-4 text-xs font-semibold text-text-secondary">
+        <div className="flex flex-wrap items-center gap-6 border-t border-surface-2 pt-4 text-xs font-semibold text-text-secondary">
           <div className="flex items-center gap-2">
             <span className="size-3 rounded-xs bg-brand-primary" />
             Revenue

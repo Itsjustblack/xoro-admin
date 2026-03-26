@@ -15,21 +15,21 @@ export function AuthPanel() {
       </div>
 
       <div className="relative z-10 max-w-125">
-        <div className="mb-8 flex size-12 items-center justify-center rounded-full border border-surface-card/20 bg-surface-card/10 text-surface-card">
+        <div className="mb-8 flex size-12 items-center justify-center rounded-full border border-surface-1/20 bg-surface-1/10 text-surface-1">
           <ShieldCheck className="size-5" />
         </div>
 
-        <h2 className="font-secondary text-[2.25rem] leading-tight font-bold text-surface-card">
+        <h2 className="font-secondary text-[2.25rem] leading-tight font-bold text-surface-1">
           Secure transactions at your fingertips.
         </h2>
 
-        <p className="mt-6 max-w-sm font-primary text-base leading-relaxed text-surface-tint">
+        <p className="mt-6 max-w-sm font-primary text-base leading-relaxed text-surface-8">
           Multi-layer encryption and real-time verification ensure your
           financial data stays exactly where it belongs. With you.
         </p>
       </div>
 
-      <div className="relative z-10 mt-30 w-full max-w-sm rounded-2xl border border-surface-card/20 bg-surface-card/10 p-8">
+      <div className="relative z-10 mt-30 w-full max-w-sm rounded-2xl border border-surface-1/20 bg-surface-1/10 p-8">
         <div className="flex items-center gap-4">
           <div className="flex items-center">
             <Image

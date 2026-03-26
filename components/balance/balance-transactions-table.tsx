@@ -15,8 +15,12 @@ import {
   ShoppingCart,
   type LucideIcon,
 } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
+
 import { StatusBadge } from "../dashboard/transactions-table"
+import { BalanceFilterPanel } from "./balance-filter-panel"
+import { useBalanceFilterStore } from "./balance-filter-store"
+import { applyBalanceFilters } from "./balance-filter-utils"
 
 type TransactionTypeConfig = {
   icon: LucideIcon
@@ -140,18 +144,32 @@ export default function BalanceTransactionsTable({
   data,
 }: BalanceTransactionsTableProps) {
   const [pageIndex, setPageIndex] = useState(0)
+  const appliedFilters = useBalanceFilterStore((state) => state.appliedFilters)
 
-  const paginatedData = data.slice(
+  const filteredData = useMemo(() => {
+    return data.filter((transaction) =>
+      applyBalanceFilters(transaction, appliedFilters),
+    )
+  }, [appliedFilters, data])
+
+  const paginatedData = filteredData.slice(
     pageIndex * PAGE_SIZE,
     (pageIndex + 1) * PAGE_SIZE,
   )
-  const pageCount = Math.ceil(data.length / PAGE_SIZE)
-  const startRange = data.length === 0 ? 0 : pageIndex * PAGE_SIZE + 1
-  const endRange = Math.min((pageIndex + 1) * PAGE_SIZE, data.length)
+  const pageCount = Math.ceil(filteredData.length / PAGE_SIZE)
+  const startRange = filteredData.length === 0 ? 0 : pageIndex * PAGE_SIZE + 1
+  const endRange = Math.min((pageIndex + 1) * PAGE_SIZE, filteredData.length)
+  const hasActiveFilters =
+    appliedFilters.status.length > 0 ||
+    appliedFilters.paymentMethod.length > 0 ||
+    appliedFilters.currency.length > 0 ||
+    Boolean(appliedFilters.dateRange.type) ||
+    Boolean(appliedFilters.amount.min) ||
+    Boolean(appliedFilters.amount.max)
 
   return (
-    <div className="flex flex-col rounded-3xl border border-surface-border bg-surface-subtle">
-      <section className="overflow-hidden rounded-t-3xl bg-surface-card">
+    <div className="flex flex-col rounded-3xl border border-surface-6 bg-surface-2">
+      <section className="overflow-hidden rounded-t-3xl bg-surface-1">
         <div className="flex items-center justify-between gap-4 px-6 py-6">
           <h2 className="text-lg font-bold text-text-primary">
             Transaction History
@@ -159,17 +177,27 @@ export default function BalanceTransactionsTable({
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              className="h-9 rounded-full border-0 bg-surface-muted px-4 text-sm font-semibold"
+              className="h-auto py-2 rounded-full border-0 bg-surface-3 px-4 text-sm font-semibold"
             >
               Export CSV
             </Button>
-            <Button
-              variant="outline"
-              className="h-9 rounded-lg px-4 text-text-subtitle border-border-soft text-sm font-semibold"
-            >
-              <FilterIcon className="h-4 w-4" />
-              Filter
-            </Button>
+            <BalanceFilterPanel
+              onApply={() => setPageIndex(0)}
+              trigger={
+                <Button
+                  variant={hasActiveFilters ? "default" : "outline"}
+                  className={cn(
+                    "flex h-auto py-2 flex-row items-center gap-2 rounded-lg px-4 text-sm font-semibold",
+                    hasActiveFilters
+                      ? "border-0 bg-brand-primary-dark text-white hover:bg-brand-primary-dark/90"
+                      : "border-border-light text-text-subtitle",
+                  )}
+                >
+                  <FilterIcon className="h-4 w-4" />
+                  Filter
+                </Button>
+              }
+            />
           </div>
         </div>
 
@@ -180,25 +208,26 @@ export default function BalanceTransactionsTable({
           getRowId={(row) => row.id}
           withPagination={true}
           tableWrapperClassName="w-full overflow-x-auto"
-          headerClassName="sticky top-0 z-10 bg-surface-subtle"
-          headerRowClassName="border-y border-surface-muted bg-surface-subtle hover:bg-surface-subtle"
-          headClassName="h-auto bg-surface-subtle px-4 py-3 font-bold sm:px-8 sm:py-4"
-          bodyRowClassName="border-b border-surface-muted transition-colors duration-100 hover:bg-surface-subtle/40 last:border-0"
+          headerClassName="sticky top-0 z-10 bg-surface-2"
+          headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
+          headClassName="h-auto bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4"
+          bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
           bodyCellClassName="px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4"
           emptyStateClassName="h-24 text-center"
         />
       </section>
 
-      <div className="flex items-center justify-between rounded-b-3xl border-t border-surface-border px-5 py-4">
+      <div className="flex items-center justify-between rounded-b-3xl border-t border-surface-6 p-6">
         <p className="text-sm font-medium text-text-secondary">
-          Showing {startRange} to {endRange} of {data.length} transactions
+          Showing {startRange} to {endRange} of {filteredData.length}{" "}
+          transactions
         </p>
 
         <div className="flex items-center gap-1">
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 rounded-full"
+            className="h-8 w-8 hover:bg-surface-1 bg-transparent rounded-full"
             disabled={pageIndex === 0}
             onClick={() => setPageIndex((current) => current - 1)}
           >
@@ -209,8 +238,8 @@ export default function BalanceTransactionsTable({
               key={index}
               variant={pageIndex === index ? "default" : "outline"}
               className={cn(
-                "h-8 w-8 rounded-full",
-                pageIndex === index && "bg-indigo-900 text-white",
+                "h-8 w-8 bg-transparent rounded-full",
+                pageIndex === index ? "bg-indigo-900 text-white" : "hover:bg-surface-1",
               )}
               onClick={() => setPageIndex(index)}
             >
@@ -220,7 +249,7 @@ export default function BalanceTransactionsTable({
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 rounded-full"
+            className="h-8 w-8 hover:bg-surface-1 bg-transparent rounded-full"
             disabled={pageIndex === pageCount - 1 || pageCount === 0}
             onClick={() => setPageIndex((current) => current + 1)}
           >

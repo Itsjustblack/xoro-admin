@@ -3,13 +3,11 @@
 Implement a trigger-anchored popover for the Balance table Filter button that matches the provided reference: rounded card panel, active filter chips, sectioned controls, and sticky footer actions.
 
 Constraints:
-
 - Keep existing transaction labels: Completed, Pending, Failed.
 - Keep partial-height behavior (never full-screen).
 - Apply filters only when the user clicks Apply Filters.
 
 **Steps**
-
 1. Phase 1: Filter state and data contract
 2. Define a dedicated filter state model near the balance table feature (status, transaction type/payment method, date preset/custom range, amount range, currency, active chips).
 3. Expand transaction data support to include missing fields required by the UI (payment method and currency) so all controls can filter real data; keep backward compatibility by mapping existing rows where needed.
@@ -29,7 +27,6 @@ Constraints:
 17. Run lint/type checks and manually test all filter combinations against mock data.
 
 **Relevant files**
-
 - components/balance/balance-transactions-table.tsx
 - components/balance/balance-filter-panel.tsx
 - components/ui/popover.tsx
@@ -38,7 +35,6 @@ Constraints:
 - hooks/use-mobile.ts
 
 **Verification**
-
 1. Run pnpm lint and ensure no TypeScript errors for updated types and props.
 2. Manual UI check on Balance page: click Filter, confirm a trigger-anchored partial-height popover appears (not full-screen).
 3. Validate each section works: status, payment method/type, date presets/custom range, amount range, currency.
@@ -47,7 +43,6 @@ Constraints:
 6. Check responsive behavior at desktop and <=768px widths for bounded-height popover usability.
 
 **Decisions**
-
 - Use a popover anchored to the Filter button.
 - Keep partial-height panel behavior (no full-height takeover).
 - Keep status labels as Completed/Pending/Failed to match current data model.
@@ -55,6 +50,5 @@ Constraints:
 - Include full filter sections from the reference image in first implementation.
 
 **Further considerations**
-
 1. If popover viewport collision causes clipping near page edges, switch to side/align offsets while keeping the same visual card.
 2. If future API integration arrives, preserve the filter-state shape so it maps directly to query params.

@@ -3,6 +3,7 @@ import { Metadata } from "next"
 import {
   Inter,
   JetBrains_Mono,
+  Manrope,
   Roboto_Mono,
   Space_Grotesk,
 } from "next/font/google"
@@ -31,6 +32,11 @@ const robotoMono = Roboto_Mono({
   weight: ["400", "700"],
 })
 
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+})
+
 export const metadata: Metadata = {
   title: "XoroPay",
   description: "Seamless Payments, Zero Downtime.",
@@ -44,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} ${manrope.variable} antialiased`}
       >
         <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         <Toaster richColors />

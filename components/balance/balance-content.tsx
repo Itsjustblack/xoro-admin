@@ -1,59 +1,66 @@
 import BalanceTransactionsTable from "@/components/balance/balance-transactions-table"
 import MetricCard from "@/components/dashboard/metric-card"
 import { mockBalanceTransactions } from "@/lib/mock-data"
+import { Landmark } from "lucide-react"
 import {
-  Banknote,
-  Bitcoin,
-  Coins,
-  DollarSign,
-  Euro,
-  Landmark,
-  type LucideIcon,
-} from "lucide-react"
+  BitcoinIcon2,
+  CurrencyRefreshIcon,
+  DollarIcon2,
+  EuroIcon2,
+  IconComponent,
+  NairaIcon,
+} from "../icons"
+import CurrencyCard from "./currency-card"
 
-type CurrencyCard = {
+type CurrencyCardItem = {
   title: string
   value: string
-  icon: LucideIcon
+  icon: IconComponent
   borderClassName: string
   iconClassName: string
+  iconBgClassName: string
 }
 
-const currencyCards: CurrencyCard[] = [
+const currencyCards: CurrencyCardItem[] = [
   {
     title: "NGN",
     value: "2.14M",
-    icon: Banknote,
+    icon: NairaIcon,
     borderClassName: "border-emerald-500",
     iconClassName: "text-emerald-600",
+    iconBgClassName: "bg-emerald-50",
   },
   {
     title: "USD",
     value: "245.00",
-    icon: DollarSign,
+    icon: DollarIcon2,
     borderClassName: "border-blue-500",
     iconClassName: "text-blue-600",
+    iconBgClassName: "bg-blue-50",
   },
   {
     title: "USDT",
     value: "1,420.00",
-    icon: Coins,
+    icon: CurrencyRefreshIcon,
     borderClassName: "border-teal-500",
     iconClassName: "text-teal-600",
+    iconBgClassName: "bg-teal-50",
   },
   {
     title: "BTC",
     value: "0.024",
-    icon: Bitcoin,
+    icon: BitcoinIcon2,
     borderClassName: "border-orange-500",
     iconClassName: "text-orange-500",
+    iconBgClassName: "bg-orange-50",
   },
   {
     title: "EUR",
     value: "150.00",
-    icon: Euro,
+    icon: EuroIcon2,
     borderClassName: "border-indigo-500",
     iconClassName: "text-indigo-600",
+    iconBgClassName: "bg-indigo-50",
   },
 ]
 
@@ -87,17 +94,14 @@ const BalanceContent = () => {
             const Icon = card.icon
 
             return (
-              <MetricCard
+              <CurrencyCard
                 key={card.title}
                 title={card.title}
                 value={card.value}
-                change=""
-                changeLabel=""
-                icon={<Icon className="size-5" />}
+                icon={<Icon className="size-6" />}
                 iconClassName={card.iconClassName}
-                changeClassName=""
+                iconBgClassName={card.iconBgClassName}
                 borderClassName={card.borderClassName}
-                sparklineValues={[]}
               />
             )
           })}

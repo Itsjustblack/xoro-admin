@@ -67,7 +67,7 @@ export default function MerchantSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex w-full items-center justify-between rounded-xl px-3 py-2 transition-colors hover:bg-surface-card focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20">
+        <button className="flex w-full items-center justify-between rounded-xl px-3 py-2 transition-colors hover:bg-surface-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/20">
           <div className="flex flex-col gap-0.5">
             <p className="text-xl text-start font-bold tracking-tight text-brand-primary-dark">
               {currentMerchant.name}
@@ -82,7 +82,7 @@ export default function MerchantSwitcher() {
 
       <DropdownMenuContent
         align="start"
-        className="w-63.25 rounded-2xl border border-brand-primary-dark/10 bg-surface-card p-0 shadow-xl"
+        className="w-63.25 rounded-2xl border border-brand-primary-dark/10 bg-surface-1 p-0 shadow-xl"
       >
         <div className="flex items-center gap-3 px-4 py-4 bg-brand-primary-dark/5">
           <Avatar className="size-10 rounded-xl">
@@ -118,7 +118,7 @@ export default function MerchantSwitcher() {
               return (
                 <DropdownMenuItem
                   key={merchant.id}
-                  className="group mx-3 my-1 gap-4 rounded-xl px-3 py-3.5 focus:bg-surface-muted"
+                  className="group mx-3 my-1 gap-4 rounded-xl px-3 py-3.5 focus:bg-surface-3"
                   onClick={() => handleSwitchMerchant(merchant.id)}
                 >
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 group-focus:bg-slate-200">
@@ -134,7 +134,7 @@ export default function MerchantSwitcher() {
         )}
 
         <DropdownMenuSeparator />
-        <div className="p-4">
+        <div className="p-2">
           <DropdownMenuItem
             className="group h-auto py-3 cursor-pointer justify-center gap-2 rounded-lg bg-brand-primary-dark font-bold text-white focus:bg-brand-primary-dark/95"
             onClick={handleCreateNew}

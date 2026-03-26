@@ -25,7 +25,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
           <AppSidebar />
           <div className="flex relative w-full flex-col flex-1 min-w-0">
             <Header />
-            <main className="h-full w-full flex-1 bg-surface-page">
+            <main className="h-full w-full flex-1 bg-surface-5">
               {children}
             </main>
           </div>
