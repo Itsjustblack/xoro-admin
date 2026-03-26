@@ -8,17 +8,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover"
 
 import { useBalanceFilterStore } from "./balance-filter-store"
 import {
-    CURRENCY_OPTIONS,
-    DATE_PRESETS,
-    PAYMENT_METHOD_OPTIONS,
-    STATUS_OPTIONS,
+  CURRENCY_OPTIONS,
+  DATE_PRESETS,
+  PAYMENT_METHOD_OPTIONS,
+  STATUS_OPTIONS,
 } from "./balance-filter-utils"
 
 interface BalanceFilterPanelProps {

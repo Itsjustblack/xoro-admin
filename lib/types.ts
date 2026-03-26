@@ -256,12 +256,12 @@ export interface Notification {
 }
 
 export interface BalanceTransaction {
-  id: string;
-  type: "Payout" | "Sales Income" | "Refund" | "Top-up";
-  reference: string;
-  amount: string;
-  currency: string;
-  paymentMethod: "Card" | "Transfer" | "Mobile Money" | "Crypto";
-  status: "Completed" | "Pending" | "Failed";
-  date: string;
+  id: string
+  type: "Payout" | "Sales Income" | "Refund" | "Top-up"
+  reference: string
+  amount: string
+  currency: string
+  paymentMethod: "Card" | "Transfer" | "Mobile Money" | "Crypto"
+  status: "Completed" | "Pending" | "Failed"
+  date: string
 }
