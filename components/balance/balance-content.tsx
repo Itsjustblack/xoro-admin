@@ -1,6 +1,6 @@
-import BalanceTransactionsTable from "@/components/balance/balance-transactions-table";
-import MetricCard from "@/components/dashboard/metric-card";
-import { mockBalanceTransactions } from "@/lib/mock-data";
+import BalanceTransactionsTable from "@/components/balance/balance-transactions-table"
+import MetricCard from "@/components/dashboard/metric-card"
+import { mockBalanceTransactions } from "@/lib/mock-data"
 import {
   Banknote,
   Bitcoin,
@@ -9,15 +9,15 @@ import {
   Euro,
   Landmark,
   type LucideIcon,
-} from "lucide-react";
+} from "lucide-react"
 
 type CurrencyCard = {
-  title: string;
-  value: string;
-  icon: LucideIcon;
-  borderClassName: string;
-  iconClassName: string;
-};
+  title: string
+  value: string
+  icon: LucideIcon
+  borderClassName: string
+  iconClassName: string
+}
 
 const currencyCards: CurrencyCard[] = [
   {
@@ -55,7 +55,7 @@ const currencyCards: CurrencyCard[] = [
     borderClassName: "border-indigo-500",
     iconClassName: "text-indigo-600",
   },
-];
+]
 
 const BalanceContent = () => {
   return (
@@ -84,7 +84,7 @@ const BalanceContent = () => {
           />
 
           {currencyCards.map((card) => {
-            const Icon = card.icon;
+            const Icon = card.icon
 
             return (
               <MetricCard
@@ -99,7 +99,7 @@ const BalanceContent = () => {
                 borderClassName={card.borderClassName}
                 sparklineValues={[]}
               />
-            );
+            )
           })}
         </div>
 
@@ -108,7 +108,7 @@ const BalanceContent = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default BalanceContent;
+export default BalanceContent

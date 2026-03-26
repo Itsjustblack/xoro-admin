@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,12 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 import {
   useCurrentMerchant,
   useMerchantActions,
   useMerchants,
-} from "@/store/merchant";
+} from "@/store/merchant"
 import {
   Banknote,
   Building2,
@@ -22,32 +22,32 @@ import {
   CirclePlus,
   Store,
   Truck,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+} from "lucide-react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 export default function MerchantSwitcher() {
-  const currentMerchant = useCurrentMerchant();
-  const merchants = useMerchants();
-  const merchantActions = useMerchantActions();
-  const router = useRouter();
+  const currentMerchant = useCurrentMerchant()
+  const merchants = useMerchants()
+  const merchantActions = useMerchantActions()
+  const router = useRouter()
 
-  const otherMerchants = merchants.filter((m) => m.id !== currentMerchant?.id);
+  const otherMerchants = merchants.filter((m) => m.id !== currentMerchant?.id)
 
   const getMerchantIcon = (index: number) => {
-    if (index % 3 === 0) return Banknote;
-    if (index % 3 === 1) return Truck;
-    return Store;
-  };
+    if (index % 3 === 0) return Banknote
+    if (index % 3 === 1) return Truck
+    return Store
+  }
 
   const handleSwitchMerchant = (merchantId: string) => {
-    merchantActions.switchMerchant(merchantId);
-    toast.success("Switching merchant...");
-  };
+    merchantActions.switchMerchant(merchantId)
+    toast.success("Switching merchant...")
+  }
 
   const handleCreateNew = () => {
-    router.push("/merchant");
-  };
+    router.push("/merchant")
+  }
 
   if (!currentMerchant) {
     return (
@@ -61,7 +61,7 @@ export default function MerchantSwitcher() {
           </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -113,7 +113,7 @@ export default function MerchantSwitcher() {
               OTHER BUSINESSES
             </DropdownMenuLabel>
             {otherMerchants.map((merchant, index) => {
-              const MerchantIcon = getMerchantIcon(index);
+              const MerchantIcon = getMerchantIcon(index)
 
               return (
                 <DropdownMenuItem
@@ -128,7 +128,7 @@ export default function MerchantSwitcher() {
                     {merchant.name}
                   </p>
                 </DropdownMenuItem>
-              );
+              )
             })}
           </>
         )}
@@ -140,12 +140,10 @@ export default function MerchantSwitcher() {
             onClick={handleCreateNew}
           >
             <CirclePlus className="size-5 text-white!" />
-            <span className="!text-white!">
-              Create New Business
-            </span>
+            <span className="!text-white!">Create New Business</span>
           </DropdownMenuItem>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

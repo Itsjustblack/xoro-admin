@@ -1,21 +1,21 @@
-import AppSidebar from "@/components/shared/app-sidebar";
-import Header from "@/components/shared/header";
-import InitializeApp from "@/components/shared/initialize-app";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { getCurrentUser } from "@/lib/api/v1/auth/actions";
-import { redirect } from "next/navigation";
+import AppSidebar from "@/components/shared/app-sidebar"
+import Header from "@/components/shared/header"
+import InitializeApp from "@/components/shared/initialize-app"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { getCurrentUser } from "@/lib/api/v1/auth/actions"
+import { redirect } from "next/navigation"
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
-  let currentUser;
+  let currentUser
 
   try {
-    currentUser = await getCurrentUser();
+    currentUser = await getCurrentUser()
   } catch {
-    redirect("/login");
+    redirect("/login")
   }
 
   if (!currentUser.merchants.length) {
-    redirect("/merchant");
+    redirect("/merchant")
   }
 
   return (
@@ -25,12 +25,14 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
           <AppSidebar />
           <div className="flex relative w-full flex-col flex-1 min-w-0">
             <Header />
-            <main className="h-full w-full flex-1 bg-surface-page">{children}</main>
+            <main className="h-full w-full flex-1 bg-surface-page">
+              {children}
+            </main>
           </div>
         </SidebarProvider>
       </div>
     </InitializeApp>
-  );
-};
+  )
+}
 
-export default DashboardLayout;
+export default DashboardLayout

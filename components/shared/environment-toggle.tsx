@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { useCurrentMode, useMerchantActions } from "@/store/merchant";
+import { cn } from "@/lib/utils"
+import { useCurrentMode, useMerchantActions } from "@/store/merchant"
 
-const OPTIONS = ["live", "test"] as const;
+const OPTIONS = ["live", "test"] as const
 
 const EnvironmentToggle = () => {
-  const environment = useCurrentMode();
-  const { toogleMode } = useMerchantActions();
+  const environment = useCurrentMode()
+  const { toogleMode } = useMerchantActions()
 
   const handleSelectEnvironment = (option: (typeof OPTIONS)[number]) => {
     if (option === environment) {
-      return;
+      return
     }
 
-    toogleMode();
-  };
+    toogleMode()
+  }
 
   return (
     <div
@@ -31,7 +31,7 @@ const EnvironmentToggle = () => {
         )}
       />
       {OPTIONS.map((option) => {
-        const isActive = environment === option;
+        const isActive = environment === option
 
         return (
           <button
@@ -49,10 +49,10 @@ const EnvironmentToggle = () => {
           >
             {option}
           </button>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
-export default EnvironmentToggle;
+export default EnvironmentToggle

@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import { DataTable } from "@/components/data-table";
-import { Button } from "@/components/ui/button";
-import { BalanceTransaction } from "@/lib/types";
-import { cn } from "@/lib/utils";
-import type { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@/components/data-table"
+import { Button } from "@/components/ui/button"
+import { BalanceTransaction } from "@/lib/types"
+import { cn } from "@/lib/utils"
+import type { ColumnDef } from "@tanstack/react-table"
 import {
   ArrowDownCircle,
   ArrowDownToLine,
@@ -14,14 +14,14 @@ import {
   FilterIcon,
   ShoppingCart,
   type LucideIcon,
-} from "lucide-react";
-import { useState } from "react";
-import { StatusBadge } from "../dashboard/transactions-table";
+} from "lucide-react"
+import { useState } from "react"
+import { StatusBadge } from "../dashboard/transactions-table"
 
 type TransactionTypeConfig = {
-  icon: LucideIcon;
-  className: string;
-};
+  icon: LucideIcon
+  className: string
+}
 
 const transactionTypeMap: Record<string, TransactionTypeConfig> = {
   payout: {
@@ -40,7 +40,7 @@ const transactionTypeMap: Record<string, TransactionTypeConfig> = {
     icon: ArrowDownCircle,
     className: "bg-blue-100 text-blue-500",
   },
-};
+}
 
 const columns: ColumnDef<BalanceTransaction>[] = [
   {
@@ -51,12 +51,12 @@ const columns: ColumnDef<BalanceTransaction>[] = [
       </span>
     ),
     cell: ({ row }) => {
-      const type = row.getValue("type") as string;
+      const type = row.getValue("type") as string
       const config = transactionTypeMap[type.toLowerCase()] ?? {
         icon: ArrowDownCircle,
         className: "bg-blue-100 text-blue-500",
-      };
-      const Icon = config.icon;
+      }
+      const Icon = config.icon
 
       return (
         <div className="flex items-center gap-3">
@@ -70,7 +70,7 @@ const columns: ColumnDef<BalanceTransaction>[] = [
           </div>
           <span className="font-bold text-text-primary">{type}</span>
         </div>
-      );
+      )
     },
   },
   {
@@ -94,7 +94,7 @@ const columns: ColumnDef<BalanceTransaction>[] = [
       </span>
     ),
     cell: ({ row }) => {
-      const amount = row.getValue("amount") as string;
+      const amount = row.getValue("amount") as string
 
       return (
         <span
@@ -105,7 +105,7 @@ const columns: ColumnDef<BalanceTransaction>[] = [
         >
           {amount}
         </span>
-      );
+      )
     },
   },
   {
@@ -128,26 +128,26 @@ const columns: ColumnDef<BalanceTransaction>[] = [
       <span className="text-text-secondary">{row.getValue("date")}</span>
     ),
   },
-];
+]
 
 interface BalanceTransactionsTableProps {
-  data: BalanceTransaction[];
+  data: BalanceTransaction[]
 }
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 5
 
 export default function BalanceTransactionsTable({
   data,
 }: BalanceTransactionsTableProps) {
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0)
 
   const paginatedData = data.slice(
     pageIndex * PAGE_SIZE,
     (pageIndex + 1) * PAGE_SIZE,
-  );
-  const pageCount = Math.ceil(data.length / PAGE_SIZE);
-  const startRange = data.length === 0 ? 0 : pageIndex * PAGE_SIZE + 1;
-  const endRange = Math.min((pageIndex + 1) * PAGE_SIZE, data.length);
+  )
+  const pageCount = Math.ceil(data.length / PAGE_SIZE)
+  const startRange = data.length === 0 ? 0 : pageIndex * PAGE_SIZE + 1
+  const endRange = Math.min((pageIndex + 1) * PAGE_SIZE, data.length)
 
   return (
     <div className="flex flex-col rounded-3xl border border-surface-border bg-surface-subtle">
@@ -229,5 +229,5 @@ export default function BalanceTransactionsTable({
         </div>
       </div>
     </div>
-  );
+  )
 }

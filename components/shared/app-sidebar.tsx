@@ -1,34 +1,34 @@
-"use client";
+"use client"
 
-import { NAV } from "@/lib/admin-nav";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Headset } from "../icons";
+import { NAV } from "@/lib/admin-nav"
+import { cn } from "@/lib/utils"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Headset } from "../icons"
 import {
-	Sidebar,
-	SidebarContent,
-	SidebarFooter,
-	SidebarGroup,
-	SidebarGroupLabel,
-	SidebarHeader,
-	SidebarMenu,
-	SidebarMenuButton,
-	SidebarMenuItem,
-} from "../ui/sidebar";
-import MerchantSwitcher from "./merchant-switcher";
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "../ui/sidebar"
+import MerchantSwitcher from "./merchant-switcher"
 
 const AppSidebar = () => {
-  const pathname = usePathname();
-  const active = pathname.split("/")[1];
+  const pathname = usePathname()
+  const active = pathname.split("/")[1]
 
   return (
     <Sidebar className="border-r-brand-primary-dark/10">
-		<SidebarHeader className="p-0">
-			<div className="p-3">
-				<MerchantSwitcher />
-			</div>
-		</SidebarHeader>
+      <SidebarHeader className="p-0">
+        <div className="p-3">
+          <MerchantSwitcher />
+        </div>
+      </SidebarHeader>
       <SidebarContent className="px-4">
         {NAV.map((nav) => (
           <SidebarGroup key={nav.section} className="px-0">
@@ -74,7 +74,7 @@ const AppSidebar = () => {
         </button>
       </SidebarFooter>
     </Sidebar>
-  );
-};
+  )
+}
 
-export default AppSidebar;
+export default AppSidebar

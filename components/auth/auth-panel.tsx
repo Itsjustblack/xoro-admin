@@ -1,9 +1,9 @@
-import { ShieldCheck } from "lucide-react";
-import Image from "next/image";
+import { ShieldCheck } from "lucide-react"
+import Image from "next/image"
 
 export function AuthPanel() {
   return (
-    <div className="h-full w-full relative overflow-hidden bg-brand-primary-dark px-14 py-29 flex flex-col">
+    <div className="h-full w-full relative overflow-hidden bg-brand-primary-dark px-14 py-29 flex flex-col text-white">
       <div className="absolute top-1/2 -right-34 -translate-y-1/2 w-105 h-105 pointer-events-none">
         <Image
           height={340}
@@ -52,5 +52,5 @@ export function AuthPanel() {
         </div>
       </div>
     </div>
-  );
+  )
 }

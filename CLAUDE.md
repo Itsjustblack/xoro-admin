@@ -154,11 +154,11 @@ Configuration in `components.json`:
 All imports use the `@/` alias which maps to the project root:
 
 ```typescript
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { CustomerData } from "@/lib/types";
-import { mockCustomers } from "@/lib/mock-data";
-import { PAGE_SIZE } from "@/lib/constants";
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { CustomerData } from "@/lib/types"
+import { mockCustomers } from "@/lib/mock-data"
+import { PAGE_SIZE } from "@/lib/constants"
 ```
 
 ## Component Design Principles

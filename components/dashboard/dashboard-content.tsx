@@ -1,27 +1,28 @@
-import InteractiveChart from "@/components/dashboard/interactive-chart";
-import MetricCard from "@/components/dashboard/metric-card";
-import TransactionsTable from "@/components/dashboard/transactions-table";
-import { BadgeCheck } from "@/components/icons";
-import type { IDashboardAnalytics, IRevenueAnalytics } from "@/lib/types";
-import { formatCount, formatCurrency, formatPercent } from "@/lib/utils";
-import { ArrowRightLeft, CornerUpLeft, TrendingUp } from "lucide-react";
+import InteractiveChart from "@/components/dashboard/interactive-chart"
+import MetricCard from "@/components/dashboard/metric-card"
+import TransactionsTable from "@/components/dashboard/transactions-table"
+import { BadgeCheck } from "@/components/icons"
+import type { IDashboardAnalytics, IRevenueAnalytics } from "@/lib/types"
+import { formatCount, formatCurrency, formatPercent } from "@/lib/utils"
+import { ArrowRightLeft, CornerUpLeft, TrendingUp } from "lucide-react"
 
 type DashboardContentProps = {
-  dashboardAnalytics?: IDashboardAnalytics | null;
-  revenueAnalytics?: IRevenueAnalytics | null;
-};
+  dashboardAnalytics?: IDashboardAnalytics | null
+  revenueAnalytics?: IRevenueAnalytics | null
+}
 
 const DashboardContent = ({
   dashboardAnalytics,
   revenueAnalytics,
 }: DashboardContentProps) => {
-  const revenueMetrics = dashboardAnalytics?.revenue_metrics;
-  const transactionBreakdown = dashboardAnalytics?.transaction_breakdown;
-  const revenueSeries = revenueAnalytics?.time_series.map((point) => point.value) ?? [];
+  const revenueMetrics = dashboardAnalytics?.revenue_metrics
+  const transactionBreakdown = dashboardAnalytics?.transaction_breakdown
+  const revenueSeries =
+    revenueAnalytics?.time_series.map((point) => point.value) ?? []
   const transactionSeries =
-    revenueAnalytics?.time_series.map((point) => point.count) ?? [];
+    revenueAnalytics?.time_series.map((point) => point.count) ?? []
   const currency =
-    revenueAnalytics?.currency ?? dashboardAnalytics?.top_currency?.currency;
+    revenueAnalytics?.currency ?? dashboardAnalytics?.top_currency?.currency
 
   const metricCards = [
     {
@@ -74,7 +75,7 @@ const DashboardContent = ({
       changeClassName: "text-warning-5",
       borderClassName: "border-warning-5",
     },
-  ];
+  ]
 
   return (
     <section className="min-h-screen p-4 sm:p-6 lg:p-8">
@@ -111,7 +112,7 @@ const DashboardContent = ({
         <TransactionsTable />
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default DashboardContent;
+export default DashboardContent

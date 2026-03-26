@@ -1,14 +1,14 @@
-import { AuthPanel } from "@/components/auth/auth-panel";
-import { VerifyForm } from "@/components/auth/verify-form";
-import { XoroPayLogo } from "@/components/icons";
+import { AuthPanel } from "@/components/auth/auth-panel"
+import { VerifyForm } from "@/components/auth/verify-form"
+import { XoroPayLogo } from "@/components/icons"
 
 type VerifyPageProps = {
-  searchParams?: Promise<{ email?: string }>;
-};
+  searchParams?: Promise<{ email?: string }>
+}
 
 export default async function VerifyPage({ searchParams }: VerifyPageProps) {
-  const params = await searchParams;
-  const email = params?.email ?? "";
+  const params = await searchParams
+  const email = params?.email ?? ""
 
   return (
     <div className="h-screen grid grid-cols-1 lg:grid-cols-2 w-full">
@@ -28,5 +28,5 @@ export default async function VerifyPage({ searchParams }: VerifyPageProps) {
         <AuthPanel />
       </div>
     </div>
-  );
+  )
 }

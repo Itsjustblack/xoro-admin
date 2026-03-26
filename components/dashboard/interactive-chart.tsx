@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import type { IRevenueAnalytics } from "@/lib/types";
-import { Download } from "lucide-react";
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import type { IRevenueAnalytics } from "@/lib/types"
+import { Download } from "lucide-react"
 import {
   Bar,
   BarChart,
@@ -13,11 +13,11 @@ import {
   XAxis,
   YAxis,
   type TooltipProps,
-} from "recharts";
+} from "recharts"
 
 type InteractiveChartProps = {
-  revenueAnalytics?: IRevenueAnalytics | null;
-};
+  revenueAnalytics?: IRevenueAnalytics | null
+}
 
 const formatAxisCurrency = (value: number, currency?: string) => {
   try {
@@ -26,14 +26,14 @@ const formatAxisCurrency = (value: number, currency?: string) => {
       maximumFractionDigits: 1,
       style: currency ? "currency" : "decimal",
       currency,
-    }).format(value);
+    }).format(value)
   } catch {
     return new Intl.NumberFormat("en-NG", {
       notation: "compact",
       maximumFractionDigits: 1,
-    }).format(value);
+    }).format(value)
   }
-};
+}
 
 const formatTooltipCurrency = (value: number, currency?: string) => {
   try {
@@ -41,13 +41,13 @@ const formatTooltipCurrency = (value: number, currency?: string) => {
       style: currency ? "currency" : "decimal",
       currency,
       maximumFractionDigits: 2,
-    }).format(value);
+    }).format(value)
   } catch {
     return new Intl.NumberFormat("en-NG", {
       maximumFractionDigits: 2,
-    }).format(value);
+    }).format(value)
   }
-};
+}
 
 const RevenueTooltip = ({
   active,
@@ -56,11 +56,11 @@ const RevenueTooltip = ({
   currency,
 }: TooltipProps<number, string> & { currency?: string }) => {
   if (!active || !payload?.length) {
-    return null;
+    return null
   }
 
-  const revenue = payload.find((item) => item.dataKey === "value")?.value ?? 0;
-  const count = payload.find((item) => item.dataKey === "count")?.value ?? 0;
+  const revenue = payload.find((item) => item.dataKey === "value")?.value ?? 0
+  const count = payload.find((item) => item.dataKey === "count")?.value ?? 0
 
   return (
     <div className="min-w-41 rounded-2xl bg-surface-inverse px-4 py-3 text-xs text-surface-card shadow-lg">
@@ -88,12 +88,12 @@ const RevenueTooltip = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
-  const chartData = revenueAnalytics?.time_series ?? [];
-  const currency = revenueAnalytics?.currency;
+  const chartData = revenueAnalytics?.time_series ?? []
+  const currency = revenueAnalytics?.currency
 
   return (
     <Card className="rounded-3xl border border-brand-primary-dark/5 bg-surface-card p-0 ring-0 shadow-sm">
@@ -133,7 +133,10 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
                     bottom: 8,
                   }}
                 >
-                  <CartesianGrid vertical={false} stroke="var(--color-surface-subtle)" />
+                  <CartesianGrid
+                    vertical={false}
+                    stroke="var(--color-surface-subtle)"
+                  />
                   <XAxis
                     axisLine={false}
                     dataKey="date"
@@ -152,7 +155,9 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
                       fontSize: 12,
                       fontWeight: 600,
                     }}
-                    tickFormatter={(value) => formatAxisCurrency(Number(value), currency)}
+                    tickFormatter={(value) =>
+                      formatAxisCurrency(Number(value), currency)
+                    }
                     tickLine={false}
                     tickMargin={14}
                     width={58}
@@ -185,7 +190,7 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
         </div>
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default InteractiveChart;
+export default InteractiveChart

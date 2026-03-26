@@ -1,11 +1,11 @@
-import { TableCell, TableRow } from "./ui/table";
+import { TableCell, TableRow } from "./ui/table"
 
 export default function RowsSkeleton({
   columnCount,
   length,
 }: {
-  columnCount: number;
-  length: number;
+  columnCount: number
+  length: number
 }) {
   return (
     <>
@@ -19,5 +19,5 @@ export default function RowsSkeleton({
         </TableRow>
       ))}
     </>
-  );
+  )
 }

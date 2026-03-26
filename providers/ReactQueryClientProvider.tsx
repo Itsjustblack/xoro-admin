@@ -1,45 +1,45 @@
-"use client";
+"use client"
 import {
-	MutationCache,
-	QueryClient,
-	QueryClientProvider,
-} from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { AxiosError } from "axios";
-import { useState } from "react";
-import { toast } from "sonner";
+  MutationCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { AxiosError } from "axios"
+import { useState } from "react"
+import { toast } from "sonner"
 
-type ErrorResponse = { detail: string } | { message: string };
+type ErrorResponse = { detail: string } | { message: string }
 
 interface CustomMutationMeta extends Record<string, unknown> {
-  skipGlobalErrorHandler?: boolean;
+  skipGlobalErrorHandler?: boolean
 }
 
 declare module "@tanstack/react-query" {
   interface Register {
-    defaultError: AxiosError<ErrorResponse>;
-    mutationMeta: CustomMutationMeta;
+    defaultError: AxiosError<ErrorResponse>
+    mutationMeta: CustomMutationMeta
   }
 }
 
 export default function ReactQueryClientProvider({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   const handleErrors = (error: AxiosError<ErrorResponse>) => {
-    const parsed = JSON.parse(error.message);
-    const data = parsed.data as ErrorResponse | null;
+    const parsed = JSON.parse(error.message)
+    const data = parsed.data as ErrorResponse | null
 
     if (!data) {
-      toast.error("Something went wrong");
-      return;
+      toast.error("Something went wrong")
+      return
     }
 
-    if ("detail" in data) toast.error(data.detail);
-    else if ("message" in data) toast.error(data.message);
-    else toast.error("An unexpected error occurred");
-  };
+    if ("detail" in data) toast.error(data.detail)
+    else if ("message" in data) toast.error(data.message)
+    else toast.error("An unexpected error occurred")
+  }
 
   const [client] = useState(
     () =>
@@ -56,13 +56,13 @@ export default function ReactQueryClientProvider({
           onError: (error, _variables, _context, mutation) => {
             if (mutation.options.meta?.skipGlobalErrorHandler) {
               // Skip global error handling for this mutation
-              return;
+              return
             }
-            handleErrors(error);
+            handleErrors(error)
           },
         }),
       }),
-  );
+  )
 
   return (
     <QueryClientProvider client={client}>
@@ -70,5 +70,5 @@ export default function ReactQueryClientProvider({
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  );
+  )
 }

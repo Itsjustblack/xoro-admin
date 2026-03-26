@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/select"
 import {
   Table,
   TableBody,
@@ -16,14 +16,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { PAGE_SIZE_OPTIONS } from "@/lib/constants";
+} from "@/components/ui/table"
+import { PAGE_SIZE_OPTIONS } from "@/lib/constants"
 import {
   IconChevronLeft,
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
-} from "@tabler/icons-react";
+} from "@tabler/icons-react"
 import {
   Cell,
   ColumnDef,
@@ -34,19 +34,19 @@ import {
   Row,
   Table as TanStackTable,
   useReactTable,
-} from "@tanstack/react-table";
-import { Dispatch, SetStateAction } from "react";
-import RowsSkeleton from "./row-skeleton";
+} from "@tanstack/react-table"
+import { Dispatch, SetStateAction } from "react"
+import RowsSkeleton from "./row-skeleton"
 
 /** Pagination Controls */
 function PaginationControls<TData>({ table }: { table: TanStackTable<TData> }) {
   const {
     pagination: { pageIndex, pageSize },
-  } = table.getState();
+  } = table.getState()
 
-  const pageCount = table.getPageCount();
-  const canPreviousPage = table.getCanPreviousPage();
-  const canNextPage = table.getCanNextPage();
+  const pageCount = table.getPageCount()
+  const canPreviousPage = table.getCanPreviousPage()
+  const canNextPage = table.getCanNextPage()
 
   return (
     <div className="flex w-full items-center gap-8">
@@ -108,38 +108,38 @@ function PaginationControls<TData>({ table }: { table: TanStackTable<TData> }) {
         </Button>
       </div>
     </div>
-  );
+  )
 }
 
 interface DataTableProps<TData> {
-  data: TData[];
-  columns: ColumnDef<TData>[];
-  isPending: boolean;
-  getRowId?: (row: TData) => string;
-  tableClassName?: string;
-  tableWrapperClassName?: string;
-  headerClassName?: string;
-  headerRowClassName?: string;
-  headClassName?: string;
-  bodyRowClassName?: string | ((row: Row<TData>) => string);
-  bodyCellClassName?: string | ((cell: Cell<TData, unknown>) => string);
-  emptyStateClassName?: string;
+  data: TData[]
+  columns: ColumnDef<TData>[]
+  isPending: boolean
+  getRowId?: (row: TData) => string
+  tableClassName?: string
+  tableWrapperClassName?: string
+  headerClassName?: string
+  headerRowClassName?: string
+  headClassName?: string
+  bodyRowClassName?: string | ((row: Row<TData>) => string)
+  bodyCellClassName?: string | ((cell: Cell<TData, unknown>) => string)
+  emptyStateClassName?: string
 
   // pagination is optional
-  withPagination?: boolean;
-  pageCount?: number;
-  pagination?: { pageIndex: number; pageSize: number };
+  withPagination?: boolean
+  pageCount?: number
+  pagination?: { pageIndex: number; pageSize: number }
   setPagination?: Dispatch<
     SetStateAction<{ pageIndex: number; pageSize: number }>
-  >;
+  >
 
-  rowGrouping?: boolean;
+  rowGrouping?: boolean
 
-  loaders?: number;
+  loaders?: number
 
   //row selection
-  rowSelection?: Record<string, boolean>;
-  setRowSelection?: Dispatch<SetStateAction<Record<string, boolean>>>;
+  rowSelection?: Record<string, boolean>
+  setRowSelection?: Dispatch<SetStateAction<Record<string, boolean>>>
 }
 
 /** Main Generic Table */
@@ -181,7 +181,7 @@ export function DataTable<TData>({
     onRowSelectionChange: setRowSelection,
     enableRowSelection: true,
     getRowId,
-  });
+  })
 
   return (
     <div className="space-y-4">
@@ -256,5 +256,5 @@ export function DataTable<TData>({
         <PaginationControls table={table} />
       )}
     </div>
-  );
+  )
 }

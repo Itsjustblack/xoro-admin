@@ -1,13 +1,13 @@
 import {
-	CalendarRefreshIcon,
-	EmailArrowIcon,
-	FileTextIcon,
-	RefreshClock,
-	SettingIcon,
-	UserCardIcon,
-	Wallet,
-} from "@/components/icons";
-import { ArrowDownLeft, ArrowUpRight, LayoutGrid, Link2 } from "lucide-react";
+  CalendarRefreshIcon,
+  EmailArrowIcon,
+  FileTextIcon,
+  RefreshClock,
+  SettingIcon,
+  UserCardIcon,
+  Wallet,
+} from "@/components/icons"
+import { ArrowDownLeft, ArrowUpRight, LayoutGrid, Link2 } from "lucide-react"
 
 export const NAV = [
   {
@@ -86,4 +86,4 @@ export const NAV = [
       },
     ],
   },
-];
+]

@@ -1,40 +1,40 @@
-"use client";
+"use client"
 
-import { DataTable } from "@/components/data-table";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import type { ColumnDef } from "@tanstack/react-table";
-import type { ReactNode } from "react";
+import { DataTable } from "@/components/data-table"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import type { ColumnDef } from "@tanstack/react-table"
+import type { ReactNode } from "react"
 
-type TableAlign = "left" | "center" | "right";
+type TableAlign = "left" | "center" | "right"
 
 type DashboardTableColumn<TData> = {
-  key: keyof TData;
-  label: string;
-  align?: TableAlign;
-  render?: (value: TData[keyof TData], row: TData) => ReactNode;
-};
+  key: keyof TData
+  label: string
+  align?: TableAlign
+  render?: (value: TData[keyof TData], row: TData) => ReactNode
+}
 
 type DashboardDataTableProps<TData> = {
-  title: string;
-  columns: DashboardTableColumn<TData>[];
-  data: TData[];
-  headerActions?: ReactNode;
-  rowKey: keyof TData | ((row: TData) => string);
-};
+  title: string
+  columns: DashboardTableColumn<TData>[]
+  data: TData[]
+  headerActions?: ReactNode
+  rowKey: keyof TData | ((row: TData) => string)
+}
 
 type RecentTransaction = {
-  customer: string;
-  reference: string;
-  type: string;
-  amount: string;
-  status: string;
-  date: string;
-};
+  customer: string
+  reference: string
+  type: string
+  amount: string
+  status: string
+  date: string
+}
 
 type TransactionsTableProps = {
-  data?: RecentTransaction[];
-};
+  data?: RecentTransaction[]
+}
 
 const STATUS_MAP = {
   success: {
@@ -69,20 +69,20 @@ const STATUS_MAP = {
     label: "Review",
   },
   archived: { bg: "bg-slate-100", text: "text-slate-400", label: "Archived" },
-} as const;
+} as const
 
 const TYPE_MAP = {
   "pay-in": { bg: "bg-accent-blue-soft", text: "text-accent-blue" },
   "pay-out": { bg: "bg-accent-violet-soft", text: "text-accent-violet" },
-} as const;
+} as const
 
 function StatusBadge({ status }: { status: string }) {
-  const key = status.toLowerCase() as keyof typeof STATUS_MAP;
+  const key = status.toLowerCase() as keyof typeof STATUS_MAP
   const config = STATUS_MAP[key] ?? {
     bg: "bg-slate-100",
     text: "text-slate-500",
     label: status,
-  };
+  }
 
   return (
     <span
@@ -90,15 +90,15 @@ function StatusBadge({ status }: { status: string }) {
     >
       {config.label}
     </span>
-  );
+  )
 }
 
 function TypeBadge({ type }: { type: string }) {
-  const key = type.toLowerCase() as keyof typeof TYPE_MAP;
+  const key = type.toLowerCase() as keyof typeof TYPE_MAP
   const config = TYPE_MAP[key] ?? {
     bg: "bg-slate-100",
     text: "text-slate-500",
-  };
+  }
 
   return (
     <span
@@ -106,7 +106,7 @@ function TypeBadge({ type }: { type: string }) {
     >
       {type}
     </span>
-  );
+  )
 }
 
 function CustomerAvatar({ name }: { name: string }) {
@@ -115,7 +115,7 @@ function CustomerAvatar({ name }: { name: string }) {
     .map((segment) => segment[0])
     .join("")
     .slice(0, 2)
-    .toUpperCase();
+    .toUpperCase()
 
   return (
     <Avatar className="h-8 w-8 shrink-0">
@@ -123,19 +123,19 @@ function CustomerAvatar({ name }: { name: string }) {
         {initials}
       </AvatarFallback>
     </Avatar>
-  );
+  )
 }
 
 function getAlignmentClass(align: TableAlign = "left") {
   if (align === "center") {
-    return "text-center";
+    return "text-center"
   }
 
   if (align === "right") {
-    return "text-right";
+    return "text-right"
   }
 
-  return "text-left";
+  return "text-left"
 }
 
 function DashboardDataTable<TData extends Record<string, unknown>>({
@@ -158,14 +158,14 @@ function DashboardDataTable<TData extends Record<string, unknown>>({
       </span>
     ),
     cell: ({ row, getValue }) => {
-      const value = getValue() as TData[keyof TData];
+      const value = getValue() as TData[keyof TData]
 
-      return column.render ? column.render(value, row.original) : String(value);
+      return column.render ? column.render(value, row.original) : String(value)
     },
-  }));
+  }))
 
   const getRowId =
-    typeof rowKey === "function" ? rowKey : (row: TData) => String(row[rowKey]);
+    typeof rowKey === "function" ? rowKey : (row: TData) => String(row[rowKey])
 
   return (
     <section className="overflow-hidden rounded-3xl border border-surface-border bg-surface-card shadow-sm">
@@ -191,7 +191,7 @@ function DashboardDataTable<TData extends Record<string, unknown>>({
         emptyStateClassName="h-24 text-center"
       />
     </section>
-  );
+  )
 }
 
 const recentTransactionColumns: DashboardTableColumn<RecentTransaction>[] = [
@@ -238,9 +238,9 @@ const recentTransactionColumns: DashboardTableColumn<RecentTransaction>[] = [
       <span className="text-text-secondary">{String(value)}</span>
     ),
   },
-];
+]
 
-export { CustomerAvatar, DashboardDataTable, StatusBadge, TypeBadge };
+export { CustomerAvatar, DashboardDataTable, StatusBadge, TypeBadge }
 
 export default function TransactionsTable({
   data = [],
@@ -260,5 +260,5 @@ export default function TransactionsTable({
         </Button>
       }
     />
-  );
+  )
 }

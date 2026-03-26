@@ -1,13 +1,13 @@
 import {
   getDashboardAnalytics,
   getRevenueAnalytics,
-} from "@/lib/api/v1/analytics/queries";
-import { getCurrentUser } from "@/lib/api/v1/auth/actions";
-import type { Mode, Period } from "@/lib/types";
-import { cookies } from "next/headers";
+} from "@/lib/api/v1/analytics/queries"
+import { getCurrentUser } from "@/lib/api/v1/auth/actions"
+import type { Mode, Period } from "@/lib/types"
+import { cookies } from "next/headers"
 
 const isMode = (value?: string): value is Mode =>
-  value === "test" || value === "live";
+  value === "test" || value === "live"
 
 const isPeriod = (value?: string): value is Period =>
   value === "today" ||
@@ -15,33 +15,33 @@ const isPeriod = (value?: string): value is Period =>
   value === "month" ||
   value === "year" ||
   value === "quarter" ||
-  value === "all_time";
+  value === "all_time"
 
 export async function getDashboardPageData() {
-  const cookieStore = await cookies();
-  const currentUser = await getCurrentUser();
-  const selectedMerchantId = cookieStore.get("current_merchant_id")?.value;
-  const selectedMode = cookieStore.get("dashboard_mode")?.value;
-  const selectedPeriod = cookieStore.get("dashboard_period")?.value;
+  const cookieStore = await cookies()
+  const currentUser = await getCurrentUser()
+  const selectedMerchantId = cookieStore.get("current_merchant_id")?.value
+  const selectedMode = cookieStore.get("dashboard_mode")?.value
+  const selectedPeriod = cookieStore.get("dashboard_period")?.value
 
   const merchant =
     currentUser.merchants.find((item) => item.id === selectedMerchantId) ??
     currentUser.merchants.find((item) => item.is_active) ??
-    currentUser.merchants[0];
+    currentUser.merchants[0]
 
-  const mode = isMode(selectedMode) ? selectedMode : "test";
-  const period = isPeriod(selectedPeriod) ? selectedPeriod : undefined;
+  const mode = isMode(selectedMode) ? selectedMode : "test"
+  const period = isPeriod(selectedPeriod) ? selectedPeriod : undefined
 
   const dashboardAnalytics = merchant?.id
     ? await getDashboardAnalytics(merchant.id, mode, period)
-    : null;
+    : null
 
   const revenueAnalytics = merchant?.id
     ? await getRevenueAnalytics(merchant.id, mode)
-    : null;
+    : null
 
   return {
     dashboardAnalytics,
     revenueAnalytics,
-  };
+  }
 }

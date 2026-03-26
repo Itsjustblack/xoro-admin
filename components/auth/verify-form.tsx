@@ -1,72 +1,72 @@
-"use client";
+"use client"
 
-import { AuthSubmitButton } from "@/components/auth/auth-submit-button";
-import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import { AuthSubmitButton } from "@/components/auth/auth-submit-button"
+import { Button } from "@/components/ui/button"
+import { Field, FieldError, FieldGroup } from "@/components/ui/field"
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
-import { useCountdown } from "@/hooks/use-count-down";
-import { verifyLoginOtp, verifySignupOtp } from "@/lib/api/v1/auth/actions";
-import { verifySchema, type VerifyFormValues } from "@/lib/schemas/auth";
-import { maskEmail } from "@/lib/utils";
+} from "@/components/ui/input-otp"
+import { useCountdown } from "@/hooks/use-count-down"
+import { verifyLoginOtp, verifySignupOtp } from "@/lib/api/v1/auth/actions"
+import { verifySchema, type VerifyFormValues } from "@/lib/schemas/auth"
+import { maskEmail } from "@/lib/utils"
 import {
   useAuthActions,
   useLoginCredentials,
   useSignupCredentials,
-} from "@/store/auth";
-import { useMerchantActions } from "@/store/merchant";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { CircleHelp, Timer } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Shield } from "../icons";
+} from "@/store/auth"
+import { useMerchantActions } from "@/store/merchant"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
+import { CircleHelp, Timer } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect, useMemo } from "react"
+import { Controller, useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { Shield } from "../icons"
 
 type VerifyFormProps = {
-  email: string;
-};
+  email: string
+}
 
 export function VerifyForm({ email }: VerifyFormProps) {
-  const router = useRouter();
-  const signupCredentials = useSignupCredentials();
-  const loginCredentials = useLoginCredentials();
+  const router = useRouter()
+  const signupCredentials = useSignupCredentials()
+  const loginCredentials = useLoginCredentials()
 
-  const { clearCredentials } = useAuthActions();
-  const { setMerchants } = useMerchantActions();
+  const { clearCredentials } = useAuthActions()
+  const { setMerchants } = useMerchantActions()
   const {
     secondsLeft: secondsRemaining,
     minutes: countdownMinutes,
     seconds: countdownSeconds,
     reset: resetCountdown,
-  } = useCountdown(60);
+  } = useCountdown(60)
 
-  const maskedEmail = useMemo(() => maskEmail(email), [email]);
+  const maskedEmail = useMemo(() => maskEmail(email), [email])
 
   const form = useForm<VerifyFormValues>({
     resolver: zodResolver(verifySchema),
     defaultValues: {
       otp: "",
     },
-  });
+  })
 
   const resolvePostLoginRoute = (data: {
     data?: {
-      merchant?: unknown;
-      merchants?: unknown[];
-    };
+      merchant?: unknown
+      merchants?: unknown[]
+    }
   }) => {
     const hasMerchant =
       Boolean(data.data?.merchant) ||
-      (Array.isArray(data.data?.merchants) && data.data.merchants.length > 0);
+      (Array.isArray(data.data?.merchants) && data.data.merchants.length > 0)
 
-    return hasMerchant ? "/dashboard" : "/merchant";
-  };
+    return hasMerchant ? "/dashboard" : "/merchant"
+  }
 
   const {
     mutate: login,
@@ -77,12 +77,12 @@ export function VerifyForm({ email }: VerifyFormProps) {
     onSuccess: (data) => {
       // Initialize merchant store with merchants from auth response
       if (data.data?.merchants && data.data.merchants.length > 0) {
-        setMerchants(data.data.merchants);
+        setMerchants(data.data.merchants)
       }
-      router.replace(resolvePostLoginRoute(data));
-      toast.success("OTP verified successfully");
+      router.replace(resolvePostLoginRoute(data))
+      toast.success("OTP verified successfully")
     },
-  });
+  })
 
   const {
     mutate: signUp,
@@ -91,10 +91,10 @@ export function VerifyForm({ email }: VerifyFormProps) {
   } = useMutation({
     mutationFn: verifySignupOtp,
     onSuccess: () => {
-      toast.success("OTP verified successfully");
-      router.replace("/merchant");
+      toast.success("OTP verified successfully")
+      router.replace("/merchant")
     },
-  });
+  })
 
   useEffect(() => {
     if (
@@ -103,7 +103,7 @@ export function VerifyForm({ email }: VerifyFormProps) {
       !isLoginSuccess &&
       !isSignupSuccess
     ) {
-      router.replace("/login");
+      router.replace("/login")
     }
   }, [
     isLoginSuccess,
@@ -111,40 +111,40 @@ export function VerifyForm({ email }: VerifyFormProps) {
     loginCredentials,
     router,
     signupCredentials,
-  ]);
+  ])
 
   useEffect(() => {
     if (isLoginSuccess || isSignupSuccess) {
-      clearCredentials();
+      clearCredentials()
     }
-  }, [clearCredentials, isLoginSuccess, isSignupSuccess]);
+  }, [clearCredentials, isLoginSuccess, isSignupSuccess])
 
   const onSubmit = (data: VerifyFormValues) => {
     if (loginCredentials) {
       login({
         ...loginCredentials,
         otp: data.otp,
-      });
-      return;
+      })
+      return
     }
 
     if (signupCredentials) {
       signUp({
         ...signupCredentials,
         otp: data.otp,
-      });
-      return;
+      })
+      return
     }
-  };
+  }
 
   const handleResend = () => {
-    resetCountdown();
-    form.reset({ otp: "" });
+    resetCountdown()
+    form.reset({ otp: "" })
     toast("Verification code resent", {
       description: email || "Please check your inbox",
       position: "bottom-right",
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -244,5 +244,5 @@ export function VerifyForm({ email }: VerifyFormProps) {
         </Link>
       </div>
     </>
-  );
+  )
 }

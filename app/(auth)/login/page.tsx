@@ -1,6 +1,6 @@
-import { AuthPanel } from "@/components/auth/auth-panel";
-import { LoginForm } from "@/components/auth/login-form";
-import { XoroPayLogo } from "@/components/icons";
+import { AuthPanel } from "@/components/auth/auth-panel"
+import { LoginForm } from "@/components/auth/login-form"
+import { XoroPayLogo } from "@/components/icons"
 
 export default function LoginPage() {
   return (
@@ -23,5 +23,5 @@ export default function LoginPage() {
         <AuthPanel />
       </div>
     </div>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import ApiClient, { handleApiError } from "@/lib/api-client";
+import ApiClient, { handleApiError } from "@/lib/api-client"
 import {
   Currency,
   ICustomerAnalytics,
@@ -11,7 +11,7 @@ import {
   Interval,
   Mode,
   Period,
-} from "@/lib/types";
+} from "@/lib/types"
 
 export async function getDashboardAnalytics(
   merchantId: string,
@@ -24,10 +24,10 @@ export async function getDashboardAnalytics(
       {
         params: { merchant_id: merchantId, mode, period },
       },
-    );
-    return res.data;
+    )
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
 
@@ -49,10 +49,10 @@ export async function getRevenueAnalytics(
         currency,
         interval,
       },
-    });
-    return res.data;
+    })
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
 
@@ -77,10 +77,10 @@ export async function getTransactionAnalytics(
           interval,
         },
       },
-    );
-    return res.data;
+    )
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
 
@@ -88,10 +88,10 @@ export async function getWalletAnalytics(merchantId: string, mode: Mode) {
   try {
     const res = await ApiClient.get<IWalletAnalytics>("/analytics/wallet", {
       params: { merchant_id: merchantId, mode },
-    });
-    return res.data;
+    })
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
 
@@ -114,10 +114,10 @@ export async function getCustomerAnalytics(
           limit,
         },
       },
-    );
-    return res.data;
+    )
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
 
@@ -139,10 +139,10 @@ export async function getPayoutsAnalytics(
         currency,
         interval,
       },
-    });
-    return res.data;
+    })
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
 
@@ -160,10 +160,10 @@ export async function getPatternsAnalytics(
         start_date: startDate,
         end_date: endDate,
       },
-    });
-    return res.data;
+    })
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
 
@@ -186,9 +186,9 @@ export async function getComparisonAnalytics(
           currency,
         },
       },
-    );
-    return res.data;
+    )
+    return res.data
   } catch (error) {
-    throw handleApiError(error);
+    throw handleApiError(error)
   }
 }
