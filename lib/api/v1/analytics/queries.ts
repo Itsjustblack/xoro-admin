@@ -1,4 +1,4 @@
-import ApiClient, { handleApiError } from "@/lib/api-client"
+import ApiClient from "@/lib/api-client"
 import {
   Currency,
   ICustomerAnalytics,
@@ -18,17 +18,10 @@ export async function getDashboardAnalytics(
   mode: Mode,
   period?: Period,
 ) {
-  try {
-    const res = await ApiClient.get<IDashboardAnalytics>(
-      "/analytics/dashboard",
-      {
-        params: { merchant_id: merchantId, mode, period },
-      },
-    )
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+  const res = await ApiClient.get<IDashboardAnalytics>("/analytics/dashboard", {
+    params: { merchant_id: merchantId, mode, period },
+  })
+  return res.data
 }
 
 export async function getRevenueAnalytics(
@@ -39,21 +32,17 @@ export async function getRevenueAnalytics(
   currency?: string,
   interval?: Interval,
 ) {
-  try {
-    const res = await ApiClient.get<IRevenueAnalytics>("/analytics/revenue", {
-      params: {
-        merchant_id: merchantId,
-        mode,
-        start_date: startDate,
-        end_date: endDate,
-        currency,
-        interval,
-      },
-    })
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+  const res = await ApiClient.get<IRevenueAnalytics>("/analytics/revenue", {
+    params: {
+      merchant_id: merchantId,
+      mode,
+      start_date: startDate,
+      end_date: endDate,
+      currency,
+      interval,
+    },
+  })
+  return res.data
 }
 
 export async function getTransactionAnalytics(
@@ -64,35 +53,27 @@ export async function getTransactionAnalytics(
   currency?: string,
   interval?: Interval,
 ) {
-  try {
-    const res = await ApiClient.get<ITransactionAnalytics>(
-      "/analytics/transactions",
-      {
-        params: {
-          merchant_id: merchantId,
-          mode,
-          start_date: startDate,
-          end_date: endDate,
-          currency,
-          interval,
-        },
+  const res = await ApiClient.get<ITransactionAnalytics>(
+    "/analytics/transactions",
+    {
+      params: {
+        merchant_id: merchantId,
+        mode,
+        start_date: startDate,
+        end_date: endDate,
+        currency,
+        interval,
       },
-    )
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+    },
+  )
+  return res.data
 }
 
 export async function getWalletAnalytics(merchantId: string, mode: Mode) {
-  try {
-    const res = await ApiClient.get<IWalletAnalytics>("/analytics/wallet", {
-      params: { merchant_id: merchantId, mode },
-    })
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+  const res = await ApiClient.get<IWalletAnalytics>("/analytics/wallet", {
+    params: { merchant_id: merchantId, mode },
+  })
+  return res.data
 }
 
 export async function getCustomerAnalytics(
@@ -102,23 +83,16 @@ export async function getCustomerAnalytics(
   endDate?: string,
   limit?: number,
 ) {
-  try {
-    const res = await ApiClient.get<ICustomerAnalytics>(
-      "/analytics/customers",
-      {
-        params: {
-          merchant_id: merchantId,
-          mode,
-          start_date: startDate,
-          end_date: endDate,
-          limit,
-        },
-      },
-    )
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+  const res = await ApiClient.get<ICustomerAnalytics>("/analytics/customers", {
+    params: {
+      merchant_id: merchantId,
+      mode,
+      start_date: startDate,
+      end_date: endDate,
+      limit,
+    },
+  })
+  return res.data
 }
 
 export async function getPayoutsAnalytics(
@@ -129,21 +103,17 @@ export async function getPayoutsAnalytics(
   currency?: string,
   interval?: Interval,
 ) {
-  try {
-    const res = await ApiClient.get<IPayoutsAnalytics>("/analytics/payouts", {
-      params: {
-        merchant_id: merchantId,
-        mode,
-        start_date: startDate,
-        end_date: endDate,
-        currency,
-        interval,
-      },
-    })
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+  const res = await ApiClient.get<IPayoutsAnalytics>("/analytics/payouts", {
+    params: {
+      merchant_id: merchantId,
+      mode,
+      start_date: startDate,
+      end_date: endDate,
+      currency,
+      interval,
+    },
+  })
+  return res.data
 }
 
 export async function getPatternsAnalytics(
@@ -152,19 +122,15 @@ export async function getPatternsAnalytics(
   startDate?: string,
   endDate?: string,
 ) {
-  try {
-    const res = await ApiClient.get<IPatternsAnalytics>("/analytics/patterns", {
-      params: {
-        merchant_id: merchantId,
-        mode,
-        start_date: startDate,
-        end_date: endDate,
-      },
-    })
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+  const res = await ApiClient.get<IPatternsAnalytics>("/analytics/patterns", {
+    params: {
+      merchant_id: merchantId,
+      mode,
+      start_date: startDate,
+      end_date: endDate,
+    },
+  })
+  return res.data
 }
 
 export async function getComparisonAnalytics(
@@ -174,21 +140,14 @@ export async function getComparisonAnalytics(
   compareWith: string,
   currency?: Currency,
 ) {
-  try {
-    const res = await ApiClient.get<IDashboardAnalytics>(
-      "/analytics/comparison",
-      {
-        params: {
-          merchant_id: merchantId,
-          mode,
-          current_period: currentPeriod,
-          compare_with: compareWith,
-          currency,
-        },
-      },
-    )
-    return res.data
-  } catch (error) {
-    throw handleApiError(error)
-  }
+  const res = await ApiClient.get<IDashboardAnalytics>("/analytics/comparison", {
+    params: {
+      merchant_id: merchantId,
+      mode,
+      current_period: currentPeriod,
+      compare_with: compareWith,
+      currency,
+    },
+  })
+  return res.data
 }

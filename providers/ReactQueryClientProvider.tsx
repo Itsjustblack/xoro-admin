@@ -28,11 +28,10 @@ export default function ReactQueryClientProvider({
   children: React.ReactNode
 }) {
   const handleErrors = (error: AxiosError<ErrorResponse>) => {
-    const parsed = JSON.parse(error.message)
-    const data = parsed.data as ErrorResponse | null
+    const data = error.response?.data
 
     if (!data) {
-      toast.error("Something went wrong")
+      toast.error(error.message || "Something went wrong")
       return
     }
 
@@ -55,7 +54,6 @@ export default function ReactQueryClientProvider({
         mutationCache: new MutationCache({
           onError: (error, _variables, _context, mutation) => {
             if (mutation.options.meta?.skipGlobalErrorHandler) {
-              // Skip global error handling for this mutation
               return
             }
             handleErrors(error)
@@ -66,7 +64,6 @@ export default function ReactQueryClientProvider({
 
   return (
     <QueryClientProvider client={client}>
-      {/* <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration> */}
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

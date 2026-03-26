@@ -1,20 +1,32 @@
+"use client"
+
 import InteractiveChart from "@/components/dashboard/interactive-chart"
 import MetricCard from "@/components/dashboard/metric-card"
 import TransactionsTable from "@/components/dashboard/transactions-table"
 import { BadgeCheck } from "@/components/icons"
-import type { IDashboardAnalytics, IRevenueAnalytics } from "@/lib/types"
+import { getDashboardAnalytics, getRevenueAnalytics } from "@/lib/api/v1/analytics/queries"
+import { analyticsQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
+import { useQuery } from "@tanstack/react-query"
 import { formatCount, formatCurrency, formatPercent } from "@/lib/utils"
 import { ArrowRightLeft, CornerUpLeft, TrendingUp } from "lucide-react"
 
-type DashboardContentProps = {
-  dashboardAnalytics?: IDashboardAnalytics | null
-  revenueAnalytics?: IRevenueAnalytics | null
-}
+const DashboardContent = () => {
+  const merchant = useCurrentMerchant()
+  const mode = useCurrentMode()
 
-const DashboardContent = ({
-  dashboardAnalytics,
-  revenueAnalytics,
-}: DashboardContentProps) => {
+  const { data: dashboardAnalytics } = useQuery({
+    queryKey: analyticsQueryKeys.dashboard(merchant?.id ?? "", mode),
+    queryFn: () => getDashboardAnalytics(merchant!.id, mode),
+    enabled: !!merchant?.id,
+  })
+
+  const { data: revenueAnalytics } = useQuery({
+    queryKey: analyticsQueryKeys.revenue(merchant?.id ?? "", mode),
+    queryFn: () => getRevenueAnalytics(merchant!.id, mode),
+    enabled: !!merchant?.id,
+  })
+
   const revenueMetrics = dashboardAnalytics?.revenue_metrics
   const transactionBreakdown = dashboardAnalytics?.transaction_breakdown
   const revenueSeries =

@@ -2,24 +2,10 @@ import AppSidebar from "@/components/shared/app-sidebar"
 import Header from "@/components/shared/header"
 import InitializeApp from "@/components/shared/initialize-app"
 import { SidebarProvider } from "@/components/ui/sidebar"
-import { getCurrentUser } from "@/lib/api/v1/auth/actions"
-import { redirect } from "next/navigation"
 
-const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
-  let currentUser
-
-  try {
-    currentUser = await getCurrentUser()
-  } catch {
-    redirect("/login")
-  }
-
-  if (!currentUser.merchants.length) {
-    redirect("/merchant")
-  }
-
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <InitializeApp user={currentUser}>
+    <InitializeApp>
       <div>
         <SidebarProvider>
           <AppSidebar />

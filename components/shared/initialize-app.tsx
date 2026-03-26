@@ -1,29 +1,37 @@
 "use client"
 
-import { IUser } from "@/lib/types"
+import { getUserInfo } from "@/lib/api/v1/user/queries"
+import { userQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { useAuthActions } from "@/store/auth"
 import {
   useCurrentMerchant,
   useCurrentMode,
   useMerchantActions,
 } from "@/store/merchant"
+import { useQuery } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
 import { ReactNode, useEffect } from "react"
 
-interface InitializeAppProps {
-  user: IUser
-  children: ReactNode
-}
-
-export default function InitializeApp({ user, children }: InitializeAppProps) {
+export default function InitializeApp({ children }: { children: ReactNode }) {
   const { setUser } = useAuthActions()
   const { setMerchants } = useMerchantActions()
   const currentMerchant = useCurrentMerchant()
   const mode = useCurrentMode()
+  const router = useRouter()
+
+  const { data: user } = useQuery({
+    queryKey: userQueryKeys.current,
+    queryFn: getUserInfo,
+  })
 
   useEffect(() => {
+    if (!user) return
     setUser(user)
     setMerchants(user.merchants)
-  }, [setMerchants, setUser, user])
+    if (!user.merchants.length) {
+      router.replace("/merchant")
+    }
+  }, [user, setUser, setMerchants, router])
 
   useEffect(() => {
     if (currentMerchant?.id) {
