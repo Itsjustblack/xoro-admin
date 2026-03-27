@@ -11,6 +11,8 @@
   --font-tertiary: var(--font-tertiary);
   --font-code: var(--font-code);
   --font-manrope: var(--font-manrope);
+  --font-clash-display: var(--font-clash-display);
+  --font-satoshi: var(--font-satoshi);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -80,6 +82,8 @@
   --color-warning-3: var(--color-warning-3);
   --color-warning-4: var(--color-warning-4);
   --color-warning-5: var(--color-warning-5);
+  --color-warning-6: var(--color-warning-6);
+
   --color-accent-blue: var(--color-accent-blue);
   --color-accent-blue-soft: var(--color-accent-blue-soft);
   --color-accent-violet: var(--color-accent-violet);
@@ -175,6 +179,7 @@
   --color-warning-3: #a16207;
   --color-warning-4: #ca8a04;
   --color-warning-5: #f97316;
+  --color-warning-6: #d97706;
 }
 
 .dark {

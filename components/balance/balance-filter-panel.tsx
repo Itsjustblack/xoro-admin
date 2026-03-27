@@ -114,7 +114,7 @@ export function BalanceFilterPanel({
       <PopoverContent
         collisionPadding={16}
         align="end"
-        className="z-50 flex w-90 flex-col gap-0 overflow-hidden rounded-3xl border-none bg-white p-0 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)] max-h-[min(85vh,calc(var(--radix-popover-content-available-height)-1rem))]"
+        className="z-50 flex w-87 flex-col font-manrope gap-0 overflow-hidden rounded-3xl border-none bg-white p-0 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)] max-h-[min(85vh,calc(var(--radix-popover-content-available-height)-1rem))]"
         sideOffset={12}
       >
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden p-6 sm:p-7">
@@ -354,17 +354,17 @@ export function BalanceFilterPanel({
           </div>
         </div>
 
-        <div className="shrink-0 bg-gray-50 p-5 px-6 sm:px-7 border-t border-gray-100">
-          <div className="flex items-center justify-between gap-3">
+        <div className="shrink-0 bg-gray-50 p-4 px-5 sm:px-7 border-t border-gray-100">
+          <div className="flex items-center justify-between gap-6">
             <Button
               variant="ghost"
-              className="h-auto p-0 flex-1 justify-start font-semibold text-text-secondary hover:bg-transparent hover:text-text-primary"
+              className="h-auto flex-1 justify-start font-bold text-text-secondary hover:bg-transparent hover:text-text-primary"
               onClick={resetDraft}
             >
               Clear All
             </Button>
             <Button
-              className="flex-1 rounded-full bg-brand-primary-dark py-6 text-base font-semibold text-white shadow-none hover:bg-brand-primary-dark/90"
+              className="flex-1 rounded-full bg-brand-primary-dark px-6 py-4.5 text-xs font-bold text-white shadow-none hover:bg-brand-primary-dark/90"
               onClick={() => {
                 applyDraft()
                 onApply?.()

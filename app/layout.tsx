@@ -7,6 +7,7 @@ import {
   Roboto_Mono,
   Space_Grotesk,
 } from "next/font/google"
+import localFont from "next/font/local"
 import { Toaster } from "sonner"
 import "./globals.css"
 
@@ -37,6 +38,21 @@ const manrope = Manrope({
   subsets: ["latin"],
 })
 
+const satoshi = localFont({
+  src: "../public/fonts/Satoshi-Variable.ttf",
+  variable: "--font-satoshi",
+  weight: "300 900",
+  display: "swap",
+})
+
+const clashDisplay = localFont({
+  src: "../public/fonts/ClashDisplay-Variable.ttf",
+  variable: "--font-clash-display",
+  weight: "200 700",
+  display: "swap",
+})
+
+
 export const metadata: Metadata = {
   title: "XoroPay",
   description: "Seamless Payments, Zero Downtime.",
@@ -50,7 +66,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} ${manrope.variable} antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} ${manrope.variable} ${satoshi.variable} ${clashDisplay.variable} antialiased`}
       >
         <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         <Toaster richColors />

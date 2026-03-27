@@ -257,11 +257,100 @@ export interface Notification {
 
 export interface BalanceTransaction {
   id: string
-  type: "Payout" | "Sales Income" | "Refund" | "Top-up"
+  type: "Payout" | "Sales Income" | "Refund" | "Top-up" | string
   reference: string
   amount: string
   currency: string
-  paymentMethod: "Card" | "Transfer" | "Mobile Money" | "Crypto"
-  status: "Completed" | "Pending" | "Failed"
+  paymentMethod?: "Card" | "Transfer" | "Mobile Money" | "Crypto" | string
+  status: "Completed" | "Pending" | "Failed" | "Partial" | string
   date: string
+}
+
+export type MerchantTransactionType = "credit" | "debit"
+
+export interface MerchantTransactionRecord {
+  id: string | number
+  reference?: string | null
+  tx_ref?: string | null
+  transaction_reference?: string | null
+  amount?: number | string | null
+  currency?: string | null
+  status?: string | null
+  transaction_type?: MerchantTransactionType | null
+  type?: string | null
+  payment_method?: string | null
+  paymentMethod?: string | null
+  created_at?: string | null
+  createdAt?: string | null
+  date?: string | null
+  description?: string | null
+  narration?: string | null
+  wallet_id?: string | number | null
+}
+
+export interface MerchantTransactionsPayload {
+  data?: MerchantTransactionRecord[]
+  transactions?: MerchantTransactionRecord[]
+  items?: MerchantTransactionRecord[]
+  results?: MerchantTransactionRecord[]
+  page?: number
+  current_page?: number
+  page_size?: number
+  per_page?: number
+  total?: number
+  total_count?: number
+  count?: number
+  total_pages?: number
+  last_page?: number
+}
+
+export interface MerchantTransactionsResponse {
+  data?: MerchantTransactionRecord[] | MerchantTransactionsPayload
+  transactions?: MerchantTransactionRecord[]
+  items?: MerchantTransactionRecord[]
+  results?: MerchantTransactionRecord[]
+  page?: number
+  current_page?: number
+  page_size?: number
+  per_page?: number
+  total?: number
+  total_count?: number
+  count?: number
+  total_pages?: number
+  last_page?: number
+}
+
+export interface Wallet {
+	id: number;
+	merchant_id: string;
+	currency: string;
+	balance: number;
+	mode: string;
+	percentage_charge: number;
+	flat_charge: number;
+	payout_percentage_charge: number;
+	payout_flat_charge: number;
+	is_active: boolean;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface WalletBalanceSummary {
+  total_balance: number
+}
+
+export interface BulkPayoutBatch {
+  id: string
+  batchName: string
+  reference: string
+  transactions: number
+  amount: string
+  status: "Success" | "Pending" | "Partial" | "Failed"
+  createdAt: string
+}
+
+export interface MonthlyPayoutPoint {
+  month: string
+  value: number
+  payoutCount: number
 }

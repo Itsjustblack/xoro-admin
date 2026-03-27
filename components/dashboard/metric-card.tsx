@@ -1,4 +1,3 @@
-import { SparklineIcon } from "@/components/icons"
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import type { ReactNode } from "react"
@@ -6,7 +5,7 @@ import type { ReactNode } from "react"
 type MetricCardProps = {
   title: string
   value: string
-  change: string
+  change?: string
   changeLabel: string
   icon: ReactNode
   iconClassName: string
@@ -16,28 +15,6 @@ type MetricCardProps = {
   sparklineValues?: number[]
 }
 
-const buildSparklinePoints = (values: number[]) => {
-  if (values.length < 2) {
-    return ""
-  }
-
-  const width = 78
-  const height = 30
-  const padding = 2
-  const min = Math.min(...values)
-  const max = Math.max(...values)
-  const range = max - min || 1
-
-  return values
-    .map((value, index) => {
-      const x = (index / (values.length - 1)) * width
-      const normalized = (value - min) / range
-      const y = height - normalized * (height - padding * 2) - padding
-
-      return `${x},${y}`
-    })
-    .join(" ")
-}
 
 const MetricCard = ({
   title,
@@ -48,13 +25,11 @@ const MetricCard = ({
   iconClassName,
   changeClassName,
   borderClassName = "border-brand-primary",
-  sparklineClassName = "",
-  sparklineValues = [],
+  sparklineClassName: _sparklineClassName,
+  sparklineValues: _sparklineValues,
 }: MetricCardProps) => {
-  const hasSparkline = sparklineValues.length > 1
-  const sparklinePoints = hasSparkline
-    ? buildSparklinePoints(sparklineValues)
-    : ""
+  void _sparklineClassName
+  void _sparklineValues
 
   return (
     <Card className="rounded-3xl border border-brand-primary-dark/10 bg-surface-1 p-0 ring-0 shadow">
@@ -66,14 +41,14 @@ const MetricCard = ({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-3 sm:space-y-4">
-            <p className="text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
+            <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
               {title}
             </p>
             <div className="space-y-1 sm:space-y-1.5">
-              <p className="text-xl sm:text-2xl font-secondary leading-none font-black text-text-primary">
+              <p className="font-clash-display text-xl sm:text-2xl leading-none font-black text-text-primary">
                 {value}
               </p>
-              <p className="text-xs sm:text-sm leading-tight sm:leading-5">
+              <p className="font-satoshi text-xs sm:text-sm leading-tight sm:leading-5">
                 <span className={cn("font-semibold", changeClassName)}>
                   {change}
                 </span>{" "}
@@ -85,17 +60,6 @@ const MetricCard = ({
           </div>
           <div className={cn("shrink-0", iconClassName)}>{icon}</div>
         </div>
-
-        {hasSparkline ? (
-          <div className="flex justify-end">
-            <SparklineIcon
-              className={sparklineClassName}
-              points={sparklinePoints}
-            />
-          </div>
-        ) : (
-          <div />
-        )}
       </div>
     </Card>
   )

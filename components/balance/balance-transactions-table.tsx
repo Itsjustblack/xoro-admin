@@ -4,6 +4,7 @@ import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { BalanceTransaction } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import type { Dispatch, SetStateAction } from "react"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
   ArrowDownCircle,
@@ -15,7 +16,7 @@ import {
   ShoppingCart,
   type LucideIcon,
 } from "lucide-react"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 
 import { StatusBadge } from "../dashboard/transactions-table"
 import { BalanceFilterPanel } from "./balance-filter-panel"
@@ -136,14 +137,25 @@ const columns: ColumnDef<BalanceTransaction>[] = [
 
 interface BalanceTransactionsTableProps {
   data: BalanceTransaction[]
+  isPending: boolean
+  pageCount: number
+  totalCount: number
+  hasKnownPageCount: boolean
+  pagination: { pageIndex: number; pageSize: number }
+  setPagination: Dispatch<
+    SetStateAction<{ pageIndex: number; pageSize: number }>
+  >
 }
-
-const PAGE_SIZE = 5
 
 export default function BalanceTransactionsTable({
   data,
+  isPending,
+  pageCount,
+  totalCount,
+  hasKnownPageCount,
+  pagination,
+  setPagination,
 }: BalanceTransactionsTableProps) {
-  const [pageIndex, setPageIndex] = useState(0)
   const appliedFilters = useBalanceFilterStore((state) => state.appliedFilters)
 
   const filteredData = useMemo(() => {
@@ -152,13 +164,10 @@ export default function BalanceTransactionsTable({
     )
   }, [appliedFilters, data])
 
-  const paginatedData = filteredData.slice(
-    pageIndex * PAGE_SIZE,
-    (pageIndex + 1) * PAGE_SIZE,
-  )
-  const pageCount = Math.ceil(filteredData.length / PAGE_SIZE)
-  const startRange = filteredData.length === 0 ? 0 : pageIndex * PAGE_SIZE + 1
-  const endRange = Math.min((pageIndex + 1) * PAGE_SIZE, filteredData.length)
+  const startRange =
+    filteredData.length === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
+  const endRange =
+    filteredData.length === 0 ? 0 : startRange + filteredData.length - 1
   const hasActiveFilters =
     appliedFilters.status.length > 0 ||
     appliedFilters.paymentMethod.length > 0 ||
@@ -182,7 +191,9 @@ export default function BalanceTransactionsTable({
               Export CSV
             </Button>
             <BalanceFilterPanel
-              onApply={() => setPageIndex(0)}
+              onApply={() =>
+                setPagination((current) => ({ ...current, pageIndex: 0 }))
+              }
               trigger={
                 <Button
                   variant={hasActiveFilters ? "default" : "outline"}
@@ -202,11 +213,11 @@ export default function BalanceTransactionsTable({
         </div>
 
         <DataTable
-          data={paginatedData}
+          data={filteredData}
           columns={columns}
-          isPending={false}
+          isPending={isPending}
           getRowId={(row) => row.id}
-          withPagination={true}
+          withPagination={false}
           tableWrapperClassName="w-full overflow-x-auto"
           headerClassName="sticky top-0 z-10 bg-surface-2"
           headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
@@ -219,7 +230,7 @@ export default function BalanceTransactionsTable({
 
       <div className="flex items-center justify-between rounded-b-3xl border-t border-surface-6 p-6">
         <p className="text-sm font-medium text-text-secondary">
-          Showing {startRange} to {endRange} of {filteredData.length}{" "}
+          Showing {startRange} to {endRange} of {totalCount}{" "}
           transactions
         </p>
 
@@ -228,30 +239,55 @@ export default function BalanceTransactionsTable({
             variant="outline"
             size="icon"
             className="h-8 w-8 hover:bg-surface-1 bg-transparent rounded-full"
-            disabled={pageIndex === 0}
-            onClick={() => setPageIndex((current) => current - 1)}
+            disabled={pagination.pageIndex === 0}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex - 1,
+              }))
+            }
           >
             <ChevronLeft className="size-4" />
           </Button>
-          {Array.from({ length: pageCount }).map((_, index) => (
-            <Button
-              key={index}
-              variant={pageIndex === index ? "default" : "outline"}
-              className={cn(
-                "h-8 w-8 bg-transparent rounded-full",
-                pageIndex === index ? "bg-indigo-900 text-white" : "hover:bg-surface-1",
-              )}
-              onClick={() => setPageIndex(index)}
-            >
-              {index + 1}
-            </Button>
-          ))}
+          {hasKnownPageCount ? (
+            Array.from({ length: pageCount }).map((_, index) => (
+              <Button
+                key={index}
+                variant={pagination.pageIndex === index ? "default" : "outline"}
+                className={cn(
+                  "h-8 w-8 bg-transparent rounded-full",
+                  pagination.pageIndex === index
+                    ? "bg-indigo-900 text-white"
+                    : "hover:bg-surface-1",
+                )}
+                onClick={() =>
+                  setPagination((current) => ({ ...current, pageIndex: index }))
+                }
+              >
+                {index + 1}
+              </Button>
+            ))
+          ) : (
+            <span className="px-3 text-sm font-medium text-text-secondary">
+              Page {pagination.pageIndex + 1}
+            </span>
+          )}
           <Button
             variant="outline"
             size="icon"
             className="h-8 w-8 hover:bg-surface-1 bg-transparent rounded-full"
-            disabled={pageIndex === pageCount - 1 || pageCount === 0}
-            onClick={() => setPageIndex((current) => current + 1)}
+            disabled={
+              pageCount === 0 ||
+              (hasKnownPageCount
+                ? pagination.pageIndex >= pageCount - 1
+                : data.length < pagination.pageSize)
+            }
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex + 1,
+              }))
+            }
           >
             <ChevronRight className="size-4" />
           </Button>

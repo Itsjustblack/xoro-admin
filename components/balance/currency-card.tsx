@@ -37,13 +37,13 @@ export default function CurrencyCard({
           >
             {icon}
           </div>
-          <p className="text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
+          <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
             {title}
           </p>
         </div>
 
         <div>
-          <p className="text-xl sm:text-2xl font-secondary leading-none font-black text-text-primary">
+          <p className="font-clash-display text-xl sm:text-2xl leading-none font-black text-text-primary">
             {value}
           </p>
         </div>
