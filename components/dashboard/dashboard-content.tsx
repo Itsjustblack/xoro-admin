@@ -112,8 +112,6 @@ const DashboardContent = () => {
               icon={card.icon}
               iconClassName={card.iconClassName}
               borderClassName={card.borderClassName}
-              sparklineClassName={card.sparklineClassName}
-              sparklineValues={card.sparklineValues}
               title={card.title}
               value={card.value}
             />

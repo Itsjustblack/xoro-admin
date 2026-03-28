@@ -1007,7 +1007,7 @@ export const mockBalanceTransactions: BalanceTransaction[] = [
     currency: "USDT",
     paymentMethod: "Crypto",
     status: "Completed",
-    
+
     date: "Oct 19, 2023, 16:20",
   },
   {
@@ -1033,14 +1033,72 @@ export const mockBalanceTransactions: BalanceTransaction[] = [
 ]
 
 export const mockBulkPayoutRows: BulkPayoutBatch[] = [
-  { id: "batch-1", batchName: "March Vendor Payouts", reference: "BP-2023-03-A", transactions: 145, amount: "45,230.50", status: "Success", createdAt: "Oct 24, 2023, 16:45" },
-  { id: "batch-2", batchName: "Affiliate Commission Q3", reference: "BP-2023-03-B", transactions: 89, amount: "12,450.00", status: "Success", createdAt: "Oct 23, 2023, 14:20" },
-  { id: "batch-3", batchName: "Contractor Weekly", reference: "BP-2023-03-C", transactions: 24, amount: "8,900.25", status: "Pending", createdAt: "Oct 22, 2023, 09:15" },
-  { id: "batch-4", batchName: "Refund processing batch", reference: "BP-2023-03-D", transactions: 12, amount: "1,250.00", status: "Partial", createdAt: "Oct 21, 2023, 11:30" },
-  { id: "batch-5", batchName: "Salary Advances", reference: "BP-2023-03-E", transactions: 5, amount: "4,500.00", status: "Failed", createdAt: "Oct 20, 2023, 10:00" },
-  { id: "batch-6", batchName: "Bonus Payouts", reference: "BP-2023-03-F", transactions: 300, amount: "150,000.00", status: "Success", createdAt: "Oct 19, 2023, 15:45" },
-  { id: "batch-7", batchName: "Vendor Adjustments", reference: "BP-2023-03-G", transactions: 8, amount: "840.00", status: "Success", createdAt: "Oct 18, 2023, 12:10" }
+  {
+    id: "batch-1",
+    batchName: "March Vendor Payouts",
+    reference: "BP-2023-03-A",
+    transactions: 145,
+    amount: "45,230.50",
+    status: "Success",
+    createdAt: "Oct 24, 2023, 16:45",
+  },
+  {
+    id: "batch-2",
+    batchName: "Affiliate Commission Q3",
+    reference: "BP-2023-03-B",
+    transactions: 89,
+    amount: "12,450.00",
+    status: "Success",
+    createdAt: "Oct 23, 2023, 14:20",
+  },
+  {
+    id: "batch-3",
+    batchName: "Contractor Weekly",
+    reference: "BP-2023-03-C",
+    transactions: 24,
+    amount: "8,900.25",
+    status: "Pending",
+    createdAt: "Oct 22, 2023, 09:15",
+  },
+  {
+    id: "batch-4",
+    batchName: "Refund processing batch",
+    reference: "BP-2023-03-D",
+    transactions: 12,
+    amount: "1,250.00",
+    status: "Partial",
+    createdAt: "Oct 21, 2023, 11:30",
+  },
+  {
+    id: "batch-5",
+    batchName: "Salary Advances",
+    reference: "BP-2023-03-E",
+    transactions: 5,
+    amount: "4,500.00",
+    status: "Failed",
+    createdAt: "Oct 20, 2023, 10:00",
+  },
+  {
+    id: "batch-6",
+    batchName: "Bonus Payouts",
+    reference: "BP-2023-03-F",
+    transactions: 300,
+    amount: "150,000.00",
+    status: "Success",
+    createdAt: "Oct 19, 2023, 15:45",
+  },
+  {
+    id: "batch-7",
+    batchName: "Vendor Adjustments",
+    reference: "BP-2023-03-G",
+    transactions: 8,
+    amount: "840.00",
+    status: "Success",
+    createdAt: "Oct 18, 2023, 12:10",
+  },
 ]
+
+export const mockBeneficiaries: import("./types").Beneficiary[] = []
 
 export const mockMonthlyPayoutVolume: MonthlyPayoutPoint[] = [
   { month: "Jan", value: 340000, payoutCount: 1240 },
@@ -1054,5 +1112,5 @@ export const mockMonthlyPayoutVolume: MonthlyPayoutPoint[] = [
   { month: "Sep", value: 680000, payoutCount: 2300 },
   { month: "Oct", value: 850000, payoutCount: 2800 },
   { month: "Nov", value: 0, payoutCount: 0 },
-  { month: "Dec", value: 0, payoutCount: 0 }
+  { month: "Dec", value: 0, payoutCount: 0 },
 ]

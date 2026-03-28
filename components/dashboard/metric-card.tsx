@@ -9,12 +9,10 @@ type MetricCardProps = {
   changeLabel: string
   icon: ReactNode
   iconClassName: string
-  changeClassName: string
+  changeClassName?: string
   borderClassName?: string
-  sparklineClassName?: string
-  sparklineValues?: number[]
+  progressValue?: number
 }
-
 
 const MetricCard = ({
   title,
@@ -25,41 +23,48 @@ const MetricCard = ({
   iconClassName,
   changeClassName,
   borderClassName = "border-brand-primary",
-  sparklineClassName: _sparklineClassName,
-  sparklineValues: _sparklineValues,
+  progressValue,
 }: MetricCardProps) => {
-  void _sparklineClassName
-  void _sparklineValues
-
   return (
-    <Card className="rounded-3xl border border-brand-primary-dark/10 bg-surface-1 p-0 ring-0 shadow">
+    <Card className="rounded-3xl min-h-36 border border-brand-primary-dark/10 bg-surface-1 p-0 ring-0 shadow">
       <div
         className={cn(
-          "flex min-h-40 sm:h-41.5 flex-col justify-between border-t-[5px] gap-4 p-4 sm:p-6",
+          "flex flex-col justify-between border-t-[5px] gap-2 p-4 sm:p-6",
           borderClassName,
         )}
       >
         <div className="flex items-start justify-between gap-3">
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-3 sm:space-y-4 flex-1">
             <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
               {title}
             </p>
-            <div className="space-y-1 sm:space-y-1.5">
-              <p className="font-clash-display text-xl sm:text-2xl leading-none font-black text-text-primary">
+            <div className="w-full">
+              <p className="font-clash-display text-xl sm:text-3xl leading-none font-black text-text-primary">
                 {value}
-              </p>
-              <p className="font-satoshi text-xs sm:text-sm leading-tight sm:leading-5">
-                <span className={cn("font-semibold", changeClassName)}>
-                  {change}
-                </span>{" "}
-                <span className="font-medium text-text-muted">
-                  {changeLabel}
-                </span>
               </p>
             </div>
           </div>
           <div className={cn("shrink-0", iconClassName)}>{icon}</div>
         </div>
+        {typeof progressValue === "number" ? (
+          <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-brand-primary-dark/10">
+            <div
+              className={cn("h-full rounded-full bg-success-2")}
+              style={{
+                width: `${Math.min(100, Math.max(0, progressValue))}%`,
+              }}
+            />
+          </div>
+        ) : (
+          <p className="font-satoshi text-xs sm:text-sm leading-tight sm:leading-5">
+            <span className={cn("font-semibold", changeClassName)}>
+              {change}
+            </span>{" "}
+            <span className={cn("font-medium", changeClassName)}>
+              {changeLabel}
+            </span>
+          </p>
+        )}
       </div>
     </Card>
   )

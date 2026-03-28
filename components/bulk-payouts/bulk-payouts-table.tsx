@@ -1,5 +1,6 @@
 ﻿"use client"
 
+import { StatusBadge } from "@/components/dashboard/transactions-table"
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -7,8 +8,7 @@ import type { BulkPayoutBatch } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import { ChevronLeft, ChevronRight, FilterIcon, Search } from "lucide-react"
-import { useMemo, useState } from "react"
-import { StatusBadge } from "@/components/dashboard/transactions-table"
+import { Dispatch, SetStateAction, useMemo, useState } from "react"
 
 const columns: ColumnDef<BulkPayoutBatch>[] = [
   {
@@ -88,15 +88,30 @@ const columns: ColumnDef<BulkPayoutBatch>[] = [
 
 interface BulkPayoutsTableProps {
   data: BulkPayoutBatch[]
+  isPending?: boolean
+  pagination?: {
+    pageIndex: number
+    pageSize: number
+  }
+  totalCount?: number
+  pageCount?: number
+  setPagination?: Dispatch<
+    SetStateAction<{
+      pageIndex: number
+      pageSize: number
+    }>
+  >
 }
 
-const PAGE_SIZE = 5
-
-export function BulkPayoutsTable({ data }: BulkPayoutsTableProps) {
-  const [pageIndex, setPageIndex] = useState(0)
+export function BulkPayoutsTable({
+  data,
+  isPending = false,
+  pagination,
+  totalCount,
+  pageCount,
+  setPagination,
+}: BulkPayoutsTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
-  // We can add the active filtering later if required
-  // const [activeFilter, setActiveFilter] = useState("all")
 
   const filteredData = useMemo(() => {
     return data.filter((batch) => {
@@ -109,15 +124,18 @@ export function BulkPayoutsTable({ data }: BulkPayoutsTableProps) {
     })
   }, [data, searchTerm])
 
-  const pageCount = Math.ceil(filteredData.length / PAGE_SIZE)
-  const paginatedData = useMemo(() => {
-    const start = pageIndex * PAGE_SIZE
-    const end = start + PAGE_SIZE
-    return filteredData.slice(start, end)
-  }, [filteredData, pageIndex])
-
-  const startRange = filteredData.length === 0 ? 0 : pageIndex * PAGE_SIZE + 1
-  const endRange = Math.min((pageIndex + 1) * PAGE_SIZE, filteredData.length)
+  const resolvedPageIndex = pagination?.pageIndex ?? 0
+  const resolvedPageSize =
+    pagination?.pageSize ?? Math.max(filteredData.length, 1)
+  const resolvedPageCount =
+    pageCount ?? Math.max(Math.ceil(filteredData.length / resolvedPageSize), 1)
+  const resolvedTotalCount = totalCount ?? filteredData.length
+  const startRange =
+    resolvedTotalCount === 0 ? 0 : resolvedPageIndex * resolvedPageSize + 1
+  const endRange = Math.min(
+    (resolvedPageIndex + 1) * resolvedPageSize,
+    resolvedTotalCount,
+  )
 
   return (
     <div className="flex flex-col rounded-3xl border border-surface-3 bg-surface-1 shadow-sm">
@@ -132,7 +150,7 @@ export function BulkPayoutsTable({ data }: BulkPayoutsTableProps) {
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value)
-                setPageIndex(0)
+                setPagination?.((current) => ({ ...current, pageIndex: 0 }))
               }}
               className="h-10 w-full pl-9 sm:w-60 font-manrope text-sm"
             />
@@ -149,11 +167,11 @@ export function BulkPayoutsTable({ data }: BulkPayoutsTableProps) {
 
       <section className="w-full">
         <DataTable
-          data={paginatedData}
+          data={filteredData}
           columns={columns}
-          isPending={false}
+          isPending={isPending}
           getRowId={(row) => row.id}
-          withPagination={true}
+
           tableWrapperClassName="w-full overflow-x-auto"
           headerClassName="sticky top-0 z-10 bg-surface-2"
           headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
@@ -166,7 +184,7 @@ export function BulkPayoutsTable({ data }: BulkPayoutsTableProps) {
 
       <div className="flex items-center justify-between rounded-b-3xl p-6">
         <p className="text-sm font-medium text-text-secondary">
-          Showing {startRange} to {endRange} of {filteredData.length} records
+          Showing {startRange} to {endRange} of {resolvedTotalCount} records
         </p>
 
         <div className="flex items-center gap-1">
@@ -174,22 +192,29 @@ export function BulkPayoutsTable({ data }: BulkPayoutsTableProps) {
             variant="outline"
             size="icon"
             className="h-8 w-8 hover:bg-surface-1 bg-transparent rounded-full border-transparent"
-            disabled={pageIndex === 0}
-            onClick={() => setPageIndex((current) => current - 1)}
+            disabled={resolvedPageIndex === 0}
+            onClick={() =>
+              setPagination?.((current) => ({
+                ...current,
+                pageIndex: current.pageIndex - 1,
+              }))
+            }
           >
             <ChevronLeft className="size-4" />
           </Button>
-          {Array.from({ length: pageCount }).map((_, index) => (
+          {Array.from({ length: resolvedPageCount }).map((_, index) => (
             <Button
               key={index}
-              variant={pageIndex === index ? "default" : "outline"}
+              variant={resolvedPageIndex === index ? "default" : "outline"}
               className={cn(
                 "h-8 w-8 bg-transparent rounded-full border-transparent",
-                pageIndex === index
+                resolvedPageIndex === index
                   ? "bg-indigo-900 text-white hover:bg-indigo-900/90"
                   : "hover:bg-surface-1",
               )}
-              onClick={() => setPageIndex(index)}
+              onClick={() =>
+                setPagination?.((current) => ({ ...current, pageIndex: index }))
+              }
             >
               {index + 1}
             </Button>
@@ -198,8 +223,16 @@ export function BulkPayoutsTable({ data }: BulkPayoutsTableProps) {
             variant="outline"
             size="icon"
             className="h-8 w-8 hover:bg-surface-1 bg-transparent rounded-full border-transparent"
-            disabled={pageIndex === pageCount - 1 || pageCount === 0}
-            onClick={() => setPageIndex((current) => current + 1)}
+            disabled={
+              resolvedPageIndex === resolvedPageCount - 1 ||
+              resolvedPageCount === 0
+            }
+            onClick={() =>
+              setPagination?.((current) => ({
+                ...current,
+                pageIndex: current.pageIndex + 1,
+              }))
+            }
           >
             <ChevronRight className="size-4" />
           </Button>

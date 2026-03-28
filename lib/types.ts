@@ -354,3 +354,14 @@ export interface MonthlyPayoutPoint {
   value: number
   payoutCount: number
 }
+
+export interface Beneficiary {
+  id: string
+  name: string
+  accountNumber: string
+  email: string
+  category: string
+  amount: number
+  phoneNo: string
+  whatsappNo: string
+}

@@ -3,6 +3,7 @@ const USER_KEY = "users" as const
 const ANALYTICS_KEY = "analytics" as const
 const WALLET_KEY = "wallets" as const
 const TRANSACTION_KEY = "transactions" as const
+const BULK_PAYOUT_KEY = "bulk-payouts" as const
 
 export const merchantQueryKeys = {
   all: [MERCHANT_KEY] as const,
@@ -44,6 +45,24 @@ export const analyticsQueryKeys = {
       currency ?? null,
       interval ?? null,
     ] as const,
+  payouts: (
+    merchantId: string,
+    mode: string,
+    startDate?: string,
+    endDate?: string,
+    currency?: string,
+    interval?: string,
+  ) =>
+    [
+      ...analyticsQueryKeys.all,
+      "payouts",
+      merchantId,
+      mode,
+      startDate ?? null,
+      endDate ?? null,
+      currency ?? null,
+      interval ?? null,
+    ] as const,
 }
 
 export const walletQueryKeys = {
@@ -75,5 +94,18 @@ export const transactionQueryKeys = {
       walletId ?? null,
       currency ?? null,
       transactionType ?? null,
+    ] as const,
+}
+
+export const bulkPayoutQueryKeys = {
+  all: [BULK_PAYOUT_KEY] as const,
+  list: (merchantId: string, mode: string, page: number, pageSize: number) =>
+    [
+      ...bulkPayoutQueryKeys.all,
+      "list",
+      merchantId,
+      mode,
+      page,
+      pageSize,
     ] as const,
 }
