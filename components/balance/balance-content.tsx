@@ -1,9 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
-
 import BalanceTransactionsTable from "@/components/balance/balance-transactions-table"
-import { useBalanceFilterStore } from "@/components/balance/balance-filter-store"
 import MetricCard from "@/components/dashboard/metric-card"
 import {
   transactionQueryKeys,
@@ -17,16 +14,15 @@ import {
 import { PAGE_SIZE } from "@/lib/constants"
 import {
   BalanceTransaction,
-  MerchantTransactionRecord,
-  MerchantTransactionsPayload,
   MerchantTransactionsResponse,
-  MerchantTransactionType,
   Wallet,
 } from "@/lib/types"
 import { formatCount, formatCurrency } from "@/lib/utils"
+import { useAppliedBalanceFilters } from "@/store/balance-filter-store"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
 import { useQuery } from "@tanstack/react-query"
 import { Landmark } from "lucide-react"
+import { useState } from "react"
 
 import {
   BitcoinIcon2,
@@ -90,24 +86,9 @@ const currencyCardThemeMap: Record<
   },
 }
 
-const apiTransactionTypeToBalanceType: Record<
-  MerchantTransactionType,
-  BalanceTransaction["type"]
-> = {
-  credit: "Sales Income",
-  debit: "Payout",
-}
-
-const fallbackStatusMap: Record<string, BalanceTransaction["status"]> = {
-  success: "Completed",
-  completed: "Completed",
-  pending: "Pending",
-  failed: "Failed",
-  partial: "Partial",
-}
-
 function buildCurrencyCard(wallet: Wallet): CurrencyCardItem {
-  const theme = currencyCardThemeMap[wallet.currency] ?? defaultCurrencyCardTheme
+  const theme =
+    currencyCardThemeMap[wallet.currency] ?? defaultCurrencyCardTheme
 
   return {
     title: wallet.currency,
@@ -116,188 +97,19 @@ function buildCurrencyCard(wallet: Wallet): CurrencyCardItem {
   }
 }
 
-function getTransactionContainer(
-  response: MerchantTransactionsResponse | undefined,
-): MerchantTransactionsResponse | MerchantTransactionsPayload | undefined {
-  if (!response) return undefined
-
-  if (Array.isArray(response.data)) {
-    return response
-  }
-
-  if (response.data && typeof response.data === "object") {
-    return response.data
-  }
-
-  return response
-}
-
-function getTransactionRows(
-  response: MerchantTransactionsResponse | undefined,
-): MerchantTransactionRecord[] {
-  const container = getTransactionContainer(response)
-
-  if (!container) return []
-
-  if (Array.isArray(response?.data)) {
-    return response.data
-  }
-
-  return (
-    container.transactions ??
-    container.items ??
-    container.results ??
-    (Array.isArray(container.data) ? container.data : undefined) ??
-    []
-  )
-}
-
-function getStringValue(
-  record: MerchantTransactionRecord,
-  keys: (keyof MerchantTransactionRecord)[],
-) {
-  for (const key of keys) {
-    const value = record[key]
-    if (typeof value === "string" && value.trim()) {
-      return value
-    }
-  }
-
-  return undefined
-}
-
-function formatTransactionDate(value?: string | null) {
-  if (!value) return "-"
-
-  const parsed = new Date(value)
-  if (Number.isNaN(parsed.getTime())) {
-    return value
-  }
-
-  return new Intl.DateTimeFormat("en-NG", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(parsed)
-}
-
-function normalizeTransactionType(
-  record: MerchantTransactionRecord,
-): BalanceTransaction["type"] {
-  const rawLabel = getStringValue(record, ["type", "description", "narration"])
-  const label = rawLabel?.toLowerCase() ?? ""
-
-  if (label.includes("refund")) return "Refund"
-  if (label.includes("top-up") || label.includes("top up")) return "Top-up"
-  if (label.includes("sales") || label.includes("income")) return "Sales Income"
-  if (label.includes("payout") || label.includes("withdraw")) return "Payout"
-
-  const transactionType = record.transaction_type
-  return transactionType
-    ? apiTransactionTypeToBalanceType[transactionType]
-    : "Sales Income"
-}
-
-function normalizeTransactionStatus(
-  status?: string | null,
-): BalanceTransaction["status"] {
-  const normalized = status?.trim().toLowerCase()
-  if (!normalized) return "Pending"
-
-  return fallbackStatusMap[normalized] ?? status ?? "Pending"
-}
-
-function normalizePaymentMethod(
-  record: MerchantTransactionRecord,
-): BalanceTransaction["paymentMethod"] {
-  const method = getStringValue(record, ["payment_method", "paymentMethod"])
-  return method ?? "Transfer"
-}
-
-function normalizeAmount(record: MerchantTransactionRecord) {
-  const currency = getStringValue(record, ["currency"]) ?? "NGN"
-  const rawAmount = record.amount
-  const parsedAmount =
-    typeof rawAmount === "number"
-      ? rawAmount
-      : typeof rawAmount === "string"
-        ? Number.parseFloat(rawAmount)
-        : 0
-
-  const signedAmount =
-    record.transaction_type === "debit"
-      ? -Math.abs(parsedAmount)
-      : Math.abs(parsedAmount)
-
-  return {
-    amount: formatCurrency(Number.isNaN(signedAmount) ? 0 : signedAmount, currency),
-    currency,
-  }
-}
-
-function normalizeBalanceTransaction(
-  record: MerchantTransactionRecord,
-): BalanceTransaction {
-  const { amount, currency } = normalizeAmount(record)
-
-  return {
-    id: String(record.id),
-    type: normalizeTransactionType(record),
-    reference:
-      getStringValue(record, [
-        "reference",
-        "tx_ref",
-        "transaction_reference",
-      ]) ?? `TX-${record.id}`,
-    amount,
-    currency,
-    paymentMethod: normalizePaymentMethod(record),
-    status: normalizeTransactionStatus(record.status),
-    date: formatTransactionDate(
-      getStringValue(record, ["created_at", "createdAt", "date"]),
-    ),
-  }
-}
-
-function getTransactionPageMeta(
-  response: MerchantTransactionsResponse | undefined,
-  pageSize: number,
-  rowCount: number,
-) {
-  const container = getTransactionContainer(response)
-  const currentPage = container?.current_page ?? container?.page ?? 1
-  const resolvedPageSize = container?.page_size ?? container?.per_page ?? pageSize
-  const totalCount =
-    container?.total_count ??
-    container?.total ??
-    container?.count ??
-    (currentPage - 1) * resolvedPageSize + rowCount
-  const explicitPageCount =
-    container?.total_pages ??
-    container?.last_page ??
-    (typeof totalCount === "number" && resolvedPageSize > 0
-      ? Math.ceil(totalCount / resolvedPageSize)
-      : undefined)
-
-  return {
-    totalCount,
-    pageCount:
-      explicitPageCount ??
-      Math.max(currentPage + (rowCount >= resolvedPageSize ? 1 : 0), 1),
-    hasKnownPageCount: explicitPageCount !== undefined,
-  }
-}
-
 const BalanceContent = () => {
   const merchant = useCurrentMerchant()
   const mode = useCurrentMode()
-  const appliedFilters = useBalanceFilterStore((state) => state.appliedFilters)
+  const appliedFilters = useAppliedBalanceFilters()
   const [transactionPagination, setTransactionPagination] = useState({
     pageIndex: 0,
     pageSize: PAGE_SIZE,
   })
 
   const serverCurrencyFilter =
-    appliedFilters.currency.length === 1 ? appliedFilters.currency[0] : undefined
+    appliedFilters.currency.length === 1
+      ? appliedFilters.currency[0]
+      : undefined
 
   const { data: walletSummary } = useQuery({
     queryKey: walletQueryKeys.summary(merchant?.id ?? "", mode),
@@ -334,19 +146,16 @@ const BalanceContent = () => {
     })
 
   const currencyCards = wallets?.map(buildCurrencyCard) ?? []
-  const balanceTransactions = useMemo(
-    () => getTransactionRows(merchantTransactions).map(normalizeBalanceTransaction),
-    [merchantTransactions],
+  const transactionsResponse =
+    merchantTransactions as MerchantTransactionsResponse | undefined
+  const balanceTransactions: BalanceTransaction[] = Array.isArray(
+    transactionsResponse?.data,
   )
-  const transactionMeta = useMemo(
-    () =>
-      getTransactionPageMeta(
-        merchantTransactions,
-        transactionPagination.pageSize,
-        balanceTransactions.length,
-      ),
-    [balanceTransactions.length, merchantTransactions, transactionPagination.pageSize],
-  )
+    ? (transactionsResponse.data as BalanceTransaction[])
+    : ((transactionsResponse?.transactions ??
+        transactionsResponse?.items ??
+        transactionsResponse?.results ??
+        []) as BalanceTransaction[])
 
   return (
     <section className="min-h-screen p-4 sm:p-6 lg:p-8">
@@ -355,7 +164,7 @@ const BalanceContent = () => {
           <h1 className="text-2xl font-black text-text-primary sm:text-3xl">
             Balance
           </h1>
-          <p className="mt-2 max-w-2xl text-base text-text-secondary">
+          <p className="mt-1 max-w-2xl text-base font-medium text-text-secondary">
             Manage your funds, monitor settlements, and initiate payouts.
           </p>
         </div>
@@ -365,10 +174,10 @@ const BalanceContent = () => {
             title="AVAILABLE BALANCE"
             value={formatCurrency(walletSummary?.total_balance ?? 0)}
             change={formatCount(currencyCards.length)}
-            changeLabel="wallets"
+            changeLabel="from last month"
             icon={<Landmark className="size-5" />}
             iconClassName="text-brand-primary-dark"
-            changeClassName="text-text-primary"
+            changeClassName="text-green-500"
             borderClassName="border-brand-primary-dark"
           />
 
@@ -393,9 +202,9 @@ const BalanceContent = () => {
           <BalanceTransactionsTable
             data={balanceTransactions}
             isPending={isTransactionsPending}
-            pageCount={transactionMeta.pageCount}
-            totalCount={transactionMeta.totalCount}
-            hasKnownPageCount={transactionMeta.hasKnownPageCount}
+            pageCount={1}
+            totalCount={balanceTransactions.length}
+            hasKnownPageCount={true}
             pagination={transactionPagination}
             setPagination={setTransactionPagination}
           />

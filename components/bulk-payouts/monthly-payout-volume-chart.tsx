@@ -1,7 +1,14 @@
 ﻿"use client"
 
-import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import type { MonthlyPayoutPoint } from "@/lib/types"
 import { MoreVertical } from "lucide-react"
 import {
@@ -14,13 +21,6 @@ import {
   YAxis,
   type TooltipProps,
 } from "recharts"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
 type MonthlyPayoutVolumeChartProps = {
   data: MonthlyPayoutPoint[]
@@ -79,7 +79,7 @@ export default function MonthlyPayoutVolumeChart({
   data,
 }: MonthlyPayoutVolumeChartProps) {
   return (
-    <Card className="rounded-2xl border border-brand-primary-dark/5 bg-surface-1 p-0 shadow-sm ring-0">
+    <Card className="rounded-2xl border border-surface-6 bg-surface-1 p-0 shadow-sm ring-0">
       <div className="flex flex-col gap-5 p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">

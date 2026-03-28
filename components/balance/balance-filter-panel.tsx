@@ -13,7 +13,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { useBalanceFilterStore } from "./balance-filter-store"
+import {
+  useBalanceFilterActions,
+  useDraftBalanceFilters,
+} from "@/store/balance-filter-store"
 import {
   CURRENCY_OPTIONS,
   DATE_PRESETS,
@@ -30,13 +33,9 @@ export function BalanceFilterPanel({
   trigger,
   onApply,
 }: BalanceFilterPanelProps) {
-  const draftFilters = useBalanceFilterStore((state) => state.draftFilters)
-  const applyDraft = useBalanceFilterStore((state) => state.applyDraft)
-  const resetDraft = useBalanceFilterStore((state) => state.resetDraft)
-  const resetAll = useBalanceFilterStore((state) => state.resetAll)
-  const updateDraftFilters = useBalanceFilterStore(
-    (state) => state.updateDraftFilters,
-  )
+  const draftFilters = useDraftBalanceFilters()
+  const { applyDraft, resetDraft, resetAll, updateDraftFilters } =
+    useBalanceFilterActions()
 
   const toggleArrayItem = (array: string[], item: string) => {
     return array.includes(item)

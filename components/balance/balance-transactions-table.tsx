@@ -4,7 +4,6 @@ import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { BalanceTransaction } from "@/lib/types"
 import { cn } from "@/lib/utils"
-import type { Dispatch, SetStateAction } from "react"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
   ArrowDownCircle,
@@ -16,11 +15,12 @@ import {
   ShoppingCart,
   type LucideIcon,
 } from "lucide-react"
+import type { Dispatch, SetStateAction } from "react"
 import { useMemo } from "react"
 
+import { useAppliedBalanceFilters } from "../../store/balance-filter-store"
 import { StatusBadge } from "../dashboard/transactions-table"
 import { BalanceFilterPanel } from "./balance-filter-panel"
-import { useBalanceFilterStore } from "./balance-filter-store"
 import { applyBalanceFilters } from "./balance-filter-utils"
 
 type TransactionTypeConfig = {
@@ -156,7 +156,7 @@ export default function BalanceTransactionsTable({
   pagination,
   setPagination,
 }: BalanceTransactionsTableProps) {
-  const appliedFilters = useBalanceFilterStore((state) => state.appliedFilters)
+  const appliedFilters = useAppliedBalanceFilters()
 
   const filteredData = useMemo(() => {
     return data.filter((transaction) =>
@@ -165,7 +165,9 @@ export default function BalanceTransactionsTable({
   }, [appliedFilters, data])
 
   const startRange =
-    filteredData.length === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
+    filteredData.length === 0
+      ? 0
+      : pagination.pageIndex * pagination.pageSize + 1
   const endRange =
     filteredData.length === 0 ? 0 : startRange + filteredData.length - 1
   const hasActiveFilters =
@@ -230,8 +232,7 @@ export default function BalanceTransactionsTable({
 
       <div className="flex items-center justify-between rounded-b-3xl border-t border-surface-6 p-6">
         <p className="text-sm font-medium text-text-secondary">
-          Showing {startRange} to {endRange} of {totalCount}{" "}
-          transactions
+          Showing {startRange} to {endRange} of {totalCount} transactions
         </p>
 
         <div className="flex items-center gap-1">
