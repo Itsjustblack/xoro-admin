@@ -159,7 +159,7 @@ export function DataTable<TData>({
   bodyRowClassName,
   bodyCellClassName,
   emptyStateClassName,
-  withPagination = true,
+  withPagination = false,
   rowGrouping = false,
   loaders = 4,
   rowSelection,

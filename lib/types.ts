@@ -1,7 +1,13 @@
-import { CRYPTO_CURRENCIES } from "./constants"
+import { CRYPTO_CURRENCIES } from "@/lib/constants"
 
 export type Mode = "test" | "live"
 export type Status = "success" | "abandoned" | "pending" | "failed"
+export type TransactionType = "credit" | "debit"
+export type PaymentChannel = "card" | "transfer" | "crypto" | "bank"
+export type CheckoutType = "static" | "dynamic"
+export type ChargeType = "one_time" | "recurring"
+export type Currency = "USD" | "NGN" | (typeof CRYPTO_CURRENCIES)[number]
+
 export type Period =
   | "today"
   | "week"
@@ -10,7 +16,362 @@ export type Period =
   | "quarter"
   | "all_time"
 export type Interval = "day" | "week" | "month"
-export type Currency = "USD" | "NGN" | (typeof CRYPTO_CURRENCIES)[number]
+
+export type QueryParams = {
+  pageIndex: number
+  pageSize: number
+  mode?: Mode
+}
+
+export type BankAccount = {
+  bank_code: string
+  account_number: string
+}
+
+export type CountryPhoneCode = {
+  name: string
+  dial_code: string
+  code: string
+}
+
+export type LoginCredentials = {
+  email: string
+  password: string
+}
+
+export type SignupCredentials = LoginCredentials & {
+  name: string
+}
+
+export interface IMerchant {
+  id: string
+  name: string
+  email: string
+  is_verified: boolean
+  is_active: boolean
+  joined_at: string
+  test_balance: number
+  live_balance: number
+  percentage_charge: number
+  flat_charge: number
+  role?: string | null
+}
+
+export interface IUser {
+  id?: string
+  name: string
+  email: string
+  created_at: string
+  updated_at: string
+  is_verified: boolean
+  merchants: IMerchant[]
+}
+
+export interface APIKeys {
+  live: { secret: string | null; public: string | null }
+  test: { secret: string | null; public: string | null }
+  merchant_id: string
+}
+
+export interface Wallet {
+  id: number
+  merchant_id: string
+  currency: string
+  balance: number
+  mode: string
+  percentage_charge: number
+  flat_charge: number
+  payout_percentage_charge: number
+  payout_flat_charge: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface WalletBalanceSummary {
+  total_balance: number
+}
+
+export interface ITransaction {
+  id: number
+  type: TransactionType
+  status: Status
+  mode: Mode
+  amount: number
+  charge: number
+  processor_reference: string
+  reference: string
+  customer: { name: string; email: string }
+  created_at: string
+}
+
+export interface TransactionsResponse {
+  transactions: ITransaction[]
+  total_items: number
+  total_pages: number
+  current_page: number
+  page_size: number
+}
+
+export type MerchantTransactionType =
+  | "Payout"
+  | "Refund"
+  | "Sales Income"
+  | "Top-up"
+
+export interface MerchantTransactionsResponse {
+  transactions: BalanceTransaction[]
+  total_items: number
+  total_pages: number
+  current_page: number
+  page_size: number
+  data?: BalanceTransaction[]
+  items?: BalanceTransaction[]
+  results?: BalanceTransaction[]
+}
+
+export interface BalanceTransaction {
+  id: string
+  type: string
+  reference: string
+  amount: string
+  currency?: string
+  paymentMethod?: string
+  status: string
+  date: string
+}
+
+export interface Beneficiary extends BankAccount {
+  id: number
+  name: string
+  email: string
+  merchant_id: string
+  phone_number?: string
+  whatsapp_number?: string
+  default_amount: number
+  narration?: string
+  is_active: boolean
+  category_id: number | null
+  created_at: string
+  updated_at: string
+}
+
+export type BeneficiaryPayload = Omit<
+  Beneficiary,
+  "id" | "is_active" | "created_at" | "updated_at"
+>
+
+export interface BeneficiariesResponse {
+  beneficiaries: Beneficiary[]
+  current_page: number
+  page_size: number
+  total_items: number
+  total_pages: number
+}
+
+export interface Category {
+  id: number
+  name: string
+  description: string
+  merchant_id: string
+}
+
+export interface GetPayoutBeneficiariesParams {
+  merchant_id: string
+  page?: number
+  size?: number
+  category_id?: number
+}
+
+export interface BulkPayoutCustomerPayload {
+  account_number: string
+  bank_slug: string
+  email: string
+  whatsapp_number: string
+  phone_number: string
+}
+
+export interface BulkPayoutItemPayload {
+  merchant_id: string
+  amount: number
+  currency: string
+  customer: BulkPayoutCustomerPayload
+  narration: string
+}
+
+export interface CreateBulkPayoutPayload {
+  merchant_id: string
+  mode: Mode
+  name: string
+  data: BulkPayoutItemPayload[]
+  category_ids?: number[]
+  beneficiary_ids?: number[]
+}
+
+export interface IndividualPayoutDetail {
+  txn_id: number
+  txn_message: string
+  status: boolean
+}
+
+export interface BulkPayout {
+  id: number
+  name: string
+  reference: string
+  status: string
+  transaction_details: IndividualPayoutDetail[]
+  created_at: string
+}
+
+export interface BulkPayoutsResponse {
+  payouts: BulkPayout[]
+  total_items: number
+  total_pages: number
+  current_page: number
+  page_size: number
+  pending_count: number
+  success_count: number
+  partial_count: number
+  failed_count: number
+  success_rate: number
+}
+
+export interface IBulkTransactionData {
+  id: number
+  name: string
+  reference: string
+  status: string
+  remarks: string | null
+  created_at: string
+  transactions: IBulkTransaction[]
+}
+
+export interface IBulkTransaction {
+  id: number
+  type: string
+  mode: Mode
+  reference: string
+  status: string
+  amount: number
+  charge: number
+  processor: string
+  customer: { name: string | null; email: string }
+  details: { account_number: string; bank: string; customer_name: string }
+  created_at: string
+}
+
+export interface PayoutPayload {
+  merchant_id: string
+  amount: number
+  currency: string
+  customer: BankAccount
+  narration?: string
+}
+
+export interface IPayoutsAnalytics {
+  mode: string
+  start_date: string
+  end_date: string
+  currency: string
+  total_payouts: number
+  payout_count: number
+  successful_payouts: number
+  failed_payouts: number
+  pending_payouts: number
+  total_payout_charges: number
+  average_payout_amount: number
+  time_series: IRevenueTimeSeriesPoint[]
+}
+
+export interface PaymentLinkPayload {
+  merchant_id: string
+  amount: number
+  currency: string
+  customer: { name: string; email: string }
+  narration: string
+  processor: string
+  mode: Mode
+}
+
+export interface PaymentLinkResponse {
+  reference: string
+  checkout_url: string
+  processor: string
+}
+
+export interface CheckoutLink {
+  id: string
+  reference: string
+  title: string
+  merchant_id: string
+  url: string
+  description: string | null
+  amount_type: CheckoutType
+  mode: Mode
+  type: ChargeType
+  currency: string
+  amount: number | null
+  max_uses: number | null
+  current_uses: number
+  redirect_url: string | null
+  expires_at: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface CheckoutLinkDetails extends CheckoutLink {
+  transactions: ITransaction[]
+}
+
+export type CheckoutResponseBase = {
+  status: boolean
+  reference: string
+  processor_reference: string
+  currency: "NGN"
+  amount: number
+  fee: number
+  customer_email: string
+  merchant_id: string
+}
+
+export type CheckoutTransferResponse = CheckoutResponseBase & {
+  channel: "transfer"
+  seconds_until_expiry: number
+  bank_account: BankAccount & {
+    account_name: string
+    bank_name: string
+    expiry_date: string
+  }
+}
+
+export type CheckoutCardResponse = CheckoutResponseBase & {
+  channel: "card"
+  checkout_url: string
+}
+
+export type CheckoutResponses = CheckoutTransferResponse | CheckoutCardResponse
+
+export type VerifyTransactionPayload = {
+  reference: string
+  customer_email: string
+  merchant_id: string
+}
+
+export type VerifyTransactionResponse = {
+  id: number
+  type: TransactionType
+  mode: Mode
+  reference: string
+  status: Status
+  amount: number
+  charge: number
+  processor_reference: string
+  processor: string
+  customer: { name: string | null; email: string }
+  details: string | null
+  created_at: string
+}
 
 export interface IRevenueMetrics {
   total_revenue: number
@@ -123,21 +484,6 @@ export interface ICustomerAnalytics {
   repeat_customer_rate: number
 }
 
-export interface IPayoutsAnalytics {
-  mode: string
-  start_date: string
-  end_date: string
-  currency: string
-  total_payouts: number
-  payout_count: number
-  successful_payouts: number
-  failed_payouts: number
-  pending_payouts: number
-  total_payout_charges: number
-  average_payout_amount: number
-  time_series: IRevenueTimeSeriesPoint[]
-}
-
 export interface IHourlyDistribution {
   hour: number
   transaction_count: number
@@ -161,207 +507,16 @@ export interface IPatternsAnalytics {
   average_daily_transactions: number
 }
 
-export interface IUser {
-  id: string
+export type IBank = {
   name: string
-  email: string
-  created_at: string
-  updated_at: string
-  is_verified: boolean
-  merchants: IMerchant[]
+  slug: string
+  code: string
+  nibss_bank_code: string | null
+  country: string
 }
 
-export interface IMerchant {
-  id: string
-  name: string
-  email: string
-  is_verified: boolean
-  is_active: boolean
-  joined_at: string
-  test_balance: number
-  live_balance: number
-  percentage_charge: number
-  flat_charge: number
-  role: string | null
-}
-
-// REMOVE LATER, NOT NEEDED
-export interface ChatItem {
-  id: string
-  name: string
-  avatar: string
-  lastMessage: string
-  timeAway: string
-  unread: number
-}
-
-export interface Message {
-  id: string
-  content: string
-  timestamp: string
-  isAgent: boolean
-}
-
-export interface CustomerData {
-  id: string
-  name: string
-  avatar: string
-  email: string
-  phone: string
-  joinDate: string
-  totalOrders: number
-  totalSpent: string
-  lastPurchase: string
-  status: "active" | "inactive" | "pending"
-}
-
-export interface Product {
-  id: string
-  name: string
-  image?: string
-  price: string
-  stock: number
-  category: string
-  description: string
-  sku: string
-}
-
-export interface OrderItem {
-  productId: string
-  productName: string
-  quantity: number
-  price: string
-}
-
-export interface Order {
-  id: string
-  orderNumber: string
-  customerName: string
-  customerEmail: string
-  items: OrderItem[]
-  totalAmount: string
-  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled"
-  paymentStatus: "paid" | "unpaid" | "refunded"
-  orderDate: string
-  shippingAddress: string
-}
-
-export interface Notification {
-  id: string
-  title: string
-  description: string
-  timestamp: string
-  read: boolean
-  type: "info" | "warning" | "success" | "order"
-}
-
-export interface BalanceTransaction {
-  id: string
-  type: "Payout" | "Sales Income" | "Refund" | "Top-up" | string
-  reference: string
-  amount: string
+export interface KoraPayload {
+  account: string
+  bank: string
   currency: string
-  paymentMethod?: "Card" | "Transfer" | "Mobile Money" | "Crypto" | string
-  status: "Completed" | "Pending" | "Failed" | "Partial" | string
-  date: string
-}
-
-export type MerchantTransactionType = "credit" | "debit"
-
-export interface MerchantTransactionRecord {
-  id: string | number
-  reference?: string | null
-  tx_ref?: string | null
-  transaction_reference?: string | null
-  amount?: number | string | null
-  currency?: string | null
-  status?: string | null
-  transaction_type?: MerchantTransactionType | null
-  type?: string | null
-  payment_method?: string | null
-  paymentMethod?: string | null
-  created_at?: string | null
-  createdAt?: string | null
-  date?: string | null
-  description?: string | null
-  narration?: string | null
-  wallet_id?: string | number | null
-}
-
-export interface MerchantTransactionsPayload {
-  data?: MerchantTransactionRecord[]
-  transactions?: MerchantTransactionRecord[]
-  items?: MerchantTransactionRecord[]
-  results?: MerchantTransactionRecord[]
-  page?: number
-  current_page?: number
-  page_size?: number
-  per_page?: number
-  total?: number
-  total_count?: number
-  count?: number
-  total_pages?: number
-  last_page?: number
-}
-
-export interface MerchantTransactionsResponse {
-  data?: MerchantTransactionRecord[] | MerchantTransactionsPayload
-  transactions?: MerchantTransactionRecord[]
-  items?: MerchantTransactionRecord[]
-  results?: MerchantTransactionRecord[]
-  page?: number
-  current_page?: number
-  page_size?: number
-  per_page?: number
-  total?: number
-  total_count?: number
-  count?: number
-  total_pages?: number
-  last_page?: number
-}
-
-export interface Wallet {
-	id: number;
-	merchant_id: string;
-	currency: string;
-	balance: number;
-	mode: string;
-	percentage_charge: number;
-	flat_charge: number;
-	payout_percentage_charge: number;
-	payout_flat_charge: number;
-	is_active: boolean;
-	created_at: string;
-	updated_at: string;
-}
-
-export interface WalletBalanceSummary {
-  total_balance: number
-}
-
-export interface BulkPayoutBatch {
-  id: string
-  batchName: string
-  reference: string
-  transactions: number
-  amount: string
-  status: "Success" | "Pending" | "Partial" | "Failed"
-  createdAt: string
-}
-
-export interface MonthlyPayoutPoint {
-  month: string
-  value: number
-  payoutCount: number
-}
-
-export interface Beneficiary {
-  id: string
-  name: string
-  accountNumber: string
-  email: string
-  category: string
-  amount: number
-  phoneNo: string
-  whatsappNo: string
 }

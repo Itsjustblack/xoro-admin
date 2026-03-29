@@ -4,7 +4,10 @@ import InteractiveChart from "@/components/dashboard/interactive-chart"
 import MetricCard from "@/components/dashboard/metric-card"
 import TransactionsTable from "@/components/dashboard/transactions-table"
 import { BadgeCheck } from "@/components/icons"
-import { getDashboardAnalytics, getRevenueAnalytics } from "@/lib/api/v1/analytics/queries"
+import {
+  getDashboardAnalytics,
+  getRevenueAnalytics,
+} from "@/lib/api/v1/analytics/queries"
 import { analyticsQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { formatCount, formatCurrency, formatPercent } from "@/lib/utils"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"

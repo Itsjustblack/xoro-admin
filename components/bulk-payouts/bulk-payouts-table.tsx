@@ -4,24 +4,29 @@ import { StatusBadge } from "@/components/dashboard/transactions-table"
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import type { BulkPayoutBatch } from "@/lib/types"
+import type { BulkPayout } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import { ChevronLeft, ChevronRight, FilterIcon, Search } from "lucide-react"
 import { Dispatch, SetStateAction, useMemo, useState } from "react"
 
-const columns: ColumnDef<BulkPayoutBatch>[] = [
+import Link from "next/link"
+
+const columns: ColumnDef<BulkPayout>[] = [
   {
-    accessorKey: "batchName",
+    accessorKey: "name",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
         Batch Name
       </span>
     ),
     cell: ({ row }) => (
-      <span className="font-bold text-text-primary">
-        {row.getValue("batchName")}
-      </span>
+      <Link
+        href={`/bulk-payouts/${row.original.reference}`}
+        className="font-bold text-text-primary hover:text-brand-primary transition-colors"
+      >
+        {row.getValue("name")}
+      </Link>
     ),
   },
   {
@@ -38,7 +43,7 @@ const columns: ColumnDef<BulkPayoutBatch>[] = [
     ),
   },
   {
-    accessorKey: "transactions",
+    id: "transactions",
     header: () => (
       <div className="w-full text-center">
         <span className="text-xs font-semibold uppercase text-text-muted">
@@ -48,21 +53,18 @@ const columns: ColumnDef<BulkPayoutBatch>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-full text-center text-text-secondary">
-        {row.getValue("transactions")}
+        {row.original.transaction_details.length}
       </div>
     ),
   },
   {
-    accessorKey: "amount",
+    id: "amount",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
         Total Amount
       </span>
     ),
-    cell: ({ row }) => {
-      const amount = row.getValue("amount") as string
-      return <span className="font-bold text-text-primary">NGN {amount}</span>
-    },
+    cell: () => <span className="font-bold text-text-primary">N/A</span>,
   },
   {
     accessorKey: "status",
@@ -74,20 +76,20 @@ const columns: ColumnDef<BulkPayoutBatch>[] = [
     cell: ({ row }) => <StatusBadge status={row.getValue("status")} />,
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
         Created At
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-text-secondary">{row.getValue("createdAt")}</span>
+      <span className="text-text-secondary">{row.getValue("created_at")}</span>
     ),
   },
 ]
 
 interface BulkPayoutsTableProps {
-  data: BulkPayoutBatch[]
+  data: BulkPayout[]
   isPending?: boolean
   pagination?: {
     pageIndex: number
@@ -117,7 +119,7 @@ export function BulkPayoutsTable({
     return data.filter((batch) => {
       const matchesSearch =
         searchTerm === "" ||
-        batch.batchName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        batch.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         batch.reference.toLowerCase().includes(searchTerm.toLowerCase())
 
       return matchesSearch
@@ -170,19 +172,18 @@ export function BulkPayoutsTable({
           data={filteredData}
           columns={columns}
           isPending={isPending}
-          getRowId={(row) => row.id}
-
+          getRowId={(row) => String(row.id)}
           tableWrapperClassName="w-full overflow-x-auto"
           headerClassName="sticky top-0 z-10 bg-surface-2"
           headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
-          headClassName="h-auto bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4 whitespace-nowrap"
+          headClassName="h-auto bg-surface-2 px-4 py-3 font-bold sm:px-8 whitespace-nowrap"
           bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
           bodyCellClassName="px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4 whitespace-nowrap"
           emptyStateClassName="h-24 text-center"
         />
       </section>
 
-      <div className="flex items-center justify-between rounded-b-3xl p-6">
+      <div className="flex items-center bg-surface-2 justify-between border-t border-surface-3 rounded-b-3xl px-6 py-4">
         <p className="text-sm font-medium text-text-secondary">
           Showing {startRange} to {endRange} of {resolvedTotalCount} records
         </p>

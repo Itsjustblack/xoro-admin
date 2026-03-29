@@ -3,8 +3,11 @@
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import type { Beneficiary } from "@/lib/types"
+import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
-import { Plus, UserPlus } from "lucide-react"
+import { ChevronLeft, ChevronRight, Plus, UserPlus } from "lucide-react"
+import type { Dispatch, SetStateAction } from "react"
+import { AddBeneficiarySheet } from "./add-beneficiary-sheet"
 
 const columns: ColumnDef<Beneficiary>[] = [
   {
@@ -21,7 +24,7 @@ const columns: ColumnDef<Beneficiary>[] = [
     ),
   },
   {
-    accessorKey: "accountNumber",
+    accessorKey: "account_number",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
         Account Number
@@ -29,7 +32,7 @@ const columns: ColumnDef<Beneficiary>[] = [
     ),
     cell: ({ row }) => (
       <span className="font-mono text-sm text-text-secondary">
-        {row.getValue("accountNumber")}
+        {row.getValue("account_number")}
       </span>
     ),
   },
@@ -47,32 +50,44 @@ const columns: ColumnDef<Beneficiary>[] = [
     ),
   },
   {
-    accessorKey: "category",
+    accessorKey: "category_id",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
         Category
       </span>
     ),
-    cell: ({ row }) => (
-      <span className="text-sm text-text-secondary">
-        {row.getValue("category")}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "amount",
-    header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
-        Amount (₦)
-      </span>
-    ),
     cell: ({ row }) => {
-      const amount = row.getValue("amount") as number
-      return <span className="font-bold text-text-primary">{amount.toLocaleString()}</span>
+      const categoryId = row.getValue("category_id") as number | null
+
+      return (
+        <span className="text-sm text-text-secondary">
+          {categoryId ? `Category ${categoryId}` : "Uncategorized"}
+        </span>
+      )
     },
   },
   {
-    accessorKey: "phoneNo",
+    accessorKey: "default_amount",
+    header: () => (
+      <span className="text-xs font-semibold uppercase text-text-muted">
+        Amount (NGN)
+      </span>
+    ),
+    cell: ({ row }) => {
+      const amount = row.getValue("default_amount") as number
+
+      return (
+        <span className="font-bold text-text-primary">
+          {amount.toLocaleString("en-NG", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </span>
+      )
+    },
+  },
+  {
+    accessorKey: "phone_number",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
         Phone No.
@@ -80,12 +95,12 @@ const columns: ColumnDef<Beneficiary>[] = [
     ),
     cell: ({ row }) => (
       <span className="text-sm text-text-secondary">
-        {row.getValue("phoneNo")}
+        {row.getValue("phone_number") || "-"}
       </span>
     ),
   },
   {
-    accessorKey: "whatsappNo",
+    accessorKey: "whatsapp_number",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
         WhatsApp No.
@@ -93,7 +108,7 @@ const columns: ColumnDef<Beneficiary>[] = [
     ),
     cell: ({ row }) => (
       <span className="text-sm text-text-secondary">
-        {row.getValue("whatsappNo")}
+        {row.getValue("whatsapp_number") || "-"}
       </span>
     ),
   },
@@ -110,24 +125,63 @@ const columns: ColumnDef<Beneficiary>[] = [
 
 interface BeneficiariesTableProps {
   data: Beneficiary[]
+  isPending: boolean
+  pagination: { pageIndex: number; pageSize: number }
+  setPagination: Dispatch<
+    SetStateAction<{ pageIndex: number; pageSize: number }>
+  >
+  pageCount: number
 }
 
-export function BeneficiariesTable({ data }: BeneficiariesTableProps) {
-  if (data.length === 0) {
+export function BeneficiariesTable({
+  data,
+  isPending,
+  pagination,
+  setPagination,
+  pageCount,
+}: BeneficiariesTableProps) {
+  const resolvedPageIndex = pagination.pageIndex
+  const resolvedPageSize = pagination.pageSize
+  const resolvedPageCount = Math.max(pageCount, 1)
+  const resolvedTotalCount = data.length
+  const startRange =
+    resolvedTotalCount === 0 ? 0 : resolvedPageIndex * resolvedPageSize + 1
+  const endRange = Math.min(
+    (resolvedPageIndex + 1) * resolvedPageSize,
+    resolvedTotalCount,
+  )
+
+  if (!isPending && data.length === 0) {
     return (
-      <div className="flex flex-col rounded-3xl border border-surface-3 bg-surface-1 shadow-sm overflow-hidden w-full">
+      <div className="flex w-full flex-col overflow-hidden rounded-3xl border border-surface-3 bg-surface-1 shadow-sm">
         <div className="flex w-full items-center justify-between border-b border-surface-3 bg-surface-2 px-4 py-3 sm:px-8 sm:py-4">
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">Name</span>
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">Account Number</span>
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">Email</span>
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">Category</span>
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">Amount (₦)</span>
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">Phone No.</span>
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">WhatsApp No.</span>
-          <span className="text-xs font-semibold uppercase text-text-muted flex-1">Actions</span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            Name
+          </span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            Account Number
+          </span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            Email
+          </span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            Category
+          </span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            Amount (NGN)
+          </span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            Phone No.
+          </span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            WhatsApp No.
+          </span>
+          <span className="text-xs font-semibold uppercase text-text-muted">
+            Actions
+          </span>
         </div>
 
-        <div className="flex flex-col items-center justify-center p-12 sm:p-24 text-center">
+        <div className="flex flex-col items-center justify-center p-12 text-center sm:p-24">
           <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-surface-2">
             <UserPlus className="size-8 text-text-muted" />
           </div>
@@ -137,31 +191,90 @@ export function BeneficiariesTable({ data }: BeneficiariesTableProps) {
           <p className="mb-8 max-w-sm text-sm text-text-secondary">
             Add beneficiaries to start sending payouts to employees or partners.
           </p>
-          <Button className="flex items-center rounded-xl bg-brand-primary text-white hover:bg-brand-primary/90 px-6 py-2 h-auto gap-2">
-            <Plus className="size-4" />
-            <span>Add Beneficiary</span>
-          </Button>
+          <AddBeneficiarySheet>
+            <Button className="flex h-auto items-center gap-2 rounded-xl bg-brand-primary px-6 py-2 text-white hover:bg-brand-primary/90">
+              <Plus className="size-4" />
+              <span>Add Beneficiary</span>
+            </Button>
+          </AddBeneficiarySheet>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col rounded-3xl border border-surface-3 bg-surface-1 shadow-sm overflow-hidden w-full">
+    <div className="flex w-full flex-col overflow-hidden rounded-3xl border border-surface-3 bg-surface-1 shadow-sm">
       <DataTable
         data={data}
         columns={columns}
-        isPending={false}
-        getRowId={(row) => row.id}
-        withPagination={true}
+        isPending={isPending}
+        getRowId={(row) => String(row.id)}
+        withPagination={false}
         tableWrapperClassName="w-full overflow-x-auto"
         headerClassName="sticky top-0 z-10 bg-surface-2"
         headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
-        headClassName="h-auto bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4 whitespace-nowrap"
+        headClassName="h-auto whitespace-nowrap bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4"
         bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
-        bodyCellClassName="px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4 whitespace-nowrap"
+        bodyCellClassName="whitespace-nowrap px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4"
         emptyStateClassName="h-48 text-center"
       />
+
+      <div className="flex items-center justify-between rounded-b-3xl p-6">
+        <p className="text-sm font-medium text-text-secondary">
+          Showing {startRange} to {endRange} of {resolvedTotalCount} records
+        </p>
+
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full border-transparent bg-transparent hover:bg-surface-1"
+            disabled={resolvedPageIndex === 0}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex - 1,
+              }))
+            }
+          >
+            <ChevronLeft className="size-4" />
+          </Button>
+          {Array.from({ length: resolvedPageCount }).map((_, index) => (
+            <Button
+              key={index}
+              variant={resolvedPageIndex === index ? "default" : "outline"}
+              className={cn(
+                "h-8 w-8 rounded-full border-transparent bg-transparent",
+                resolvedPageIndex === index
+                  ? "bg-indigo-900 text-white hover:bg-indigo-900/90"
+                  : "hover:bg-surface-1",
+              )}
+              onClick={() =>
+                setPagination((current) => ({ ...current, pageIndex: index }))
+              }
+            >
+              {index + 1}
+            </Button>
+          ))}
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-full border-transparent bg-transparent hover:bg-surface-1"
+            disabled={
+              resolvedPageIndex === resolvedPageCount - 1 ||
+              resolvedPageCount === 0
+            }
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex + 1,
+              }))
+            }
+          >
+            <ChevronRight className="size-4" />
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

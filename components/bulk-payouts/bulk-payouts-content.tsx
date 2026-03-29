@@ -1,21 +1,21 @@
 ﻿"use client"
 
 import MetricCard from "@/components/dashboard/metric-card"
-import { Button } from "@/components/ui/button"
 import { getPayoutsAnalytics } from "@/lib/api/v1/analytics/queries"
-import { getBulkPayout } from "@/lib/api/v1/bulk-payout/queries"
+import { getBulkPayout } from "@/lib/api/v1/payout/queries"
 import {
   analyticsQueryKeys,
   bulkPayoutQueryKeys,
 } from "@/lib/api/v1/query-key-factory"
 import { PAGE_SIZE } from "@/lib/constants"
-import type { BulkPayoutBatch, MonthlyPayoutPoint } from "@/lib/types"
 import { formatCount, formatCurrency, formatPercent } from "@/lib/utils"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
-import { useQuery } from "@tanstack/react-query"
-import { Banknote, CheckCircle2, Hourglass, Plus } from "lucide-react"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import { CheckCircle2, Hourglass } from "lucide-react"
 import { useState } from "react"
+import { PaymentIcon } from "../icons"
 import { BulkPayoutsTable } from "./bulk-payouts-table"
+import { CreateBatchPayoutSheet } from "./create-batch-payout-sheet"
 import MonthlyPayoutVolumeChart from "./monthly-payout-volume-chart"
 
 export function BulkPayoutsContent() {
@@ -47,11 +47,16 @@ export function BulkPayoutsContent() {
         page_size: pagination.pageSize,
       }),
     enabled: !!merchant?.id,
+    placeholderData: keepPreviousData,
   })
 
-  const bulkPayoutRows = (bulkPayouts as BulkPayoutBatch[] | undefined) ?? []
-  const monthlyPayoutVolume =
-    (payoutAnalytics?.time_series as MonthlyPayoutPoint[] | undefined) ?? []
+  // BulkPayoutsResponse shape: { payouts: BulkPayout[], total_items, total_pages, ... }
+  const bulkPayoutRows = bulkPayouts?.payouts ?? []
+  const totalCount = bulkPayouts?.total_items ?? 0
+  const pageCount = bulkPayouts?.total_pages ?? 1
+
+  const monthlyPayoutVolume = payoutAnalytics?.time_series ?? []
+
   const successRate = payoutAnalytics?.payout_count
     ? (payoutAnalytics.successful_payouts / payoutAnalytics.payout_count) * 100
     : 0
@@ -68,10 +73,7 @@ export function BulkPayoutsContent() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button className="flex h-auto items-center gap-2 rounded-xl bg-brand-primary px-5 py-2 text-white hover:bg-brand-primary/90">
-            <Plus className="size-4" />
-            <span>Create Bulk Payout</span>
-          </Button>
+          <CreateBatchPayoutSheet />
         </div>
       </section>
 
@@ -84,7 +86,7 @@ export function BulkPayoutsContent() {
           )}
           change={formatCount(payoutAnalytics?.payout_count ?? 0)}
           changeLabel="total payouts"
-          icon={<Banknote className="size-5" />}
+          icon={<PaymentIcon className="size-5" />}
           iconClassName="rounded-full bg-brand-primary-dark/10 p-2 text-brand-primary"
           changeClassName="text-green-600"
         />
@@ -114,11 +116,8 @@ export function BulkPayoutsContent() {
         isPending={isPending}
         pagination={pagination}
         setPagination={setPagination}
-        totalCount={bulkPayoutRows.length}
-        pageCount={Math.max(
-          Math.ceil(bulkPayoutRows.length / pagination.pageSize),
-          1,
-        )}
+        totalCount={totalCount}
+        pageCount={pageCount}
       />
       <MonthlyPayoutVolumeChart data={monthlyPayoutVolume} />
     </div>

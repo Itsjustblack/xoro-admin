@@ -146,8 +146,9 @@ const BalanceContent = () => {
     })
 
   const currencyCards = wallets?.map(buildCurrencyCard) ?? []
-  const transactionsResponse =
-    merchantTransactions as MerchantTransactionsResponse | undefined
+  const transactionsResponse = merchantTransactions as
+    | MerchantTransactionsResponse
+    | undefined
   const balanceTransactions: BalanceTransaction[] = Array.isArray(
     transactionsResponse?.data,
   )

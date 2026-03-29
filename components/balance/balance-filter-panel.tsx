@@ -5,13 +5,13 @@ import { useMemo } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 
 import {
   useBalanceFilterActions,
@@ -108,12 +108,12 @@ export function BalanceFilterPanel({
   }, [draftFilters, updateDraftFilters])
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuContent
         collisionPadding={16}
         align="end"
-        className="z-50 flex w-87 flex-col font-manrope gap-0 overflow-hidden rounded-3xl border-none bg-white p-0 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)] max-h-[min(85vh,calc(var(--radix-popover-content-available-height)-1rem))]"
+        className="z-50 flex max-h-[85vh] w-87 flex-col gap-0 overflow-hidden rounded-3xl border-none bg-white p-0 font-manrope shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)]"
         sideOffset={12}
       >
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden p-6 sm:p-7">
@@ -373,7 +373,7 @@ export function BalanceFilterPanel({
             </Button>
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

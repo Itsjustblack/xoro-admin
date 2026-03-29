@@ -1,26 +1,30 @@
 ﻿"use client"
 
-import { useState, useMemo } from "react"
-import { mockCustomers } from "@/lib/mock-data"
-import { CustomerData } from "@/lib/types"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetFooter,
   SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from "@/components/ui/sheet"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Search, X, CheckCircle2 } from "lucide-react"
+import {
+  getPayoutBeneficiaries,
+  getPayoutCategories,
+} from "@/lib/api/v1/payout/queries"
+import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { Beneficiary, Category } from "@/lib/types"
 import { cn } from "@/lib/utils"
-
-interface CreateBatchPayoutSheetProps {
-  isOpen: boolean
-  onOpenChange: (open: boolean) => void
-}
+import { useCurrentMerchant } from "@/store/merchant"
+import { useQuery } from "@tanstack/react-query"
+import { CheckCircle2, Plus, Search, X } from "lucide-react"
+import { useMemo, useState } from "react"
 
 const getInitials = (name: string) => {
   return name
@@ -47,61 +51,81 @@ const getAvatarColor = (name: string) => {
   return colors[Math.abs(hash) % colors.length]
 }
 
-export function CreateBatchPayoutSheet({
-  isOpen,
-  onOpenChange,
-}: CreateBatchPayoutSheetProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    "active",
-  )
+export function CreateBatchPayoutSheet() {
+  const merchant = useCurrentMerchant()
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCustomers, setSelectedCustomers] = useState<Set<string>>(
     new Set(),
   )
+  const beneficiaryPage = 1
+  const beneficiaryPageSize = 10
 
-  const categories = useMemo(() => {
-    return {
-      active: mockCustomers.filter((c) => c.status === "active").length,
-      pending: mockCustomers.filter((c) => c.status === "pending").length,
-      inactive: mockCustomers.filter((c) => c.status === "inactive").length,
+  const { data: payoutCategories = [] } = useQuery({
+    queryKey: payoutQueryKeys.categories(merchant?.id ?? ""),
+    queryFn: () => getPayoutCategories(merchant!.id),
+    enabled: !!merchant?.id,
+  })
+
+  const { data: beneficiaries = [] } = useQuery({
+    queryKey: payoutQueryKeys.beneficiaries(
+      merchant?.id ?? "",
+      beneficiaryPage,
+      beneficiaryPageSize,
+      selectedCategory ? Number(selectedCategory) : null,
+    ),
+    queryFn: () =>
+      getPayoutBeneficiaries({
+        merchant_id: merchant!.id,
+        page: beneficiaryPage,
+        size: beneficiaryPageSize,
+        ...(selectedCategory
+          ? { category_id: Number(selectedCategory) }
+          : {}),
+      }),
+    enabled: !!merchant?.id,
+  })
+  const beneficiaryList = useMemo(() => {
+    if (Array.isArray(beneficiaries)) {
+      return beneficiaries
     }
-  }, [])
 
-  const categoryLabels: Record<string, string> = {
-    active: "Marketing Team",
-    pending: "Vendors",
-    inactive: "Contractors",
-  }
+    if (
+      Array.isArray(
+        (beneficiaries as { data?: Beneficiary[] } | undefined)?.data,
+      )
+    ) {
+      return (beneficiaries as { data?: Beneficiary[] }).data ?? []
+    }
+
+    return []
+  }, [beneficiaries])
 
   const filteredCustomers = useMemo(() => {
-    let filtered = mockCustomers
-
-    if (selectedCategory) {
-      filtered = filtered.filter((c) => c.status === selectedCategory)
-    }
+    let filtered = beneficiaryList
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
       filtered = filtered.filter(
-        (c) =>
-          c.name.toLowerCase().includes(query) ||
-          c.email.toLowerCase().includes(query),
+        (beneficiary) =>
+          beneficiary.name.toLowerCase().includes(query) ||
+          beneficiary.email.toLowerCase().includes(query),
       )
     }
 
     return filtered
-  }, [selectedCategory, searchQuery])
+  }, [beneficiaryList, searchQuery])
 
   const areAllSelected =
     filteredCustomers.length > 0 &&
-    filteredCustomers.every((c) => selectedCustomers.has(c.id))
+    filteredCustomers.every((c) => selectedCustomers.has(String(c.id)))
 
   const handleSelectAll = (checked: boolean) => {
     const newSelected = new Set(selectedCustomers)
     if (checked) {
-      filteredCustomers.forEach((c) => newSelected.add(c.id))
+      filteredCustomers.forEach((c) => newSelected.add(String(c.id)))
     } else {
-      filteredCustomers.forEach((c) => newSelected.delete(c.id))
+      filteredCustomers.forEach((c) => newSelected.delete(String(c.id)))
     }
     setSelectedCustomers(newSelected)
   }
@@ -116,8 +140,8 @@ export function CreateBatchPayoutSheet({
     setSelectedCustomers(newSelected)
   }
 
-  const selectedCustomerObjects = mockCustomers.filter((c) =>
-    selectedCustomers.has(c.id),
+  const selectedCustomerObjects = beneficiaryList.filter((beneficiary) =>
+    selectedCustomers.has(String(beneficiary.id)),
   )
 
   const handleRemoveSelected = (customerId: string) => {
@@ -127,16 +151,22 @@ export function CreateBatchPayoutSheet({
   }
 
   return (
-    <Sheet open={isOpen} onOpenChange={onOpenChange}>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button className="flex h-auto items-center gap-2 rounded-xl bg-brand-primary px-5 py-2 text-white hover:bg-brand-primary/90">
+          <Plus className="size-4" />
+          <span>Create Bulk Payout</span>
+        </Button>
+      </SheetTrigger>
       <SheetContent className="flex w-full flex-col font-manrope bg-[#F9F9F9] p-0 data-[side=right]:sm:max-w-125">
         <SheetHeader className="px-8 pb-4 pt-10">
-          <div className="space-y-2 pr-6">
-            <h2 className="text-[32px] font-bold leading-tight tracking-tight text-text-primary">
+          <div className="pr-6">
+            <SheetTitle className="text-4xl font-secondary font-bold leading-tight tracking-tight text-text-primary">
               Bulk Payout
-            </h2>
-            <p className="text-[15px] font-medium text-text-secondary">
+            </SheetTitle>
+            <SheetDescription className="text-[15px] font-medium text-text-secondary">
               Select categories or beneficiaries to send payments
-            </p>
+            </SheetDescription>
           </div>
         </SheetHeader>
 
@@ -160,22 +190,24 @@ export function CreateBatchPayoutSheet({
               QUICK SELECT CATEGORIES
             </p>
             <div className="flex flex-wrap gap-3">
-              {Object.entries(categories).map(([key, count]) => {
-                const isSelected = selectedCategory === key
+              {payoutCategories.map((category: Category) => {
+                const categoryKey = String(category.id)
+                const isSelected = selectedCategory === categoryKey
+
                 return (
                   <button
-                    key={key}
-                    onClick={() => setSelectedCategory(isSelected ? null : key)}
+                    key={category.id}
+                    onClick={() =>
+                      setSelectedCategory(isSelected ? null : categoryKey)
+                    }
                     className={cn(
                       "flex h-10.5 items-center gap-2 rounded-full px-5 text-[14px] transition-colors",
                       isSelected
-                        ? "bg-[#251481] font-semibold text-white"
+                        ? "bg-brand-primary-dark font-semibold text-white"
                         : "bg-black/4 font-medium text-text-secondary hover:bg-black/6",
                     )}
                   >
-                    <span>
-                      {categoryLabels[key] || "Management"} ({count})
-                    </span>
+                    <span>{category.name}</span>
                     {isSelected && (
                       <CheckCircle2
                         className="size-4"
@@ -187,6 +219,9 @@ export function CreateBatchPayoutSheet({
                   </button>
                 )
               })}
+              {payoutCategories.length === 0 && (
+                <p className="text-sm text-text-muted">No categories found</p>
+              )}
             </div>
           </div>
 
@@ -213,7 +248,7 @@ export function CreateBatchPayoutSheet({
                   <BeneficiaryRow
                     key={customer.id}
                     customer={customer}
-                    isSelected={selectedCustomers.has(customer.id)}
+                    isSelected={selectedCustomers.has(String(customer.id))}
                     onToggle={handleCustomerToggle}
                   />
                 ))
@@ -222,7 +257,7 @@ export function CreateBatchPayoutSheet({
           </div>
         </div>
 
-        <SheetFooter className="mt-auto flex flex-col gap-5 border-t border-border bg-white px-6 py-6 shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
+        <SheetFooter className="mt-auto flex flex-col gap-6 border-t border-border bg-white px-6 py-6 shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
           {selectedCustomerObjects.length > 0 && (
             <div className="space-y-3">
               <p className="text-[11px] font-semibold tracking-wider text-text-muted">
@@ -237,7 +272,7 @@ export function CreateBatchPayoutSheet({
                   >
                     <span>{customer.name}</span>
                     <button
-                      onClick={() => handleRemoveSelected(customer.id)}
+                      onClick={() => handleRemoveSelected(String(customer.id))}
                       className="ml-0.5 text-text-muted transition-colors hover:text-text-primary"
                     >
                       <X className="size-3.5" />
@@ -248,16 +283,16 @@ export function CreateBatchPayoutSheet({
             </div>
           )}
 
-          <div className="flex flex-col gap-1">
-            <p className="text-sm text-text-secondary">Summary</p>
-            <p className="text-2xl font-bold tracking-tight text-text-primary">
+          <div className="flex flex-col">
+            <p className="text-xs text-text-secondary">Summary</p>
+            <p className="text-xl font-bold tracking-tight text-text-primary">
               Total selected: {selectedCustomerObjects.length} recipient
               {selectedCustomerObjects.length !== 1 ? "s" : ""}
             </p>
           </div>
 
           <Button
-            className="h-14 w-full rounded-sm bg-[#251481] text-lg font-medium text-white hover:bg-[#251481]/90 focus-visible:ring-[#251481] disabled:opacity-50"
+            className="h-14 w-full rounded-sm bg-[#251481] text-lg font-bold text-white hover:bg-[#251481]/90 focus-visible:ring-[#251481] disabled:opacity-50"
             disabled={selectedCustomerObjects.length === 0}
           >
             Continue to Bulk Payout
@@ -269,7 +304,7 @@ export function CreateBatchPayoutSheet({
 }
 
 interface BeneficiaryRowProps {
-  customer: CustomerData
+  customer: Beneficiary
   isSelected: boolean
   onToggle: (id: string, checked: boolean) => void
 }
@@ -279,8 +314,6 @@ function BeneficiaryRow({
   isSelected,
   onToggle,
 }: BeneficiaryRowProps) {
-  const isInactive = customer.status === "inactive"
-
   return (
     <div
       className={cn(
@@ -288,7 +321,6 @@ function BeneficiaryRow({
         isSelected
           ? "bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)]"
           : "bg-transparent",
-        isInactive && "opacity-60",
       )}
     >
       <Avatar className="size-11.5">
@@ -313,7 +345,7 @@ function BeneficiaryRow({
         <Checkbox
           checked={isSelected}
           onCheckedChange={(checked) =>
-            onToggle(customer.id, checked as boolean)
+            onToggle(String(customer.id), checked as boolean)
           }
           className="size-6 rounded-[6px] bg-transparent border-black/30 shadow-none data-[state=checked]:border-brand-primary data-[state=checked]:bg-brand-primary *:text-white!"
         />

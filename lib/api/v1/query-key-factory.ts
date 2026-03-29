@@ -4,6 +4,8 @@ const ANALYTICS_KEY = "analytics" as const
 const WALLET_KEY = "wallets" as const
 const TRANSACTION_KEY = "transactions" as const
 const BULK_PAYOUT_KEY = "bulk-payouts" as const
+const PAYOUT_KEY = "payout" as const
+const CHECKOUT_LINK_KEY = "checkout-links" as const
 
 export const merchantQueryKeys = {
   all: [MERCHANT_KEY] as const,
@@ -108,4 +110,36 @@ export const bulkPayoutQueryKeys = {
       page,
       pageSize,
     ] as const,
+  detail: (reference: string) =>
+    [...bulkPayoutQueryKeys.all, "detail", reference] as const,
+}
+
+export const payoutQueryKeys = {
+  all: [PAYOUT_KEY] as const,
+  categories: (merchantId: string) =>
+    [...payoutQueryKeys.all, "categories", merchantId] as const,
+  category: (merchantId: string, categoryId: number) =>
+    [...payoutQueryKeys.all, "category", merchantId, categoryId] as const,
+  beneficiariesList: (merchantId: string) =>
+    [...payoutQueryKeys.all, "beneficiaries", merchantId] as const,
+  beneficiaries: (
+    merchantId: string,
+    page: number,
+    size: number,
+    categoryId?: number | null,
+  ) =>
+    [
+      ...payoutQueryKeys.beneficiariesList(merchantId),
+      page,
+      size,
+      categoryId ?? null,
+    ] as const,
+}
+
+export const checkoutLinkQueryKeys = {
+  all: [CHECKOUT_LINK_KEY] as const,
+  list: (merchantId: string) =>
+    [...checkoutLinkQueryKeys.all, "list", merchantId] as const,
+  detail: (linkId: string) =>
+    [...checkoutLinkQueryKeys.all, "detail", linkId] as const,
 }
