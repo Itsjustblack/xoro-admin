@@ -7,12 +7,7 @@ import { Input } from "@/components/ui/input"
 import type { PaymentRecord } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
-import {
-  ChevronLeft,
-  ChevronRight,
-  FilterIcon,
-  Search,
-} from "lucide-react"
+import { ChevronLeft, ChevronRight, FilterIcon, Search } from "lucide-react"
 import { useMemo, useState } from "react"
 
 const columns: ColumnDef<PaymentRecord>[] = [
@@ -50,9 +45,7 @@ const columns: ColumnDef<PaymentRecord>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-text-secondary">
-        {row.getValue("method")}
-      </span>
+      <span className="text-text-secondary">{row.getValue("method")}</span>
     ),
   },
   {
@@ -81,8 +74,10 @@ const columns: ColumnDef<PaymentRecord>[] = [
         <Badge
           className={cn(
             "rounded-md px-2 py-0.5 font-bold text-[10px] border-0",
-            status === "Success" && "bg-status-success-soft text-status-success",
-            status === "Pending" && "bg-status-warning-soft text-status-warning",
+            status === "Success" &&
+              "bg-status-success-soft text-status-success",
+            status === "Pending" &&
+              "bg-status-warning-soft text-status-warning",
             status === "Failed" && "bg-status-danger-soft text-status-danger",
           )}
         >
@@ -104,9 +99,10 @@ export function PaymentHistoryTable({ data }: PaymentHistoryTableProps) {
   const [pageIndex, setPageIndex] = useState(0)
 
   const filteredData = useMemo(() => {
-    return data.filter((record) =>
-      record.reference.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      record.method.toLowerCase().includes(searchTerm.toLowerCase())
+    return data.filter(
+      (record) =>
+        record.reference.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.method.toLowerCase().includes(searchTerm.toLowerCase()),
     )
   }, [data, searchTerm])
 
@@ -132,7 +128,7 @@ export function PaymentHistoryTable({ data }: PaymentHistoryTableProps) {
                 setSearchTerm(e.target.value)
                 setPageIndex(0)
               }}
-              className="h-10 w-full pl-9 sm:w-[240px] text-sm"
+              className="h-10 w-full pl-9 sm:w-60 text-sm"
             />
           </div>
           <Button
@@ -163,7 +159,9 @@ export function PaymentHistoryTable({ data }: PaymentHistoryTableProps) {
 
       <div className="flex items-center justify-between p-6 border-t border-surface-3 bg-surface-2">
         <p className="text-sm font-medium text-text-secondary">
-          Showing {Math.min(filteredData.length, (pageIndex * PAGE_SIZE) + 1)} to {Math.min(filteredData.length, (pageIndex + 1) * PAGE_SIZE)} of {filteredData.length} payments
+          Showing {Math.min(filteredData.length, pageIndex * PAGE_SIZE + 1)} to{" "}
+          {Math.min(filteredData.length, (pageIndex + 1) * PAGE_SIZE)} of{" "}
+          {filteredData.length} payments
         </p>
 
         <div className="flex items-center gap-2">
@@ -172,7 +170,7 @@ export function PaymentHistoryTable({ data }: PaymentHistoryTableProps) {
             size="icon"
             className="h-9 w-9 rounded-lg border-surface-6 bg-white hover:bg-surface-5"
             disabled={pageIndex === 0}
-            onClick={() => setPageIndex(p => p - 1)}
+            onClick={() => setPageIndex((p) => p - 1)}
           >
             <ChevronLeft className="size-4" />
           </Button>
@@ -184,7 +182,7 @@ export function PaymentHistoryTable({ data }: PaymentHistoryTableProps) {
                 "h-9 w-9 rounded-lg border-transparent font-bold text-sm",
                 pageIndex === i
                   ? "bg-brand-primary text-white hover:bg-brand-primary"
-                  : "bg-transparent text-text-secondary hover:bg-white"
+                  : "bg-transparent text-text-secondary hover:bg-white",
               )}
               onClick={() => setPageIndex(i)}
             >
@@ -196,7 +194,7 @@ export function PaymentHistoryTable({ data }: PaymentHistoryTableProps) {
             size="icon"
             className="h-9 w-9 rounded-lg border-surface-6 bg-white hover:bg-surface-5"
             disabled={pageIndex === pageCount - 1 || pageCount === 0}
-            onClick={() => setPageIndex(p => p + 1)}
+            onClick={() => setPageIndex((p) => p + 1)}
           >
             <ChevronRight className="size-4" />
           </Button>

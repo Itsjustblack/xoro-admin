@@ -101,11 +101,8 @@ interface PlanSubscribersTableProps {
   data: IndividualSubscriber[]
 }
 
-const PAGE_SIZE = 10
-
 export function PlanSubscribersTable({ data }: PlanSubscribersTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
-  const [pageIndex, setPageIndex] = useState(0)
 
   const filteredData = useMemo(() => {
     return data.filter((sub) =>
@@ -122,10 +119,7 @@ export function PlanSubscribersTable({ data }: PlanSubscribersTableProps) {
           <Input
             placeholder="Search subscribers..."
             value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value)
-              setPageIndex(0)
-            }}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="h-10 w-full pl-9 border-none bg-surface-2 sm:w-[320px] text-sm rounded-xl focus-visible:ring-0"
           />
         </div>

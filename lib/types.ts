@@ -245,6 +245,15 @@ export interface PaymentRecord {
   status: "Success" | "Failed" | "Pending"
 }
 
+export interface Notification {
+  id: string
+  title: string
+  description: string
+  timestamp: string
+  read: boolean
+  type: "order" | "warning" | "success" | "info"
+}
+
 export interface ActivityEvent {
   id: string
   type: "renewed" | "successful" | "created"
@@ -282,6 +291,22 @@ export interface IndividualSubscriber {
   status: "Active" | "Past Due" | "Canceled"
   nextBillingDate: string
   amount: string
+}
+
+export interface BulkPayoutBatch {
+  id: string
+  batchName: string
+  reference: string
+  transactions: number
+  amount: string
+  status: "Success" | "Pending" | "Partial" | "Failed"
+  createdAt: string
+}
+
+export interface MonthlyPayoutPoint {
+  month: string
+  value: number
+  payoutCount: number
 }
 
 export interface PayInTransaction {

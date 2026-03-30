@@ -7,7 +7,7 @@ type MetricCardProps = {
   value: string
   change?: string
   changeLabel: string
-  icon: ReactNode
+  icon?: ReactNode
   iconClassName: string
   changeClassName?: string
   borderClassName?: string
@@ -29,12 +29,12 @@ const MetricCard = ({
     <Card className="rounded-3xl min-h-36 border border-brand-primary-dark/10 bg-surface-1 p-0 ring-0 shadow">
       <div
         className={cn(
-          "flex flex-col justify-between border-t-[5px] gap-2 p-4 sm:p-6",
+          "flex flex-col justify-between border-t-[5px] gap-1 p-4 sm:p-6",
           borderClassName,
         )}
       >
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-3 sm:space-y-4 flex-1">
+        <div className="flex items-start justify-between gap-3  ">
+          <div className="space-y-1 flex-1">
             <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
               {title}
             </p>
