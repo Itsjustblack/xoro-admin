@@ -1114,3 +1114,48 @@ export const mockMonthlyPayoutVolume: MonthlyPayoutPoint[] = [
   { month: "Nov", value: 0, payoutCount: 0 },
   { month: "Dec", value: 0, payoutCount: 0 },
 ]
+
+import { PayInKPIs, PayInTransaction } from "./types"
+
+export const mockPayInKPIs: PayInKPIs = {
+  totalVolume: "$124,500.00",
+  transactionCount: "1,284",
+  averagePayIn: "$96.96",
+  volumeChange: "+12.5%",
+  countChange: "+5.2%",
+}
+
+export const mockPayInTransactions: PayInTransaction[] = [
+  { id: "1", customerName: "John Doe", email: "john@example.com", reference: "TRu-992831", amount: "$120.00", method: "Card", status: "Success", date: "Oct 24, 2023" },
+  { id: "2", customerName: "Alice Smith", email: "alice@tech.io", reference: "TRu-882732", amount: "$450.00", method: "Transfer", status: "Pending", date: "Oct 24, 2023" },
+  { id: "3", customerName: "Crypto Whale", email: "whale@btc.com", reference: "TRu-772103", amount: "0.05 BTC", method: "Crypto", status: "Success", date: "Oct 23, 2023" },
+  { id: "4", customerName: "Bob Johnson", email: "bob@corp.com", reference: "TRu-662544", amount: "$85.50", method: "Card", status: "Failed", date: "Oct 23, 2023" },
+  { id: "5", customerName: "Sarah Williams", email: "sarah@williams.net", reference: "TRu-552985", amount: "$1,200.00", method: "Transfer", status: "Success", date: "Oct 22, 2023" },
+]
+
+export const getDetailedPlanSubscription = (id: string): import("./types").DetailedPlanSubscription => ({
+  id,
+  planName: "Premium Monthly",
+  price: "₦5,000",
+  billingCycle: "Monthly",
+  trialPeriod: "None",
+  createdDate: "Jan 12, 2026",
+  totalSubscribers: 5235,
+  activeSubscribers: 5012,
+  monthlyRevenue: "₦42,500.00",
+  churnRate: "1.4%",
+  healthStats: {
+    active: 95,
+    cancelled: 3,
+    pastDue: 2,
+  },
+  recentActivity: [
+    { id: "1", type: "renewed", title: "Subscription renewed", timestamp: "Feb 12, 2026 • 09:41 AM" },
+    { id: "2", type: "successful", title: "Payment successful", timestamp: "Jan 12, 2026 • 11:20 AM" },
+    { id: "3", type: "created", title: "Subscription created", timestamp: "Jan 12, 2026 • 11:15 AM" },
+  ],
+  subscribers: [
+    { id: "sub-1", customerName: "John Doe", email: "john@example.com", planType: "Premium", status: "Active", nextBillingDate: "Feb 12", amount: "₦5,000" },
+    { id: "sub-2", customerName: "Sarah Smith", email: "sarah@corp.com", planType: "Premium", status: "Past Due", nextBillingDate: "Jan 15", amount: "₦5,000" },
+  ]
+})

@@ -37,13 +37,12 @@ const getInitials = (name: string) => {
 
 const getAvatarColor = (name: string) => {
   const colors = [
-    "bg-[#EBE9F8] text-[#251481]", // purple
+    "bg-[#EBE9F8] text-[#251481]",
     "bg-green-100 text-green-800",
     "bg-blue-100 text-blue-800",
     "bg-orange-100 text-orange-800",
-    "bg-black/[0.08] text-text-secondary", // default gray
+    "bg-black/[0.08] text-text-secondary",
   ]
-  // simple hash
   let hash = 0
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash)

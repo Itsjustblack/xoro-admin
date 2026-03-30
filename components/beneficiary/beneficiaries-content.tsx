@@ -13,8 +13,6 @@ import MetricCard from "../dashboard/metric-card"
 import { GroupIcon, PaymentIcon } from "../icons"
 import { AddBeneficiarySheet } from "./add-beneficiary-sheet"
 import { BeneficiariesTable } from "./beneficiaries-table"
-
-import { ProInsights } from "../shared/pro-insights"
 import { SiteFooter } from "../shared/site-footer"
 
 export function BeneficiariesContent() {
@@ -36,7 +34,7 @@ export function BeneficiariesContent() {
         merchant_id: merchant!.id,
         page: pagination.pageIndex + 1,
         size: pagination.pageSize,
-    }),
+      }),
     enabled: !!merchant?.id,
   })
 
@@ -44,7 +42,9 @@ export function BeneficiariesContent() {
     () => beneficiaryResponse?.beneficiaries ?? [],
     [beneficiaryResponse?.beneficiaries],
   )
-  const totalBeneficiaries = beneficiaryResponse?.total_items ?? beneficiaries.length
+
+  const totalBeneficiaries =
+    beneficiaryResponse?.total_items ?? beneficiaries.length
   const totalAmount = useMemo(
     () =>
       beneficiaries.reduce(
@@ -53,6 +53,7 @@ export function BeneficiariesContent() {
       ),
     [beneficiaries],
   )
+  
   const pageCount =
     beneficiaryResponse?.total_pages ??
     Math.max(Math.ceil(totalBeneficiaries / pagination.pageSize), 1)
@@ -111,11 +112,6 @@ export function BeneficiariesContent() {
             pageCount={pageCount}
           />
         </section>
-
-        <ProInsights 
-          content="Pro Tip: You can organize your beneficiaries into categories to streamline your bulk payout process and filter them more effectively."
-          className="mt-4"
-        />
       </div>
       <SiteFooter />
     </div>

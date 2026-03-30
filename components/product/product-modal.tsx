@@ -30,7 +30,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Product Image */}
           <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-secondary">
             {product.image ? (
               <Image
@@ -58,7 +57,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
             )}
           </div>
 
-          {/* Product Info */}
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
               <label className="text-sm font-medium text-muted-foreground">

@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function Page() {
   return (
     <div className="p-8 h-full">
-      {/* Header Section */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
         <p className="text-muted-foreground">

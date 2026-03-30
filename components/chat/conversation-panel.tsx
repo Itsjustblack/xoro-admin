@@ -45,7 +45,6 @@ export function ConversationPanel({
 
   return (
     <div className="flex flex-col flex-1 min-w-0 bg-background border-l border-border">
-      {/* Header */}
       <div className="p-4 border-b border-border flex items-center justify-between">
         <h3 className="font-semibold text-foreground truncate">
           {customerName}
@@ -55,7 +54,6 @@ export function ConversationPanel({
         </Button>
       </div>
 
-      {/* Messages Area */}
       <ScrollArea className="flex-1 p-8">
         <div>
           {messages.map((msg) => (
@@ -70,7 +68,6 @@ export function ConversationPanel({
         </div>
       </ScrollArea>
 
-      {/* Input Area */}
       <div className="flex gap-4 py-4 px-8 border-t border-border">
         <Input
           placeholder="Type your message..."

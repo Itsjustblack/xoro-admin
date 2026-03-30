@@ -16,7 +16,10 @@ export async function updateBeneficiary(payload: BeneficiaryPayload) {
   return res.data
 }
 
-export async function deleteBeneficiary(beneficiary_id: number, merchant_id: string) {
+export async function deleteBeneficiary(
+  beneficiary_id: number,
+  merchant_id: string,
+) {
   const res = await ApiClient.delete(`/payout-beneficiary/${beneficiary_id}`, {
     params: { merchant_id },
   })
@@ -39,10 +42,12 @@ export async function createPayoutCategory(
 
 export async function updatePayoutCategory(
   category_id: number,
+  merchant_id: string,
   name: string,
   description?: string,
 ) {
   const res = await ApiClient.put<Category>(`/payout-category/${category_id}`, {
+    merchant_id,
     name,
     description,
   })

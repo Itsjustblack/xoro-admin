@@ -5,7 +5,6 @@ import { Download, Plus } from "lucide-react"
 export default function Page() {
   return (
     <div className="p-8 h-full">
-      {/* Header Section */}
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">Products</h1>

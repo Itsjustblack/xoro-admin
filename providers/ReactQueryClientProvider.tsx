@@ -46,8 +46,8 @@ export default function ReactQueryClientProvider({
         defaultOptions: {
           queries: {
             refetchOnWindowFocus: false,
-            staleTime: 10 * 60 * 1000, // 10 minutes
-            gcTime: 30 * 60 * 1000, // 30 minutes
+            staleTime: 10 * 60 * 1000,
+            gcTime: 30 * 60 * 1000,
             retry: 2,
           },
         },

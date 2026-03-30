@@ -42,11 +42,9 @@ export function ChatList({
 
   return (
     <div className="flex flex-col h-full w-full">
-      {/* Fixed Header */}
       <div className="p-8 pb-4 space-y-4">
         <h2 className="text-xl font-semibold text-foreground">Inbox</h2>
         <div className="flex gap-2">
-          {/* Search with icon */}
           <div className="relative flex-1">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -56,7 +54,6 @@ export function ChatList({
               className="pl-8"
             />
           </div>
-          {/* Filter dropdown */}
           <Select
             value={filter}
             onValueChange={(value: "all" | "unread" | "escalated") =>
@@ -77,7 +74,6 @@ export function ChatList({
         </div>
       </div>
 
-      {/* Scrollable Chat List */}
       <ScrollArea className="flex-1">
         <div className="px-8 pb-8 space-y-2">
           {filteredChats.map((chat) => (

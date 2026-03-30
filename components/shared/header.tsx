@@ -15,7 +15,6 @@ const Header = () => {
     pathname.startsWith(item.href),
   )
 
-  // Specific override for /balance route based on requirements
   const currentPage = pathname.startsWith("/balance")
     ? "Balance Overview"
     : navItem?.label

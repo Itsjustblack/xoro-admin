@@ -1,13 +1,7 @@
 "use client"
 
 import * as React from "react"
-import {
-  Area,
-  AreaChart,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from "recharts"
+import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
 import {
   ChartConfig,
@@ -42,7 +36,7 @@ export function MRRChart() {
           <p className="text-xs font-bold text-text-secondary uppercase tracking-wider">
             Monthly Recurring Revenue (MRR)
           </p>
-          <h2 className="text-4xl font-black text-text-primary font-clash-display">
+          <h2 className="text-4xl font-black text-text-primary">
             $42,500.00
           </h2>
         </div>
@@ -52,7 +46,7 @@ export function MRRChart() {
         </Badge>
       </div>
 
-      <div className="flex-1 w-full mt-4 min-h-48">
+      <div className="flex-1 w-full mt-4 max-h-45">
         <ChartContainer config={chartConfig} className="h-full w-full">
           <AreaChart
             data={mrrData}

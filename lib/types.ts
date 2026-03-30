@@ -236,6 +236,86 @@ export interface BulkPayoutsResponse {
   success_rate: number
 }
 
+export interface PaymentRecord {
+  id: string
+  amount: string
+  date: string
+  method: string
+  reference: string
+  status: "Success" | "Failed" | "Pending"
+}
+
+export interface ActivityEvent {
+  id: string
+  type: "renewed" | "successful" | "created"
+  title: string
+  timestamp: string
+}
+
+export interface HealthStats {
+  active: number
+  cancelled: number
+  pastDue: number
+}
+
+export interface DetailedPlanSubscription {
+  id: string
+  planName: string
+  price: string
+  billingCycle: string
+  trialPeriod: string
+  createdDate: string
+  totalSubscribers: number
+  activeSubscribers: number
+  monthlyRevenue: string
+  churnRate: string
+  healthStats: HealthStats
+  recentActivity: ActivityEvent[]
+  subscribers: IndividualSubscriber[]
+}
+
+export interface IndividualSubscriber {
+  id: string
+  customerName: string
+  email: string
+  planType: string
+  status: "Active" | "Past Due" | "Canceled"
+  nextBillingDate: string
+  amount: string
+}
+
+export interface PayInTransaction {
+  id: string
+  customerName: string
+  email: string
+  reference: string
+  amount: string
+  method: "Card" | "Transfer" | "Crypto"
+  status: "Success" | "Pending" | "Failed"
+  date: string
+}
+
+export interface PayInKPIs {
+  totalVolume: string
+  transactionCount: string
+  averagePayIn: string
+  volumeChange: string
+  countChange: string
+}
+
+export interface DetailedSubscription {
+  id: string
+  customerName: string
+  email: string
+  planName: string
+  billingCycle: string
+  status: "Active" | "Trialing" | "Past Due" | "Canceled"
+  startDate: string
+  nextBilling: string
+  amount: string
+  totalPaid: string
+}
+
 export interface IBulkTransactionData {
   id: number
   name: string

@@ -5,7 +5,6 @@ import { Download, Plus } from "lucide-react"
 export default function Page() {
   return (
     <div className="p-8 h-full">
-      {/* Header Section */}
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground mb-2">Customers</h1>
@@ -17,7 +16,6 @@ export default function Page() {
           <Button
             variant="outline"
             className="gap-2 bg-transparent"
-            // onClick={handleExport}
           >
             <Download className="w-4 h-4" />
             Export

@@ -38,7 +38,6 @@ import {
 import { Dispatch, SetStateAction } from "react"
 import RowsSkeleton from "./row-skeleton"
 
-/** Pagination Controls */
 function PaginationControls<TData>({ table }: { table: TanStackTable<TData> }) {
   const {
     pagination: { pageIndex, pageSize },
@@ -125,7 +124,6 @@ interface DataTableProps<TData> {
   bodyCellClassName?: string | ((cell: Cell<TData, unknown>) => string)
   emptyStateClassName?: string
 
-  // pagination is optional
   withPagination?: boolean
   pageCount?: number
   pagination?: { pageIndex: number; pageSize: number }
@@ -137,12 +135,10 @@ interface DataTableProps<TData> {
 
   loaders?: number
 
-  //row selection
   rowSelection?: Record<string, boolean>
   setRowSelection?: Dispatch<SetStateAction<Record<string, boolean>>>
 }
 
-/** Main Generic Table */
 export function DataTable<TData>({
   data,
   columns,

@@ -1,0 +1,64 @@
+"use client"
+
+import { Edit2, Pause, ChevronLeft } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { SubscriptionKPIs } from "./subscription-kpis"
+import { HealthOverview } from "./health-overview"
+import { PlanSubscribersTable } from "./plan-subscribers-table"
+import { PlanInfoSidebar } from "./plan-info-sidebar"
+import { getDetailedPlanSubscription } from "@/lib/mock-data"
+import Link from "next/link"
+import { useParams } from "next/navigation"
+
+export function SubscriptionDetailsContent() {
+  const { id } = useParams()
+  const plan = getDetailedPlanSubscription(id as string)
+
+  return (
+    <div className="flex h-full w-full flex-col gap-8 p-4 sm:p-6 lg:p-8">
+      {/* Page Header */}
+      <section className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="font-secondary text-5xl font-black text-text-primary tracking-tight">
+            Subscription Details
+          </h1>
+          <p className="font-primary text-base font-medium text-text-secondary">
+            View and manage this subscription plan
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            className="flex h-12 items-center gap-2 rounded-none border-surface-3 bg-surface-1 px-6 font-bold text-text-primary hover:bg-surface-2"
+          >
+            <div className="flex size-5 items-center justify-center rounded-full border-2 border-text-primary">
+              <Pause size={10} fill="currentColor" />
+            </div>
+            <span>Pause Subscription</span>
+          </Button>
+          <Button className="flex h-12 items-center gap-2 rounded-none bg-success-5 px-6 font-bold text-green-950 hover:bg-success-5/90">
+            <Edit2 size={18} />
+            <span>Edit Plan</span>
+          </Button>
+        </div>
+      </section>
+
+      {/* KPI Metrics */}
+      <SubscriptionKPIs plan={plan} />
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+        {/* Left Column (Main) */}
+        <div className="flex flex-col gap-8 lg:col-span-8">
+          <HealthOverview stats={plan.healthStats} />
+          <PlanSubscribersTable data={plan.subscribers} />
+        </div>
+
+        {/* Right Column (Sidebar) */}
+        <div className="lg:col-span-4">
+          <PlanInfoSidebar plan={plan} />
+        </div>
+      </div>
+    </div>
+  )
+}

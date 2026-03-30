@@ -72,6 +72,10 @@
   --color-brand-primary-2: var(--color-brand-primary-2);
   --color-surface-dark: var(--color-surface-dark);
 
+  --color-green-700: var(--color-green-700);
+  --color-green-950: var(--color-green-950);
+  --color-amber-700: var(--color-amber-700);
+
   --color-legal: var(--color-legal);
   --color-success-1: var(--color-success-1);
   --color-success-2: var(--color-success-2);
@@ -86,6 +90,7 @@
   --color-warning-5: var(--color-warning-5);
   --color-warning-6: var(--color-warning-6);
   --color-warning-7: var(--color-warning-7);
+  --color-warning-8: var(--color-warning-8);
 
   --color-accent-blue: var(--color-accent-blue);
   --color-accent-blue-soft: var(--color-accent-blue-soft);
@@ -168,6 +173,11 @@
   --color-success-5: #c1eebc;
   --color-status-success: #059669;
   --color-status-success-soft: #d1fae5;
+
+  --color-green-700: #406840;
+  --color-green-950: #002105;
+  --color-amber-700: #ba1a1a;
+
   --color-status-warning: #ea580c;
   --color-status-warning-soft: #ffedd5;
   --color-status-danger: #dc2626;
@@ -187,6 +197,7 @@
   --color-warning-5: #f97316;
   --color-warning-6: #d97706;
   --color-warning-7: #92400e;
+  --color-warning-8: #f87171;
 }
 
 .dark {
@@ -298,16 +309,10 @@
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
-
-/* ============================================
-   Custom Scrollbar Styling
-   ============================================ */
-
-/* Webkit browsers (Chrome, Safari, Edge) */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -320,25 +325,19 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: oklch(0.922 0 0 / 0.3); /* Very subtle by default */
+  background: oklch(0.922 0 0 / 0.3);
   border-radius: 10px;
   transition:
     opacity 200ms ease-in-out,
     background-color 200ms ease-in-out;
 }
-
-/* Show scrollbar on container hover */
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-  background: oklch(0.556 0 0 / 0.7); /* Muted gray, more visible */
+  background: oklch(0.556 0 0 / 0.7);
 }
-
-/* Show brand color on direct scrollbar hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--color-brand-primary); /* Brand indigo */
+  background: var(--color-brand-primary);
   opacity: 1;
 }
-
-/* Firefox support */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: oklch(0.922 0 0 / 0.3) transparent;

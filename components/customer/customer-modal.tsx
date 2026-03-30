@@ -31,7 +31,6 @@ export function CustomerModal({
           <DialogTitle className="text-xl">Customer Details</DialogTitle>
         </DialogHeader>
 
-        {/* Customer Info */}
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium text-muted-foreground">
@@ -93,7 +92,6 @@ export function CustomerModal({
           <Button variant="destructive" size="lg" onClick={onClose}>
             Close
           </Button>
-          {/* <Button>Edit Customer</Button> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>

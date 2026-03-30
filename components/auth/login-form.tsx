@@ -140,32 +140,6 @@ export function LoginForm() {
             )}
           />
 
-          {/* <Controller
-						name="remember"
-						control={form.control}
-						render={({ field }) => (
-							<Field
-								orientation="horizontal"
-								className="items-center gap-2.5"
-							>
-								<Checkbox
-									id="login-remember"
-									className="rounded-sm data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary *:data-[slot=checkbox-indicator]:text-white!"
-									checked={field.value}
-									onCheckedChange={(checked) =>
-										field.onChange(checked === true)
-									}
-								/>
-								<FieldLabel
-									htmlFor="login-remember"
-									className="font-primary text-sm font-normal text-text-secondary"
-								>
-									Keep me logged in for 30 days
-								</FieldLabel>
-							</Field>
-						)}
-					/> */}
-
           <AuthSubmitButton
             idleText="Sign In"
             loadingText="Logging in..."

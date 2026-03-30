@@ -75,7 +75,6 @@ export function VerifyForm({ email }: VerifyFormProps) {
   } = useMutation({
     mutationFn: verifyLoginOtp,
     onSuccess: (data) => {
-      // Initialize merchant store with merchants from auth response
       if (data.data?.merchants && data.data.merchants.length > 0) {
         setMerchants(data.data.merchants)
       }
@@ -216,16 +215,6 @@ export function VerifyForm({ email }: VerifyFormProps) {
           Resend code
         </Button>
       </div>
-
-      {/* <p className="mt-4 text-center text-sm text-text-secondary font-primary">
-        Wrong email?{" "}
-        <Link
-          href="/sign-up"
-          className="text-brand-primary font-semibold hover:underline"
-        >
-          Go back
-        </Link>
-      </p> */}
 
       <div className="mt-18 flex items-center justify-center gap-6 text-sm font-primary text-text-muted">
         <Link

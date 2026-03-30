@@ -17,104 +17,107 @@ import {
 } from "@/components/ui/sheet"
 import {
   createPayoutCategory,
+  deletePayoutCategory,
   updatePayoutCategory,
 } from "@/lib/api/v1/payout/actions"
+import { getPayoutCategories } from "@/lib/api/v1/payout/queries"
 import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { type CategoryFormValues } from "@/lib/schemas/payout"
+import type { Category } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { useCurrentMerchant } from "@/store/merchant"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { ShapesIcon2 } from "../icons"
 
 const LABEL_COLORS = [
-  { id: "blue", className: "bg-accent-blue" },
-  { id: "green", className: "bg-success-2" },
-  { id: "purple", className: "bg-accent-violet" },
-  { id: "orange", className: "bg-warning-5" },
-  { id: "gray", className: "bg-text-muted-2" },
-]
-
-const MOCK_CATEGORIES = [
-  {
-    id: "1",
-    name: "Payroll",
-    description: "Monthly salary disbursements and bonuses.",
-    color: "bg-accent-blue",
-  },
-  {
-    id: "2",
-    name: "Marketing",
-    description: "Ad campaigns, social media, and branding.",
-    color: "bg-accent-violet",
-  },
-  {
-    id: "3",
-    name: "Vendor Payouts",
-    description: "Third-party service providers and contractors.",
-    color: "bg-warning-5",
-  },
-  {
-    id: "4",
-    name: "General",
-    description: "Miscellaneous operational expenses.",
-    color: "bg-text-muted-2",
-  },
-  {
-    id: "5",
-    name: "Refunds",
-    description: "Customer return processing and credit.",
-    color: "bg-success-2",
-  },
+  "bg-accent-blue",
+  "bg-success-2",
+  "bg-accent-violet",
+  "bg-warning-5",
+  "bg-text-muted-2",
 ]
 
 type View = "list" | "create" | "edit"
-type Category = (typeof MOCK_CATEGORIES)[number]
 const CATEGORY_FORM_ID = "category-form"
 
 const DEFAULT_FORM_VALUES: CategoryFormValues = {
   name: "",
   description: "",
-  color: "blue",
 }
 
-function getColorId(className: string) {
-  return (
-    LABEL_COLORS.find((color) => color.className === className)?.id ?? "blue"
-  )
+const EMPTY_STATE_MESSAGE = "No categories yet. Create one to get started."
+
+function getCategoryColor(category: Category) {
+  return LABEL_COLORS[category.id % LABEL_COLORS.length]
 }
 
 export function CategoriesSheet() {
   const merchant = useCurrentMerchant()
   const queryClient = useQueryClient()
+  const merchantId = merchant?.id ?? ""
   const [view, setView] = React.useState<View>("list")
+  const [searchTerm, setSearchTerm] = React.useState("")
   const [editingCategory, setEditingCategory] = React.useState<Category | null>(
     null,
   )
+  
+  const { data: categories = [], isLoading } = useQuery({
+    queryKey: payoutQueryKeys.categories(merchantId),
+    queryFn: () => getPayoutCategories(merchant!.id),
+    enabled: !!merchant?.id,
+  })
+
   const isListView = view === "list"
+  const isEditing = view === "edit"
+  const isMutating = isLoading
   const formTitle = view === "create" ? "Create New Category" : "Edit Category"
   const formInitialValues = editingCategory
     ? {
         name: editingCategory.name,
         description: editingCategory.description,
-        color: getColorId(editingCategory.color),
       }
     : DEFAULT_FORM_VALUES
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase()
+  const filteredCategories = React.useMemo(
+    () =>
+      categories.filter((category) => {
+        if (!normalizedSearchTerm) {
+          return true
+        }
 
-  const setCreateView = React.useCallback(() => {
+        return (
+          category.name.toLowerCase().includes(normalizedSearchTerm) ||
+          category.description.toLowerCase().includes(normalizedSearchTerm)
+        )
+      }),
+    [categories, normalizedSearchTerm],
+  )
+
+  const showCreateView = () => {
     setEditingCategory(null)
     setView("create")
-  }, [])
+  }
 
-  const setEditView = React.useCallback((category: Category) => {
+  const showEditView = (category: Category) => {
     setEditingCategory(category)
     setView("edit")
-  }, [])
+  }
 
-  const setListView = React.useCallback(() => {
+  const showListView = () => {
     setEditingCategory(null)
     setView("list")
-  }, [])
+  }
+
+  const invalidateCategories = React.useCallback(async () => {
+    if (!merchantId) {
+      return
+    }
+
+    await queryClient.invalidateQueries({
+      queryKey: payoutQueryKeys.categories(merchantId),
+    })
+  }, [merchantId, queryClient])
 
   const { mutate: submitCategory, isPending } = useMutation({
     mutationFn: async (values: CategoryFormValues) => {
@@ -124,7 +127,8 @@ export function CategoriesSheet() {
 
       if (editingCategory) {
         return updatePayoutCategory(
-          Number(editingCategory.id),
+          editingCategory.id,
+          merchant.id,
           values.name,
           values.description,
         )
@@ -133,28 +137,43 @@ export function CategoriesSheet() {
       return createPayoutCategory(merchant.id, values.name, values.description)
     },
     onSuccess: async () => {
-      if (merchant?.id) {
-        await queryClient.invalidateQueries({
-          queryKey: payoutQueryKeys.categories(merchant.id),
-        })
-      }
-
+      await invalidateCategories()
       toast.success(
-        editingCategory
-          ? "Category updated successfully"
-          : "Category created successfully",
+        isEditing ? "Category updated successfully" : "Category created successfully",
       )
-      setListView()
+      showListView()
     },
     onError: (error) => {
       const message =
         error instanceof Error && error.message === "No merchant selected"
           ? error.message
-          : editingCategory
+          : isEditing
             ? "Unable to update category"
             : "Unable to create category"
 
       toast.error(message)
+    },
+  })
+
+  const { mutate: removeCategory, isPending: isDeleting } = useMutation({
+    mutationFn: async (category: Category) => {
+      if (!merchant?.id) {
+        throw new Error("No merchant selected")
+      }
+
+      return deletePayoutCategory(category.id, merchant.id)
+    },
+    onSuccess: async () => {
+      await invalidateCategories()
+      toast.success("Category deleted successfully")
+      showListView()
+    },
+    onError: (error) => {
+      toast.error(
+        error instanceof Error && error.message === "No merchant selected"
+          ? error.message
+          : "Unable to delete category",
+      )
     },
   })
 
@@ -164,6 +183,24 @@ export function CategoriesSheet() {
     },
     [submitCategory],
   )
+
+  const handleDelete = React.useCallback(
+    (category: Category) => {
+      if (
+        typeof window !== "undefined" &&
+        !window.confirm(`Delete "${category.name}"?`)
+      ) {
+        return
+      }
+
+      removeCategory(category)
+    },
+    [removeCategory],
+  )
+
+  const listEmptyMessage = normalizedSearchTerm
+    ? "No categories match your search."
+    : EMPTY_STATE_MESSAGE
 
   return (
     <Sheet>
@@ -210,12 +247,16 @@ export function CategoriesSheet() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
               <Input
                 placeholder="Search categories..."
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                disabled={!isListView}
                 className="pl-9 bg-surface-2 border-transparent focus-visible:ring-1 focus-visible:ring-surface-6 rounded-full h-10 text-text-primary"
               />
             </div>
             <Button
               className="bg-brand-primary hover:bg-brand-primary-dark text-white rounded-2xl px-4 h-10 shadow-sm shadow-brand-primary/20"
-              onClick={setCreateView}
+              onClick={showCreateView}
+              disabled={!isListView}
             >
               <Plus className="h-4 w-4" />
               New Category
@@ -223,68 +264,78 @@ export function CategoriesSheet() {
           </div>
         </SheetHeader>
 
-        <div className="">
-          <div className="h-px w-full bg-surface-3" />
-        </div>
+        <div className="h-px w-full bg-surface-3" />
 
         <div className=" py-4 flex-1 overflow-y-auto custom-scrollbar space-y-4">
           {isListView ? (
             <div className="space-y-3 px-6">
-              {MOCK_CATEGORIES.map((category) => (
-                <div
-                  key={category.id}
-                  className={cn(
-                    "group flex items-center gap-4 rounded-3xl h-19.5 border-2 p-4 transition-all",
-                    "hover:bg-surface-1 hover:border-brand-primary hover:shadow-sm",
-                    "bg-surface-2 border-transparent",
-                  )}
-                >
+              {isLoading ? (
+                <div className="rounded-3xl border border-dashed border-surface-6 bg-surface-2 px-4 py-8 text-center text-sm text-text-secondary">
+                  Loading categories...
+                </div>
+              ) : filteredCategories.length === 0 ? (
+                <div className="rounded-3xl border border-dashed border-surface-6 bg-surface-2 px-4 py-8 text-center text-sm text-text-secondary">
+                  {listEmptyMessage}
+                </div>
+              ) : (
+                filteredCategories.map((category) => (
                   <div
+                    key={category.id}
                     className={cn(
-                      "size-3 shrink-0 rounded-full",
-                      category.color,
+                      "group flex items-center gap-4 rounded-3xl h-19.5 border-2 p-4 transition-all",
+                      "hover:bg-surface-1 hover:border-brand-primary hover:shadow-sm",
+                      "bg-surface-2 border-transparent",
                     )}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div>
-                      <div className="min-w-0 flex items-center justify-between">
-                        <h4 className="text-base font-bold leading-none text-text-primary">
-                          {category.name}
-                        </h4>
-                        <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-text-muted-2 hover:text-brand-primary"
-                            onClick={() => setEditView(category)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-text-muted-2 hover:text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                  >
+                    <div
+                      className={cn(
+                        "size-3 shrink-0 rounded-full",
+                        getCategoryColor(category),
+                      )}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div>
+                        <div className="min-w-0 flex items-center justify-between">
+                          <h4 className="text-base font-bold leading-none text-text-primary">
+                            {category.name}
+                          </h4>
+                          <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-text-muted-2 hover:text-brand-primary"
+                              onClick={() => showEditView(category)}
+                              disabled={isMutating}
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-text-muted-2 hover:text-destructive"
+                              onClick={() => handleDelete(category)}
+                              disabled={isMutating}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
+                        <p className="text-xs -mt-1 leading-relaxed text-text-secondary">
+                          {category.description}
+                        </p>
                       </div>
-                      <p className="text-xs -mt-1 leading-relaxed text-text-secondary">
-                        {category.description}
-                      </p>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           ) : (
             <CategoryForm
               title={formTitle}
-              colors={LABEL_COLORS}
               formId={CATEGORY_FORM_ID}
               initialValues={formInitialValues}
-              onCancel={setListView}
-              submitLabel={editingCategory ? "Save Changes" : "Create Category"}
+              onCancel={showListView}
+              submitLabel={isEditing ? "Save Changes" : "Create Category"}
               onSubmit={handleSubmit}
               isPending={isPending}
             />

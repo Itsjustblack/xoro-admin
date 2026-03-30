@@ -2,7 +2,6 @@ import ApiClient from "@/lib/api-client"
 import { LoginFormValues, SignUpFormValues } from "@/lib/schemas/auth"
 import { IUser } from "@/lib/types"
 
-// Define response types
 export interface AuthResponse {
   status: boolean
   message: string

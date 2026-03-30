@@ -122,7 +122,7 @@ export function CheckoutLinksTable({
         data={data}
         getRowId={(row) => row.id}
         tableWrapperClassName="w-full"
-        headerRowClassName="bg-surface-2/40 border-b border-surface-6 hover:bg-surface-2/40"
+        headerRowClassName="bg-surface-2 border-b border-surface-6"
         headClassName="h-14 px-8 py-4"
         bodyRowClassName="border-b border-surface-3 last:border-0 hover:bg-surface-2/20 transition-colors"
         bodyCellClassName="px-8 py-6 h-auto"

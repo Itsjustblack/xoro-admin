@@ -2,7 +2,6 @@ import { LoginFormValues, SignUpFormValues } from "@/lib/schemas/auth"
 import { IUser } from "@/lib/types"
 import { create } from "zustand"
 
-//TODO: Use the hook usemutationdata instead of logincredentils => See how it goes
 interface AuthStoreProps {
   user: IUser | null
   signupCredentials: SignUpFormValues | null
@@ -35,7 +34,6 @@ export const useAuthStore = create<AuthStoreProps>((set) => ({
   },
 }))
 
-// Custom hooks for easy access to state and actions
 export const useUser = () => useAuthStore((state) => state.user)
 
 export const useLoginCredentials = () =>

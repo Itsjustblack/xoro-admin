@@ -13,18 +13,11 @@ import {
   categoryFormSchema,
   type CategoryFormValues,
 } from "@/lib/schemas/payout"
-import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { Controller, useForm } from "react-hook-form"
 
-type LabelColor = {
-  id: string
-  className: string
-}
-
 interface CategoryFormProps {
-  colors: LabelColor[]
   title: string
   initialValues: CategoryFormValues
   onSubmit: (values: CategoryFormValues) => void
@@ -35,7 +28,6 @@ interface CategoryFormProps {
 }
 
 export function CategoryForm({
-  colors,
   title,
   initialValues,
   onSubmit,
@@ -104,42 +96,6 @@ export function CategoryForm({
                     aria-invalid={fieldState.invalid}
                     className="min-h-20 resize-none rounded-xl border-border-light bg-white"
                   />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-              name="color"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel className="text-xs font-semibold uppercase tracking-wide text-text-muted-3">
-                    Label Color
-                  </FieldLabel>
-                  <div className="flex items-center gap-3">
-                    {colors.map((color) => (
-                      <button
-                        key={color.id}
-                        type="button"
-                        onClick={() => field.onChange(color.id)}
-                        className={cn(
-                          "flex h-8 w-8 items-center justify-center rounded-full transition-all",
-                          color.className,
-                          field.value === color.id
-                            ? "ring-2 ring-offset-2 ring-surface-6"
-                            : "ring-0 hover:opacity-80",
-                        )}
-                        aria-label={`Select ${color.id} color`}
-                      >
-                        {field.value === color.id && (
-                          <div className="h-full w-full rounded-full border-2 border-white/20" />
-                        )}
-                      </button>
-                    ))}
-                  </div>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}

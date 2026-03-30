@@ -17,7 +17,6 @@ async function proxyRequest(req: NextRequest, path: string[]): Promise<NextRespo
     )
   }
 
-  // Prevent path traversal
   if (path.some((segment) => segment === ".." || segment.includes("\0"))) {
     return NextResponse.json({ message: "Invalid path" }, { status: 400 })
   }

@@ -214,51 +214,6 @@ export function SignUpForm() {
             />
           </div>
 
-          {/* <Controller
-            name="terms"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <Field
-                  orientation="horizontal"
-                  className="items-start gap-3 mt-1"
-                >
-                  <Checkbox
-                    id="signup-terms"
-                    className="rounded-full data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary *:data-[slot=checkbox-indicator]:text-white!"
-                    checked={field.value}
-                    onCheckedChange={(checked) =>
-                      field.onChange(checked === true)
-                    }
-                  />
-                  <FieldLabel
-                    htmlFor="signup-terms"
-                    className="text-sm text-text-secondary font-primary font-normal block leading-tight"
-                  >
-                    I agree to the{" "}
-                    <Link
-                      href="#"
-                      className="text-brand-primary hover:underline font-medium"
-                    >
-                      Terms of Service
-                    </Link>{" "}
-                    and{" "}
-                    <Link
-                      href="#"
-                      className="text-brand-primary hover:underline font-medium"
-                    >
-                      Privacy Policy
-                    </Link>
-                    .
-                  </FieldLabel>
-                </Field>
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          /> */}
-
           <AuthSubmitButton
             idleText="Create account"
             loadingText="Creating account..."

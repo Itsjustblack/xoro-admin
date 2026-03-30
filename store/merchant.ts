@@ -29,13 +29,11 @@ const useMerchantStore = create<MerchantStoreProps>()(
             const persistedId = get().currentMerchantId
             let selectedMerchant: IMerchant | null = null
 
-            // Try to find the persisted merchant
             if (persistedId) {
               selectedMerchant =
                 merchants.find((m) => m.id === persistedId) || null
             }
 
-            // If no persisted merchant or it doesn't exist, use the first one
             if (!selectedMerchant) {
               selectedMerchant = merchants[0]
             }
@@ -65,8 +63,6 @@ const useMerchantStore = create<MerchantStoreProps>()(
           set({ currentMerchant: null, currentMerchantId: null })
         },
 
-        // Called by login page when ?from=logout query param is present
-        // NOT called during logout itself to avoid UI glitches during navigation
         clearMerchants: () => {
           set({
             merchants: [],

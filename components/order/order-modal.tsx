@@ -75,7 +75,6 @@ export function OrderModal({ order, isOpen, onClose }: OrderModalProps) {
         </DialogHeader>
 
         <div className="space-y-4">
-          {/* Order Number & Date */}
           <div className="flex justify-between items-center">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
@@ -93,7 +92,6 @@ export function OrderModal({ order, isOpen, onClose }: OrderModalProps) {
             </div>
           </div>
 
-          {/* Customer Info */}
           <div>
             <label className="text-sm font-medium text-muted-foreground">
               Customer
@@ -106,7 +104,6 @@ export function OrderModal({ order, isOpen, onClose }: OrderModalProps) {
             </p>
           </div>
 
-          {/* Status & Payment */}
           <div className="flex justify-between items-center">
             <div>
               <label className="text-sm font-medium text-muted-foreground">
@@ -130,7 +127,6 @@ export function OrderModal({ order, isOpen, onClose }: OrderModalProps) {
             </div>
           </div>
 
-          {/* Order Items */}
           <div>
             <label className="text-sm font-medium text-muted-foreground">
               Items
@@ -153,7 +149,6 @@ export function OrderModal({ order, isOpen, onClose }: OrderModalProps) {
             </div>
           </div>
 
-          {/* Total */}
           <div className="flex justify-between items-center pt-2 border-t border-border">
             <label className="text-sm font-medium text-muted-foreground">
               Total Amount
@@ -163,7 +158,6 @@ export function OrderModal({ order, isOpen, onClose }: OrderModalProps) {
             </p>
           </div>
 
-          {/* Shipping Address */}
           <div>
             <label className="text-sm font-medium text-muted-foreground">
               Shipping Address

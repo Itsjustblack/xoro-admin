@@ -14,7 +14,6 @@ export function CustomerProfile({ customer, onBack }: CustomerProfileProps) {
 
   return (
     <div className="flex flex-col h-full bg-background border-l border-border">
-      {/* Header */}
       <div className="p-4 border-b border-border flex items-center gap-3">
         <Button variant="ghost" size="icon" onClick={onBack}>
           <ArrowLeft className="w-4 h-4" />
@@ -24,9 +23,7 @@ export function CustomerProfile({ customer, onBack }: CustomerProfileProps) {
         </h2>
       </div>
 
-      {/* Profile Content */}
       <div className="flex-1 overflow-y-auto p-8 space-y-8">
-        {/* Avatar and Name */}
         <div className="flex items-center gap-5">
           <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
             <span className="text-2xl font-semibold text-primary">
@@ -43,7 +40,6 @@ export function CustomerProfile({ customer, onBack }: CustomerProfileProps) {
           </div>
         </div>
 
-        {/* Contact Information */}
         <div className="space-y-4">
           <h4 className="text-base font-semibold text-muted-foreground">
             Contact Information
@@ -60,7 +56,6 @@ export function CustomerProfile({ customer, onBack }: CustomerProfileProps) {
           </div>
         </div>
 
-        {/* Account Details */}
         <div className="space-y-4">
           <h4 className="text-base font-semibold text-muted-foreground">
             Account Details

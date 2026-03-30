@@ -50,7 +50,6 @@ export function BulkPayoutsContent() {
     placeholderData: keepPreviousData,
   })
 
-  // BulkPayoutsResponse shape: { payouts: BulkPayout[], total_items, total_pages, ... }
   const bulkPayoutRows = bulkPayouts?.payouts ?? []
   const totalCount = bulkPayouts?.total_items ?? 0
   const pageCount = bulkPayouts?.total_pages ?? 1
