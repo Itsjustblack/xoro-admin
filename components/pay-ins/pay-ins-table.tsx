@@ -7,9 +7,7 @@ import type { PayInTransaction } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
-  CreditCard,
   MoreVertical,
-  ArrowRightLeft,
   Bitcoin,
   Landmark,
 } from "lucide-react"

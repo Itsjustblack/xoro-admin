@@ -19,7 +19,7 @@ import {
   getPayoutCategories,
 } from "@/lib/api/v1/payout/queries"
 import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
-import { Beneficiary, Category } from "@/lib/types"
+import { Beneficiary, BeneficiariesResponse, Category } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { useCurrentMerchant } from "@/store/merchant"
 import { useQuery } from "@tanstack/react-query"
@@ -66,7 +66,7 @@ export function CreateBatchPayoutSheet() {
     enabled: !!merchant?.id,
   })
 
-  const { data: beneficiaries = [] } = useQuery({
+  const { data: beneficiaryResponse } = useQuery<BeneficiariesResponse>({
     queryKey: payoutQueryKeys.beneficiaries(
       merchant?.id ?? "",
       beneficiaryPage,
@@ -81,24 +81,13 @@ export function CreateBatchPayoutSheet() {
         ...(selectedCategory
           ? { category_id: Number(selectedCategory) }
           : {}),
-      }),
+    }),
     enabled: !!merchant?.id,
   })
-  const beneficiaryList = useMemo(() => {
-    if (Array.isArray(beneficiaries)) {
-      return beneficiaries
-    }
-
-    if (
-      Array.isArray(
-        (beneficiaries as { data?: Beneficiary[] } | undefined)?.data,
-      )
-    ) {
-      return (beneficiaries as { data?: Beneficiary[] }).data ?? []
-    }
-
-    return []
-  }, [beneficiaries])
+  const beneficiaryList = useMemo(
+    () => beneficiaryResponse?.beneficiaries ?? [],
+    [beneficiaryResponse?.beneficiaries],
+  )
 
   const filteredCustomers = useMemo(() => {
     let filtered = beneficiaryList
