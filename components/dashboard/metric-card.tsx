@@ -11,6 +11,7 @@ type MetricCardProps = {
   iconClassName: string
   changeClassName?: string
   borderClassName?: string
+  containerClassName?: string
   progressValue?: number
 }
 
@@ -21,25 +22,26 @@ const MetricCard = ({
   changeLabel,
   icon,
   iconClassName,
+  containerClassName,
   changeClassName,
   borderClassName = "border-brand-primary",
   progressValue,
 }: MetricCardProps) => {
   return (
-    <Card className="rounded-3xl min-h-36 border border-brand-primary-dark/10 bg-surface-1 p-0 ring-0 shadow">
+    <Card className={cn("rounded-3xl min-h-33 border border-brand-primary-dark/10 bg-surface-1 p-0 ring-0 shadow", containerClassName)}>
       <div
         className={cn(
-          "flex flex-col justify-between border-t-[5px] gap-1 p-4 sm:p-6",
+          "flex flex-col text-text-primary justify-between border-t-[5px] gap-3 p-4 sm:p-5",
           borderClassName,
         )}
       >
         <div className="flex items-start justify-between gap-3  ">
-          <div className="space-y-1 flex-1">
+          <div className="space-y-3 flex-1">
             <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
               {title}
             </p>
             <div className="w-full">
-              <p className="font-clash-display text-xl sm:text-3xl leading-none font-black text-text-primary">
+              <p className="font-clash-display text-xl sm:text-3xl leading-none font-black ">
                 {value}
               </p>
             </div>

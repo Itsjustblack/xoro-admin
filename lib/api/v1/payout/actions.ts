@@ -4,6 +4,7 @@ import {
   BeneficiaryPayload,
   Category,
   CreateBulkPayoutPayload,
+  PayoutPayload,
 } from "@/lib/types"
 
 export async function createBeneficiary(payload: BeneficiaryPayload) {
@@ -71,5 +72,10 @@ export async function deletePayoutCategory(
 export async function createBulkPayout(payload: CreateBulkPayoutPayload) {
   const res = await ApiClient.post("/bulk-payout", payload)
 
+  return res.data
+}
+
+export async function merchantPayout(payload: PayoutPayload) {
+  const res = await ApiClient.post("/payout", payload)
   return res.data
 }

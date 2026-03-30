@@ -328,6 +328,23 @@ export interface PayInKPIs {
   countChange: string
 }
 
+export interface PayOutTransaction {
+  id: string
+  recipientName: string
+  recipientType: string
+  reference: string
+  amount: string
+  method: "Bank Transfer" | "Xoro Wallet" | "Card Payout"
+  status: "Completed" | "Pending" | "Processing" | "Failed"
+  date: string
+}
+
+export interface PayOutKPIs {
+  totalPaid: string
+  pendingProcessing: string
+  failedPayouts: string
+}
+
 export interface DetailedSubscription {
   id: string
   customerName: string

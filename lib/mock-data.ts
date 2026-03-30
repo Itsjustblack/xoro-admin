@@ -281,6 +281,20 @@ export const mockPayInTransactions: PayInTransaction[] = [
   { id: "5", customerName: "Sarah Williams", email: "sarah@williams.net", reference: "TRu-552985", amount: "$1,200.00", method: "Transfer", status: "Success", date: "Oct 22, 2023" },
 ]
 
+export const mockPayOutKPIs: import("./types").PayOutKPIs = {
+  totalPaid: "$124,500.00",
+  pendingProcessing: "$12,450.25",
+  failedPayouts: "2",
+}
+
+export const mockPayOutTransactions: import("./types").PayOutTransaction[] = [
+  { id: "1", recipientName: "Acme Corp", recipientType: "Business Services", reference: "Inv-001", amount: "$1,200.00", method: "Bank Transfer", status: "Completed", date: "Oct 24, 2023" },
+  { id: "2", recipientName: "Global Logistics", recipientType: "Shipping", reference: "Shipping Fees", amount: "$450.25", method: "Xoro Wallet", status: "Pending", date: "Oct 25, 2023" },
+  { id: "3", recipientName: "Tech Solutions", recipientType: "Software", reference: "Subscription", amount: "$89.00", method: "Card Payout", status: "Completed", date: "Oct 25, 2023" },
+  { id: "4", recipientName: "Refund - User 88", recipientType: "Customer Refund", reference: "Order #992", amount: "$55.00", method: "Xoro Wallet", status: "Processing", date: "Oct 26, 2023" },
+  { id: "5", recipientName: "Marketing Agency", recipientType: "Advertising", reference: "Ad Spend", amount: "$3,000.00", method: "Bank Transfer", status: "Failed", date: "Oct 26, 2023" },
+]
+
 export const getDetailedPlanSubscription = (id: string): import("./types").DetailedPlanSubscription => ({
   id,
   planName: "Premium Monthly",

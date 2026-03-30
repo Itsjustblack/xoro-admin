@@ -11,9 +11,9 @@ import { useMemo, useState } from "react"
 import { CategoriesSheet } from "../category/categories-sheet"
 import MetricCard from "../dashboard/metric-card"
 import { GroupIcon, PaymentIcon } from "../icons"
+import { SiteFooter } from "../shared/site-footer"
 import { AddBeneficiarySheet } from "./add-beneficiary-sheet"
 import { BeneficiariesTable } from "./beneficiaries-table"
-import { SiteFooter } from "../shared/site-footer"
 
 export function BeneficiariesContent() {
   const merchant = useCurrentMerchant()
@@ -91,6 +91,7 @@ export function BeneficiariesContent() {
             changeLabel=""
             icon={<PaymentIcon className="size-5" />}
             borderClassName="border-transparent"
+            containerClassName="rounded-2xl"
             iconClassName="p-2 rounded-lg bg-brand-primary-dark/10 text-brand-primary"
           />
           <MetricCard
@@ -100,6 +101,7 @@ export function BeneficiariesContent() {
             icon={<GroupIcon className="size-5" />}
             iconClassName="p-2 rounded-lg bg-brand-primary-dark/10 text-brand-primary"
             borderClassName="border-transparent"
+            containerClassName="rounded-2xl"
           />
         </section>
 

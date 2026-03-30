@@ -3,8 +3,6 @@
 import { X } from "lucide-react"
 import * as React from "react"
 
-import { createBeneficiary } from "@/lib/api/v1/payout/actions"
-import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -14,6 +12,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { createBeneficiary } from "@/lib/api/v1/payout/actions"
+import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { type AddBeneficiaryFormValues } from "@/lib/schemas/beneficiary"
 import { useCurrentMerchant } from "@/store/merchant"
 import { useMutation, useQueryClient } from "@tanstack/react-query"

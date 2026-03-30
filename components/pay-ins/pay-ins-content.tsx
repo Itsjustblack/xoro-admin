@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import { Download } from "lucide-react"
 import MetricCard from "@/components/dashboard/metric-card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { PayInsTable } from "./pay-ins-table"
 import { mockPayInKPIs, mockPayInTransactions } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
+import { Download } from "lucide-react"
+import { useState } from "react"
+import { PayInsTable } from "./pay-ins-table"
 
 const TABS = ["All", "Card", "Transfer", "Crypto"] as const
 
@@ -19,7 +19,7 @@ export function PayInsContent() {
   })
 
   return (
-    <div className="flex h-full w-full flex-col gap-10 p-4 sm:p-6 lg:p-10">
+    <div className="flex h-full w-full flex-col gap-10 p-4 sm:p-6 lg:p-8">
       <section className="space-y-1">
         <h1 className="text-3xl font-black text-text-primary tracking-tight">
           Pay-Ins
