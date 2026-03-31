@@ -78,7 +78,7 @@ const churnRate = totalSubscriptions > 0
               </h2>
               <p className="text-sm font-medium text-surface-1">
                 {getSubscriptionCountLabel(totalSubscriptions)} across{" "}
-                {plans.length.toLocaleString()} plans
+                {/* {plans.length.toLocaleString()} plans */}
               </p>
             </div>
 
@@ -116,7 +116,7 @@ const churnRate = totalSubscriptions > 0
           </div>
         </section>
 
-        <SubscriptionPlansTable data={plans} isPending={isPending} />
+        {/* <SubscriptionPlansTable data={plans} isPending={isPending} /> */}
       </div>
       <SiteFooter />
     </div>
