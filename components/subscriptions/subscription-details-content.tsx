@@ -1,23 +1,33 @@
 "use client"
 
-import { Edit2, PauseCircle } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { PauseCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SubscriptionKPIs } from "./subscription-kpis"
 import { HealthOverview } from "./health-overview"
 import { PlanSubscribersTable } from "./plan-subscribers-table"
 import { PlanInfoSidebar } from "./plan-info-sidebar"
-import { getDetailedPlanSubscription } from "@/lib/mock-data"
+import { subscriptionQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { getAllSubscriptions } from "@/lib/api/v1/subscriptions/queries"
 import { useParams } from "next/navigation"
+import { buildPlanDetails } from "./subscription-view-model"
 
 export function SubscriptionDetailsContent() {
   const { id } = useParams()
-  const plan = getDetailedPlanSubscription(id as string)
+  const productId = String(id)
+  const { data: subscriptions = [] } = useQuery({
+    queryKey: subscriptionQueryKeys.list(1, 100, null, productId),
+    queryFn: () => getAllSubscriptions({ product_id: productId }),
+    enabled: Boolean(productId),
+  })
+
+  const plan = buildPlanDetails(productId, subscriptions)
 
   return (
     <div className="flex h-full w-full flex-col gap-8 p-4 sm:p-6 lg:p-8">
       <section className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
-          <h1 className="font-secondary text-5xl font-black text-text-primary tracking-tight">
+          <h1 className="font-secondary text-5xl font-black tracking-tight text-text-primary">
             Subscription Details
           </h1>
           <p className="font-primary text-base font-medium text-text-secondary">
@@ -26,17 +36,14 @@ export function SubscriptionDetailsContent() {
         </div>
         <div className="flex items-center gap-3">
           <Button
+            disabled
             variant="outline"
             className="flex h-12 items-center gap-2 rounded-none border-text-primary/10 bg-transparent px-6 font-bold text-text-primary hover:bg-surface-2"
           >
             <div className="flex items-center justify-center">
               <PauseCircle className="size-5" />
             </div>
-            <span>Pause Subscription</span>
-          </Button>
-          <Button className="flex h-12 items-center gap-2 rounded-none bg-success-5 px-6 font-bold text-green-950 hover:bg-success-5/90">
-            <Edit2 size={18} />
-            <span>Edit Plan</span>
+            <span>Subscription Actions</span>
           </Button>
         </div>
       </section>

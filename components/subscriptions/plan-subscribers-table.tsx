@@ -147,7 +147,6 @@ export function PlanSubscribersTable({ data }: PlanSubscribersTableProps) {
         />
       </section>
 
-      {/* Info Alert */}
       <div className="flex items-center gap-3 bg-surface-2 p-6 rounded-b-4xl">
         <div className="flex size-6 items-center justify-center rounded-full bg-white text-brand-primary-2 shadow-sm">
           <Info size={14} />
@@ -166,7 +165,11 @@ export function PlanSubscribersTable({ data }: PlanSubscribersTableProps) {
         </div>
 
         <div className="flex items-center gap-6">
-          <span className="text-sm font-medium text-text-secondary">1-10 of 5,235</span>
+          <span className="text-sm font-medium text-text-secondary">
+            {filteredData.length === 0
+              ? "0 of 0"
+              : `1-${Math.min(filteredData.length, 10)} of ${filteredData.length}`}
+          </span>
           <div className="flex items-center gap-4">
             <button className="text-text-muted hover:text-text-primary disabled:opacity-50">
               <ChevronLeft size={20} />

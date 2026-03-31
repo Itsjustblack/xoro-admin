@@ -113,7 +113,7 @@ export function BalanceFilterPanel({
       <DropdownMenuContent
         collisionPadding={16}
         align="end"
-        className="z-50 flex h-168 w-87 flex-col gap-0 overflow-hidden rounded-3xl border-none bg-white p-0 font-manrope shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)]"
+        className="z-50 flex h-168! w-87 flex-col gap-0 overflow-hidden rounded-3xl border-none bg-white p-0 font-manrope shadow-[0_12px_40px_-12px_rgba(0,0,0,0.12)]"
         sideOffset={12}
       >
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden p-6 sm:p-7">

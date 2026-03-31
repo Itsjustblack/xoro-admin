@@ -10,7 +10,6 @@ interface SubscriptionKPIsProps {
 export function SubscriptionKPIs({ plan }: SubscriptionKPIsProps) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-      {/* Total Subscribers */}
       <Card className="border rounded-none border-surface-3 bg-white p-6 shadow-sm ring-0">
         <div className="flex flex-col gap-2">
           <p className="font-primary text-[11px] font-bold uppercase tracking-widest text-text-subtitle">
@@ -20,12 +19,13 @@ export function SubscriptionKPIs({ plan }: SubscriptionKPIsProps) {
             <h3 className="font-secondary text-3xl font-black text-text-primary">
               {plan.totalSubscribers.toLocaleString()}
             </h3>
-            <span className="text-xs font-bold text-status-success">+12%</span>
+            <span className="text-xs font-bold text-status-success">
+              {plan.healthStats.active}%
+            </span>
           </div>
         </div>
       </Card>
 
-      {/* Active Subscribers */}
       <Card className="border rounded-none border-surface-3 bg-white p-6 shadow-sm ring-0">
         <div className="flex flex-col gap-2">
           <p className="font-primary text-[11px] font-bold uppercase tracking-widest text-text-subtitle">
@@ -40,7 +40,6 @@ export function SubscriptionKPIs({ plan }: SubscriptionKPIsProps) {
         </div>
       </Card>
 
-      {/* Monthly Revenue */}
       <Card className="border rounded-none border-surface-3 bg-white p-6 shadow-sm ring-0">
         <div className="flex flex-col gap-2">
           <p className="font-primary text-[11px] font-bold uppercase tracking-widest text-text-subtitle">
@@ -52,7 +51,6 @@ export function SubscriptionKPIs({ plan }: SubscriptionKPIsProps) {
         </div>
       </Card>
 
-      {/* Churn Rate */}
       <Card className="border rounded-none border-surface-3 bg-white p-6 shadow-sm ring-0">
         <div className="flex flex-col gap-2">
           <p className="font-primary text-[11px] font-bold uppercase tracking-widest text-text-subtitle">

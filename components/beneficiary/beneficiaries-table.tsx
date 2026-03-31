@@ -212,14 +212,14 @@ export function BeneficiariesTable({
         withPagination={false}
         tableWrapperClassName="w-full overflow-x-auto"
         headerClassName="sticky top-0 z-10 bg-surface-2"
-        headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
+        headerRowClassName="border-t border-surface-6 bg-surface-2 hover:bg-surface-2"
         headClassName="h-auto whitespace-nowrap bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4"
         bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
         bodyCellClassName="whitespace-nowrap px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4"
         emptyStateClassName="h-48 text-center"
       />
 
-      <div className="flex items-center justify-between rounded-b-3xl p-6">
+      <div className="flex items-center justify-between border-t border-surface-6 rounded-b-3xl px-6 py-4">
         <p className="text-sm font-medium text-text-secondary">
           Showing {startRange} to {endRange} of {resolvedTotalCount} records
         </p>

@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronLeft, ChevronRight, FilterIcon, Search } from "lucide-react"
+import Link from "next/link"
 
 import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
@@ -15,8 +16,8 @@ export interface SubscriptionPlan {
   name: string
   subscribers: number
   price: string
-  billingCycle: "Monthly" | "Yearly" | "Custom" | "None"
-  status: "Active" | "Review" | "Archived"
+  billingCycle: string
+  status: string
 }
 
 const columns: ColumnDef<SubscriptionPlan>[] = [
@@ -24,7 +25,7 @@ const columns: ColumnDef<SubscriptionPlan>[] = [
     accessorKey: "name",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
-        Plan Name
+        Product
       </span>
     ),
     cell: ({ row }) => (
@@ -44,7 +45,7 @@ const columns: ColumnDef<SubscriptionPlan>[] = [
       const subscribers = row.getValue("subscribers") as number
 
       return (
-        <span className="text-text-secondary font-medium">
+        <span className="font-medium text-text-secondary">
           {subscribers.toLocaleString()}
         </span>
       )
@@ -54,11 +55,11 @@ const columns: ColumnDef<SubscriptionPlan>[] = [
     accessorKey: "price",
     header: () => (
       <span className="text-xs font-semibold uppercase text-text-muted">
-        Price
+        Price Override
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-text-secondary font-medium">
+      <span className="font-medium text-text-secondary">
         {row.getValue("price")}
       </span>
     ),
@@ -71,7 +72,7 @@ const columns: ColumnDef<SubscriptionPlan>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <Badge className="bg-surface-3 text-text-subtitle border-0 font-bold text-[10px] rounded-md px-2 py-0.5">
+      <Badge className="rounded-md border-0 bg-surface-3 px-2 py-0.5 text-[10px] font-bold text-text-subtitle">
         {row.getValue("billingCycle")}
       </Badge>
     ),
@@ -88,7 +89,7 @@ const columns: ColumnDef<SubscriptionPlan>[] = [
       return (
         <Badge
           className={cn(
-            "rounded-md px-2 py-0.5 font-bold text-[10px] border-0",
+            "rounded-md border-0 px-2 py-0.5 text-[10px] font-bold",
             status === "Active" && "bg-status-success-soft text-status-success",
             status === "Review" && "bg-status-warning-soft text-status-warning",
             status === "Archived" && "bg-surface-6 text-text-muted",
@@ -106,39 +107,46 @@ const columns: ColumnDef<SubscriptionPlan>[] = [
         Actions
       </span>
     ),
-    cell: ({ row }) => {
-      const status = row.original.status
-      return (
-        <Button
-          variant="ghost"
-          className={cn(
-            "font-black text-[10px] uppercase tracking-widest px-0 h-auto hover:bg-transparent",
-            status === "Archived" ? "text-brand-primary" : "text-brand-primary",
-          )}
-        >
-          {status === "Archived" ? "Restore" : "Edit"}
-        </Button>
-      )
-    },
+    cell: ({ row }) => (
+      <Button
+        asChild
+        variant="ghost"
+        className="h-auto px-0 font-black text-[10px] uppercase tracking-widest text-brand-primary hover:bg-transparent"
+      >
+        <Link href={`/subscriptions/${row.original.id}`}>View</Link>
+      </Button>
+    ),
   },
 ]
 
 interface SubscriptionPlansTableProps {
   data: SubscriptionPlan[]
+  isPending?: boolean
 }
 
-export function SubscriptionPlansTable({ data }: SubscriptionPlansTableProps) {
+export function SubscriptionPlansTable({
+  data,
+  isPending = false,
+}: SubscriptionPlansTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
-  const [pageIndex, setPageIndex] = useState(0)
 
   const filteredData = useMemo(() => {
-    return data.filter((plan) =>
-      plan.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    )
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase()
+
+    return data.filter((plan) => {
+      if (!normalizedSearchTerm) {
+        return true
+      }
+
+      return (
+        plan.name.toLowerCase().includes(normalizedSearchTerm) ||
+        plan.id.toLowerCase().includes(normalizedSearchTerm)
+      )
+    })
   }, [data, searchTerm])
 
   return (
-    <div className="rounded-4xl border border-surface-3 bg-surface-1 shadow-sm overflow-hidden">
+    <div className="overflow-hidden rounded-4xl border border-surface-3 bg-surface-1 shadow-sm">
       <div className="flex flex-col gap-4 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
         <h3 className="font-bold text-text-primary">
           Subscription Plans
@@ -150,16 +158,13 @@ export function SubscriptionPlansTable({ data }: SubscriptionPlansTableProps) {
             <Input
               placeholder="Search plans..."
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value)
-                setPageIndex(0)
-              }}
-              className="h-10 w-full pl-9 sm:w-60 text-sm"
+              onChange={(event) => setSearchTerm(event.target.value)}
+              className="h-10 w-full pl-9 text-sm sm:w-60"
             />
           </div>
           <Button
             variant="outline"
-            className="flex h-10 items-center px-4 font-satoshi justify-center gap-2 border-border-light text-text-subtitle bg-transparent"
+            className="flex h-10 items-center justify-center gap-2 border-border-light bg-transparent px-4 font-satoshi text-text-subtitle"
           >
             <FilterIcon className="size-4" />
             <span>Filter</span>
@@ -168,18 +173,18 @@ export function SubscriptionPlansTable({ data }: SubscriptionPlansTableProps) {
       </div>
 
       <DataTable
-        isPending={false}
+        isPending={isPending}
         columns={columns}
         data={filteredData}
         getRowId={(row) => row.id}
         tableWrapperClassName="w-full"
-        headerRowClassName="bg-surface-2 border-none hover:bg-surface-2"
-        headClassName="h-14 px-6 *:font-bold py-4"
+        headerRowClassName="border-none bg-surface-2 hover:bg-surface-2"
+        headClassName="h-14 px-6 py-4 *:font-bold"
         bodyRowClassName="border-surface-3 last:border-0 transition-colors"
-        bodyCellClassName="px-6 py-4 h-auto"
+        bodyCellClassName="h-auto px-6 py-4"
       />
 
-      <div className="flex items-center justify-between px-6 py-4 border-t border-surface-3 bg-surface-2">
+      <div className="flex items-center justify-between border-t border-surface-3 bg-surface-2 px-6 py-4">
         <p className="text-sm font-medium text-text-secondary">
           Showing {filteredData.length} of {data.length} plans
         </p>
@@ -192,12 +197,12 @@ export function SubscriptionPlansTable({ data }: SubscriptionPlansTableProps) {
           >
             <ChevronLeft className="size-4" />
           </Button>
-          {[1, 2, 3].map((page, i) => (
+          {[1, 2, 3].map((page) => (
             <Button
-              key={i}
+              key={page}
               variant={page === 1 ? "default" : "outline"}
               className={cn(
-                "h-9 w-9 rounded-lg border-transparent font-bold text-sm",
+                "h-9 w-9 rounded-lg border-transparent text-sm font-bold",
                 page === 1
                   ? "bg-brand-primary text-white hover:bg-brand-primary"
                   : "bg-transparent text-text-secondary hover:bg-white",

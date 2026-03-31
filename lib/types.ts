@@ -376,6 +376,97 @@ export interface DetailedSubscription {
   totalPaid: string
 }
 
+export interface ISubscriptionAnalytics {
+  total: number,
+  active: number,
+  pending: number,
+  past_due: number,
+  grace: number,
+  expired: number,
+  cancelled: number,
+  paused: number
+}
+
+export type SubscriptionStatus =
+  | "pending"
+  | "active"
+  | "past_due"
+  | "grace"
+  | "expired"
+  | "cancelled"
+  | "paused"
+
+export type SubscriptionMetadata = Record<string, unknown>
+
+export interface SubscriptionItem {
+  id: string
+  merchant_id: string
+  product_id: string
+  customer_id: string | null
+  subscriber_id: string | null
+  subscriber_email: string
+  subscriber_name: string
+  subscriber_phone: string | null
+  status: SubscriptionStatus | string
+  current_period_start: string | null
+  current_period_end: string | null
+  grace_period_days: number
+  grace_period_end: string | null
+  trial_end: string | null
+  cancelled_at: string | null
+  cancel_at_period_end: boolean
+  cancellation_reason: string | null
+  paused_at: string | null
+  price_override: number | string | null
+  metadata: SubscriptionMetadata | null
+  external_id: string | null
+  bulk_subscription_id: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface SubscriptionListResponse {
+  items: SubscriptionItem[]
+  total: number
+  page: number
+  page_size: number
+  total_pages: number
+}
+
+export interface SubscriptionListParams {
+  page?: number
+  page_size?: number
+  status?: SubscriptionStatus | string | null
+  product_id?: string | null
+  subscriber_id?: string | null
+  subscriber_email?: string | null
+  customer_id?: string | null
+}
+
+export interface CreateSubscriptionPayload {
+  product_id: string
+  subscriber_id?: string | null
+  subscriber_email: string
+  subscriber_name: string
+  subscriber_phone?: string | null
+  grace_period_days?: number
+  metadata?: SubscriptionMetadata | null
+  external_id?: string | null
+  price_override?: number | string | null
+  trial_days?: number
+  start_date?: string | null
+  customer_id?: string | null
+}
+
+export interface UpdateSubscriptionPayload {
+  subscriber_name?: string
+  subscriber_phone?: string | null
+  grace_period_days?: number
+  metadata?: SubscriptionMetadata | null
+  external_id?: string | null
+  price_override?: number | string | null
+}
+
 export interface IBulkTransactionData {
   id: number
   name: string

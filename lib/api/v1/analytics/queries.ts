@@ -1,4 +1,4 @@
-import ApiClient from "@/lib/api-client"
+import ApiClient, {SubscriptionsApiClient} from "@/lib/api-client"
 import {
   Currency,
   ICustomerAnalytics,
@@ -7,6 +7,7 @@ import {
   IPayoutsAnalytics,
   IRevenueAnalytics,
   ITransactionAnalytics,
+  ISubscriptionAnalytics,
   IWalletAnalytics,
   Interval,
   Mode,
@@ -149,5 +150,10 @@ export async function getComparisonAnalytics(
       currency,
     },
   })
+  return res.data
+}
+
+export async function getSubscriptionAnalytics() {
+  const res = await SubscriptionsApiClient.get<ISubscriptionAnalytics>("/analytics/subscriptions")
   return res.data
 }

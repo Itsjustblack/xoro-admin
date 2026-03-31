@@ -222,7 +222,7 @@ export default function BalanceTransactionsTable({
           withPagination={false}
           tableWrapperClassName="w-full overflow-x-auto"
           headerClassName="sticky top-0 z-10 bg-surface-2"
-          headerRowClassName="border-y border-surface-3 bg-surface-2 hover:bg-surface-2"
+          headerRowClassName="border-t border-surface-6 bg-surface-2 hover:bg-surface-2"
           headClassName="h-auto bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4"
           bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
           bodyCellClassName="px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4"

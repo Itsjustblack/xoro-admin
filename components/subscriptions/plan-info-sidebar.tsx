@@ -36,7 +36,11 @@ export function PlanInfoSidebar({ plan }: PlanInfoSidebarProps) {
                 <span className="font-secondary text-3xl font-black text-surface-1">
                   {plan.price}
                 </span>
-                <span className="text-xs font-medium text-surface-1/70">/month</span>
+                {plan.billingCycle !== "N/A" && (
+                  <span className="text-xs font-medium text-surface-1/70">
+                    /{plan.billingCycle.toLowerCase()}
+                  </span>
+                )}
               </div>
             </div>
             <div className="space-y-1 text-right">

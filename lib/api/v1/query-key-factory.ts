@@ -6,6 +6,7 @@ const TRANSACTION_KEY = "transactions" as const
 const BULK_PAYOUT_KEY = "bulk-payouts" as const
 const PAYOUT_KEY = "payout" as const
 const CHECKOUT_LINK_KEY = "checkout-links" as const
+const SUBSCRIPTION_KEY = "subscriptions" as const
 
 export const merchantQueryKeys = {
   all: [MERCHANT_KEY] as const,
@@ -65,6 +66,7 @@ export const analyticsQueryKeys = {
       currency ?? null,
       interval ?? null,
     ] as const,
+  subscriptions: () => [...analyticsQueryKeys.all, "subscriptions"] as const,
 }
 
 export const walletQueryKeys = {
@@ -142,4 +144,30 @@ export const checkoutLinkQueryKeys = {
     [...checkoutLinkQueryKeys.all, "list", merchantId] as const,
   detail: (linkId: string) =>
     [...checkoutLinkQueryKeys.all, "detail", linkId] as const,
+}
+
+export const subscriptionQueryKeys = {
+  all: [SUBSCRIPTION_KEY] as const,
+  list: (
+    page = 1,
+    pageSize = 20,
+    status?: string | null,
+    productId?: string | null,
+    subscriberId?: string | null,
+    subscriberEmail?: string | null,
+    customerId?: string | null,
+  ) =>
+    [
+      ...subscriptionQueryKeys.all,
+      "list",
+      page,
+      pageSize,
+      status ?? null,
+      productId ?? null,
+      subscriberId ?? null,
+      subscriberEmail ?? null,
+      customerId ?? null,
+    ] as const,
+  detail: (subscriptionId: string) =>
+    [...subscriptionQueryKeys.all, "detail", subscriptionId] as const,
 }

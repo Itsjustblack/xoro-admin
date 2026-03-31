@@ -1,7 +1,6 @@
 "use client"
 
-import * as React from "react"
-import { Area, AreaChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, XAxis, YAxis } from "recharts"
 
 import {
   ChartConfig,
@@ -11,45 +10,43 @@ import {
 } from "@/components/ui/chart"
 import { Badge } from "@/components/ui/badge"
 import { TrendingUp } from "lucide-react"
-
-const mrrData = [
-  { month: "JAN", amount: 15000 },
-  { month: "FEB", amount: 18000 },
-  { month: "MAR", amount: 14000 },
-  { month: "APR", amount: 22000 },
-  { month: "MAY", amount: 19000 },
-  { month: "JUN", amount: 35000 },
-]
+import type { SubscriptionTrendPoint } from "./subscription-view-model"
 
 const chartConfig = {
-  amount: {
-    label: "MRR",
+  subscriptions: {
+    label: "Subscriptions",
     color: "var(--color-brand-primary)",
   },
 } satisfies ChartConfig
 
-export function MRRChart() {
+interface MRRChartProps {
+  data: SubscriptionTrendPoint[]
+  total: number
+  changeLabel: string
+}
+
+export function MRRChart({ data, total, changeLabel }: MRRChartProps) {
   return (
-    <div className="rounded-4xl border border-surface-3 bg-surface-1 p-8 shadow-sm flex flex-col h-full">
-      <div className="flex items-start justify-between mb-2">
+    <div className="flex h-full flex-col rounded-4xl border border-surface-3 bg-surface-1 p-8 shadow-sm">
+      <div className="mb-2 flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-xs font-bold text-text-secondary uppercase tracking-wider">
-            Monthly Recurring Revenue (MRR)
+          <p className="text-xs font-bold uppercase tracking-wider text-text-secondary">
+            Subscription Signups
           </p>
           <h2 className="text-4xl font-black text-text-primary">
-            $42,500.00
+            {total.toLocaleString()}
           </h2>
         </div>
-        <Badge className="bg-success-5 text-success-1 border-0 rounded-full px-3 py-1 font-bold text-xs flex items-center gap-1">
+        <Badge className="flex items-center gap-1 rounded-full border-0 bg-success-5 px-3 py-1 text-xs font-bold text-success-1">
           <TrendingUp className="size-3" />
-          +12.5%
+          {changeLabel}
         </Badge>
       </div>
 
-      <div className="flex-1 w-full mt-4 max-h-45">
+      <div className="mt-4 max-h-45 w-full flex-1">
         <ChartContainer config={chartConfig} className="h-full w-full">
           <AreaChart
-            data={mrrData}
+            data={data}
             margin={{
               left: -20,
               right: 0,
@@ -76,7 +73,7 @@ export function MRRChart() {
               axisLine={false}
               tickLine={false}
               tickMargin={12}
-              className="text-[10px] font-bold text-text-muted uppercase tracking-widest"
+              className="text-[10px] font-bold uppercase tracking-widest text-text-muted"
             />
             <YAxis hide />
             <ChartTooltip
