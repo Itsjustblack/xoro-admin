@@ -41,8 +41,12 @@ export default function MerchantSwitcher() {
   }
 
   const handleSwitchMerchant = (merchantId: string) => {
+    if (merchantId === currentMerchant?.id) {
+      return
+    }
+
     merchantActions.switchMerchant(merchantId)
-    toast.success("Switching merchant...")
+    toast.success("Switched merchant successfully")
   }
 
   const handleCreateNew = () => {
@@ -109,7 +113,7 @@ export default function MerchantSwitcher() {
         {otherMerchants.length > 0 && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel className="px-6 pt-6 pb-1 text-xs font-bold tracking-[0.12em] text-slate-500 uppercase">
+            <DropdownMenuLabel className="px-6 pt-6 pb-1 text-[10px] font-black tracking-[0.12em] text-text-muted uppercase">
               OTHER BUSINESSES
             </DropdownMenuLabel>
             {otherMerchants.map((merchant, index) => {
@@ -118,13 +122,13 @@ export default function MerchantSwitcher() {
               return (
                 <DropdownMenuItem
                   key={merchant.id}
-                  className="group mx-3 my-1 gap-4 rounded-xl px-3 py-3.5 focus:bg-surface-3"
+                  className="group mx-1 my-1 h-14 gap-4 rounded-xl px-3 py-3.5 focus:bg-surface-3"
                   onClick={() => handleSwitchMerchant(merchant.id)}
                 >
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 group-focus:bg-slate-200">
-                    <MerchantIcon className="size-5 text-slate-500!" />
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-surface-3 text-text-secondary group-focus:bg-surface-2">
+                    <MerchantIcon className="size-5 text-text-secondary" />
                   </div>
-                  <p className="truncate text-sm font-semibold leading-none !text-slate-700! group-focus:text-slate-800!">
+                  <p className="truncate text-sm font-semibold leading-none !text-slate-700! group-focus:text-text-primary!">
                     {merchant.name}
                   </p>
                 </DropdownMenuItem>
@@ -136,11 +140,11 @@ export default function MerchantSwitcher() {
         <DropdownMenuSeparator />
         <div className="p-2">
           <DropdownMenuItem
-            className="group h-auto py-3 cursor-pointer justify-center gap-2 rounded-lg bg-brand-primary-dark font-bold text-white focus:bg-brand-primary-dark/95"
+            className="group h-auto py-3 cursor-pointer justify-center gap-2 rounded-lg bg-brand-primary-dark font-bold text-surface-1 hover:text-surface-1! focus:bg-brand-primary-dark/95"
             onClick={handleCreateNew}
           >
-            <CirclePlus className="size-5 text-white!" />
-            <span className="!text-white!">Create New Business</span>
+            <CirclePlus className="size-5" />
+            <span>Create New Business</span>
           </DropdownMenuItem>
         </div>
       </DropdownMenuContent>

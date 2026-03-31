@@ -55,6 +55,7 @@
   --color-surface-6: var(--color-surface-6);
   --color-surface-7: var(--color-surface-7);
   --color-surface-8: var(--color-surface-8);
+  --color-surface-9: var(--color-surface-9);
 
   --color-text-primary: var(--color-text-primary);
   --color-text-subtitle: var(--color-text-subtitle);
@@ -62,19 +63,23 @@
   --color-text-muted-2: var(--color-text-muted-2);
   --color-text-muted-3: var(--color-text-muted-3);
   --color-text-heading: var(--color-text-heading);
+  --color-text-heading-2: var(--color-text-heading-2);
   --color-text-secondary: var(--color-text-secondary);
   --color-text-dark: var(--color-text-dark);
   --color-text-dim: var(--color-text-dim);
   --color-text-light: var(--color-text-light);
 
   --color-brand-primary: var(--color-brand-primary);
+  --color-brand-primary-light: var(--color-brand-primary-light);
   --color-brand-primary-dark: var(--color-brand-primary-dark);
   --color-brand-primary-2: var(--color-brand-primary-2);
   --color-surface-dark: var(--color-surface-dark);
 
   --color-green-700: var(--color-green-700);
   --color-green-950: var(--color-green-950);
+  --color-amber-400: var(--color-amber-400);
   --color-amber-700: var(--color-amber-700);
+  --color-amber-950: var(--color-amber-950);
 
   --color-legal: var(--color-legal);
   --color-success-1: var(--color-success-1);
@@ -147,11 +152,13 @@
   --color-surface-6: #e2e8f0;
   --color-surface-7: #f3f4f6;
   --color-surface-8: #e0e7ff;
+  --color-surface-9: #e8e8e8;
 
   --color-text-primary: #0f172a;
   --color-text-secondary: #64748b;
   --color-text-subtitle: #475569;
   --color-text-heading: #334155;
+  --color-text-heading-2: #484552;
   --color-text-muted: #94a3b8;
   --color-text-muted-2: #9ca3af;
   --color-text-muted-3: #6b7280;
@@ -161,9 +168,10 @@
   --color-text-light: #c7d2fe;
 
   --color-brand-primary: #2d1087;
+  --color-brand-primary-light: #e6deff;
   --color-brand-primary-dark: #2e1089;
   --color-brand-primary-2: #18005c;
-  --color-surface-dark: #0f172a;
+  --color-surface-dark: #09090b;
 
   --color-legal: #80ab7d;
   --color-success-1: #00a63e;
@@ -176,7 +184,9 @@
 
   --color-green-700: #406840;
   --color-green-950: #002105;
+  --color-amber-400: #ffdbcf;
   --color-amber-700: #ba1a1a;
+  --color-amber-950: #380c00;
 
   --color-status-warning: #ea580c;
   --color-status-warning-soft: #ffedd5;

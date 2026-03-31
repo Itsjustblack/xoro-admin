@@ -328,6 +328,24 @@ export interface PayInKPIs {
   countChange: string
 }
 
+export interface RefundRequest {
+  id: string
+  customerName: string
+  avatarColor: string
+  transactionId: string
+  amount: string
+  reason: string
+  status: "Completed" | "Processing" | "Failed" | "Pending"
+  date: string
+}
+
+export interface RefundKPIs {
+  pending: string
+  processing: string
+  completed: string
+  failed: string
+}
+
 export interface PayOutTransaction {
   id: string
   recipientName: string

@@ -34,9 +34,9 @@ export default function InitializeApp({ children }: { children: ReactNode }) {
   }, [user, setUser, setMerchants, router])
 
   useEffect(() => {
-    if (currentMerchant?.id) {
-      document.cookie = `current_merchant_id=${currentMerchant.id}; path=/; samesite=lax`
-    }
+    document.cookie = currentMerchant?.id
+      ? `current_merchant_id=${currentMerchant.id}; path=/; samesite=lax`
+      : "current_merchant_id=; path=/; max-age=0; samesite=lax"
   }, [currentMerchant?.id])
 
   useEffect(() => {

@@ -16,6 +16,24 @@ interface MerchantStoreProps {
   }
 }
 
+const resolveCurrentMerchant = (
+  merchants: IMerchant[],
+  preferredMerchantId: string | null,
+) => {
+  if (!merchants.length) {
+    return null
+  }
+
+  if (preferredMerchantId) {
+    const persistedMerchant = merchants.find((m) => m.id === preferredMerchantId)
+    if (persistedMerchant) {
+      return persistedMerchant
+    }
+  }
+
+  return merchants[0]
+}
+
 const useMerchantStore = create<MerchantStoreProps>()(
   persist(
     (set, get) => ({
@@ -25,27 +43,18 @@ const useMerchantStore = create<MerchantStoreProps>()(
       currentMerchantId: null,
       actions: {
         setMerchants: (merchants) => {
-          if (merchants && merchants.length > 0) {
-            const persistedId = get().currentMerchantId
-            let selectedMerchant: IMerchant | null = null
+          const preferredMerchantId =
+            get().currentMerchantId ?? get().currentMerchant?.id ?? null
+          const selectedMerchant = resolveCurrentMerchant(
+            merchants,
+            preferredMerchantId,
+          )
 
-            if (persistedId) {
-              selectedMerchant =
-                merchants.find((m) => m.id === persistedId) || null
-            }
-
-            if (!selectedMerchant) {
-              selectedMerchant = merchants[0]
-            }
-
-            set({
-              merchants,
-              currentMerchant: selectedMerchant,
-              currentMerchantId: selectedMerchant.id,
-            })
-          } else {
-            set({ merchants })
-          }
+          set({
+            merchants,
+            currentMerchant: selectedMerchant,
+            currentMerchantId: selectedMerchant?.id ?? null,
+          })
         },
         switchMerchant: (id) => {
           const merchant = get().merchants.find((m) => m.id === id)
@@ -78,8 +87,6 @@ const useMerchantStore = create<MerchantStoreProps>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         currentMerchantId: state.currentMerchantId,
-        currentMerchant: state.currentMerchant,
-        merchants: state.merchants,
         mode: state.mode,
       }),
     },

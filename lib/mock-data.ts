@@ -321,3 +321,19 @@ export const getDetailedPlanSubscription = (id: string): import("./types").Detai
     { id: "sub-2", customerName: "Sarah Smith", email: "sarah@corp.com", planType: "Premium", status: "Past Due", nextBillingDate: "Jan 15", amount: "₦5,000" },
   ]
 })
+
+export const mockRefundKPIs: import("./types").RefundKPIs = {
+  pending: "12 Requests",
+  processing: "4 Requests",
+  completed: "184 Today",
+  failed: "2 Issues",
+}
+
+export const mockRefundRequests: import("./types").RefundRequest[] = [
+  { id: "1", customerName: "Alex Rivera", avatarColor: "bg-surface-2 text-brand-primary-2", transactionId: "#XP-90210", amount: "$120.00", reason: "Defective item", status: "Completed", date: "Oct 24, 2023" },
+
+  { id: "2", customerName: "Sarah Chen", avatarColor: "bg-accent-blue", transactionId: "#XP-88342", amount: "$45.50", reason: "Accidental purchase", status: "Processing", date: "Oct 23, 2023" },
+  { id: "3", customerName: "Mike Johnson", avatarColor: "bg-surface-6", transactionId: "#XP-77219", amount: "$299.00", reason: "Not as described", status: "Completed", date: "Oct 22, 2023" },
+  { id: "4", customerName: "Emily Davis", avatarColor: "bg-status-danger", transactionId: "#XP-66102", amount: "$15.00", reason: "Late delivery", status: "Failed", date: "Oct 21, 2023" },
+  { id: "5", customerName: "Robert Wilson", avatarColor: "bg-status-warning", transactionId: "#XP-55091", amount: "$89.99", reason: "Changed mind", status: "Pending", date: "Oct 20, 2023" },
+]

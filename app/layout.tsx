@@ -21,7 +21,7 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
 })
 
-const spaceMono = JetBrains_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-tertiary",
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -66,7 +66,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${robotoMono.variable} ${manrope.variable} ${satoshi.variable} ${clashDisplay.variable} antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${robotoMono.variable} ${manrope.variable} ${satoshi.variable} ${clashDisplay.variable} antialiased`}
       >
         <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         <Toaster richColors />
