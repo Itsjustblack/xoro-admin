@@ -1,18 +1,18 @@
 "use client"
 
-import { Download, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { mockRefundKPIs, mockRefundRequests } from "@/lib/mock-data"
+import { Download, Plus } from "lucide-react"
 import { RefundsKPIs } from "./refunds-kpis"
 import { RefundsTable } from "./refunds-table"
-import { mockRefundKPIs, mockRefundRequests } from "@/lib/mock-data"
 
 export function RefundsContent() {
   return (
-    <div className="flex h-full w-full flex-col gap-10 p-4 sm:p-6 lg:p-10">
+    <div className="flex h-full w-full flex-col gap-10 p-4 sm:p-6 lg:p-8">
       {/* Page Header */}
       <section className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-2">
-          <h1 className="font-primary text-5xl font-black text-text-primary tracking-tight">
+        <div className="space-y-1">
+          <h1 className="font-primary text-3xl font-black text-text-primary tracking-tight">
             Refunds
           </h1>
           <p className="font-primary text-base font-medium text-text-secondary">

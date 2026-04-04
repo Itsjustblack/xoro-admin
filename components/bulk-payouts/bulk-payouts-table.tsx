@@ -159,7 +159,7 @@ export function BulkPayoutsTable({
           </div>
           <Button
             variant="outline"
-            className="flex h-10 items-center font-satoshi justify-center gap-2 border-border-light text-text-subtitle bg-transparent"
+            className="flex h-auto py-2 px-3 items-center font-satoshi justify-center gap-2 border-border-light text-text-subtitle bg-transparent"
           >
             <FilterIcon className="size-4" />
             <span>Filter</span>

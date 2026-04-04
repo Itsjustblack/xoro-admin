@@ -1,42 +1,43 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
+import { getSubscriptionAnalytics } from "@/lib/api/v1/analytics/queries"
+import { analyticsQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { analyticsQueryKeys, subscriptionQueryKeys } from "@/lib/api/v1/query-key-factory"
-import { getSubscriptions } from "@/lib/api/v1/subscriptions/queries"
 import { SiteFooter } from "../shared/site-footer"
 import { MRRChart } from "./mrr-chart"
-import { SubscriptionPlansTable } from "./subscription-plans-table"
 import {
   getSubscriptionCountLabel,
   getTrendChangeLabel,
 } from "./subscription-view-model"
-import { getSubscriptionAnalytics } from "@/lib/api/v1/analytics/queries"
 
 export function SubscriptionsContent() {
-  const { isPending } = useQuery({
-    queryKey: subscriptionQueryKeys.list(1, 100),
-    queryFn: () => getSubscriptions(),
-  })
+  // const { isPending, data: subscriptions } = useQuery({
+  //   queryKey: subscriptionQueryKeys.list(1, 100),
+  //   queryFn: () => getSubscriptions(),
+  // })
 
   const { data: subscriptionAnalytics } = useQuery({
     queryKey: analyticsQueryKeys.subscriptions(),
     queryFn: () => getSubscriptionAnalytics(),
   })
 
+  const activeSubscriptions = subscriptionAnalytics?.active ?? 0
+  const totalSubscriptions = subscriptionAnalytics?.total ?? 0
 
-const activeSubscriptions = subscriptionAnalytics?.active ?? 0
-const totalSubscriptions = subscriptionAnalytics?.total ?? 0
+  const activeRate =
+    totalSubscriptions > 0
+      ? `${Math.round((activeSubscriptions / totalSubscriptions) * 100)}%`
+      : "0%"
 
-const activeRate = totalSubscriptions > 0
-  ? `${Math.round((activeSubscriptions / totalSubscriptions) * 100)}%`
-  : "0%"
-
-const churnedSubscriptions = (subscriptionAnalytics?.cancelled ?? 0) + (subscriptionAnalytics?.expired ?? 0)
-const churnRate = totalSubscriptions > 0
-  ? `${Math.round((churnedSubscriptions / totalSubscriptions) * 100)}%`
-  : "0%"
+  const churnedSubscriptions =
+    (subscriptionAnalytics?.cancelled ?? 0) +
+    (subscriptionAnalytics?.expired ?? 0)
+  const churnRate =
+    totalSubscriptions > 0
+      ? `${Math.round((churnedSubscriptions / totalSubscriptions) * 100)}%`
+      : "0%"
 
   return (
     <div className="flex min-h-full w-full flex-col">
@@ -62,9 +63,9 @@ const churnRate = totalSubscriptions > 0
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <MRRChart
-               data={[]}
-               total={totalSubscriptions}
-               changeLabel={getTrendChangeLabel([])}
+              data={[]}
+              total={totalSubscriptions}
+              changeLabel={getTrendChangeLabel([])}
             />
           </div>
 
@@ -116,7 +117,7 @@ const churnRate = totalSubscriptions > 0
           </div>
         </section>
 
-        {/* <SubscriptionPlansTable data={plans} isPending={isPending} /> */}
+        {/* <SubscriptionPlansTable data={subscriptions} isPending={isPending} /> */}
       </div>
       <SiteFooter />
     </div>

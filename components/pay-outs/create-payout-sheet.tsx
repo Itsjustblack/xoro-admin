@@ -1,15 +1,15 @@
 "use client"
 
-import * as React from "react"
-import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { X, Search, Landmark, Smartphone, Bitcoin, Wallet, ShieldCheck } from "lucide-react"
+import { Bitcoin, Landmark, Search, ShieldCheck, Smartphone, Wallet, X } from "lucide-react"
+import * as React from "react"
+import { Controller, useForm } from "react-hook-form"
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   Sheet,
   SheetClose,
