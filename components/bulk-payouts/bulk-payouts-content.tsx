@@ -54,7 +54,12 @@ export function BulkPayoutsContent() {
   const totalCount = bulkPayouts?.total_items ?? 0
   const pageCount = bulkPayouts?.total_pages ?? 1
 
-  const monthlyPayoutVolume = payoutAnalytics?.time_series ?? []
+  const monthlyPayoutVolume =
+    payoutAnalytics?.time_series.map((point) => ({
+      month: point.date,
+      value: point.value,
+      payoutCount: point.count,
+    })) ?? []
 
   const successRate = payoutAnalytics?.payout_count
     ? (payoutAnalytics.successful_payouts / payoutAnalytics.payout_count) * 100

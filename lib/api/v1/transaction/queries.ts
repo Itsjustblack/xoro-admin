@@ -1,4 +1,6 @@
 import ApiClient from "@/lib/api-client"
+import { mockMerchantTransactions } from "@/lib/mock-data"
+import { isMockDataMode } from "@/lib/mock-mode"
 import {
   MerchantTransactionsResponse,
   MerchantTransactionType,
@@ -24,6 +26,20 @@ export async function getMerchantTransactions({
   currency,
   transaction_type,
 }: GetMerchantTransactionsParams) {
+  if (isMockDataMode()) {
+    const filteredTransactions = mockMerchantTransactions.transactions.filter(
+      (transaction) =>
+        (!currency || transaction.currency === currency) &&
+        (!transaction_type || transaction.type === transaction_type),
+    )
+
+    return {
+      ...mockMerchantTransactions,
+      transactions: filteredTransactions,
+      total_items: filteredTransactions.length,
+    }
+  }
+
   const res = await ApiClient.get<MerchantTransactionsResponse>(
     "/merchant-transactions",
     {
@@ -47,6 +63,10 @@ export async function getWalletTransactions(
   page_size: number,
   transaction_type?: MerchantTransactionType,
 ) {
+  if (isMockDataMode()) {
+    return mockMerchantTransactions
+  }
+
   const res = await ApiClient.get("/wallet-transactions", {
     params: {
       wallet_id,

@@ -254,6 +254,63 @@ export interface Notification {
   type: "order" | "warning" | "success" | "info"
 }
 
+export interface Product {
+  id: string
+  name: string
+  image?: string
+  price: string
+  stock: number
+  category: string
+  sku: string
+  description: string
+}
+
+export interface Order {
+  id: string
+  orderNumber: string
+  customerName: string
+  customerEmail: string
+  items: Array<{
+    productName: string
+    quantity: number
+    price: string
+  }>
+  totalAmount: string
+  status: "pending" | "processing" | "shipped" | "delivered" | "cancelled"
+  paymentStatus: "paid" | "unpaid" | "refunded"
+  orderDate: string
+  shippingAddress: string
+}
+
+export interface CustomerData {
+  id: string
+  name: string
+  email: string
+  phone: string
+  avatar: string
+  status: "active" | "pending" | "inactive"
+  totalOrders: number
+  totalSpent: string
+  joinDate: string
+  lastPurchase: string
+}
+
+export interface ChatItem {
+  id: string
+  name: string
+  avatar: string
+  lastMessage: string
+  timeAway: string
+  unread: number
+}
+
+export interface Message {
+  id: string
+  content: string
+  timestamp: string
+  isAgent: boolean
+}
+
 export interface ActivityEvent {
   id: string
   type: "renewed" | "successful" | "created"

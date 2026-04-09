@@ -37,11 +37,12 @@ const MetricCard = ({
       >
         <div className="flex items-start justify-between gap-3  ">
           <div className="space-y-3 flex-1">
+            d
             <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
               {title}
             </p>
             <div className="w-full">
-              <p className="font-clash-display text-xl sm:text-3xl leading-none font-black ">
+              <p className="font-clash-display text-xl sm:text-2xl xl:text-3xl leading-none font-black ">
                 {value}
               </p>
             </div>

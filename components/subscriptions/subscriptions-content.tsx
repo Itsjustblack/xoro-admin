@@ -9,15 +9,17 @@ import { SiteFooter } from "../shared/site-footer"
 import { MRRChart } from "./mrr-chart"
 import { SubscriptionPlansTable } from "./subscription-plans-table"
 import {
+  buildSubscriptionPlans,
+  buildSubscriptionTrend,
   getSubscriptionCountLabel,
   getTrendChangeLabel,
 } from "./subscription-view-model"
 import { getSubscriptionAnalytics } from "@/lib/api/v1/analytics/queries"
 
 export function SubscriptionsContent() {
-  const { isPending } = useQuery({
+  const { data: subscriptionResponse, isPending } = useQuery({
     queryKey: subscriptionQueryKeys.list(1, 100),
-    queryFn: () => getSubscriptions(),
+    queryFn: () => getSubscriptions({ page: 1, page_size: 100 }),
   })
 
   const { data: subscriptionAnalytics } = useQuery({
@@ -28,6 +30,9 @@ export function SubscriptionsContent() {
 
 const activeSubscriptions = subscriptionAnalytics?.active ?? 0
 const totalSubscriptions = subscriptionAnalytics?.total ?? 0
+const subscriptions = subscriptionResponse?.items ?? []
+const plans = buildSubscriptionPlans(subscriptions)
+const trend = buildSubscriptionTrend(subscriptions)
 
 const activeRate = totalSubscriptions > 0
   ? `${Math.round((activeSubscriptions / totalSubscriptions) * 100)}%`
@@ -62,9 +67,9 @@ const churnRate = totalSubscriptions > 0
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <MRRChart
-               data={[]}
+               data={trend}
                total={totalSubscriptions}
-               changeLabel={getTrendChangeLabel([])}
+               changeLabel={getTrendChangeLabel(trend)}
             />
           </div>
 
@@ -116,7 +121,7 @@ const churnRate = totalSubscriptions > 0
           </div>
         </section>
 
-        {/* <SubscriptionPlansTable data={plans} isPending={isPending} /> */}
+        <SubscriptionPlansTable data={plans} isPending={isPending} />
       </div>
       <SiteFooter />
     </div>

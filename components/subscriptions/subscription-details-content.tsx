@@ -8,20 +8,20 @@ import { HealthOverview } from "./health-overview"
 import { PlanSubscribersTable } from "./plan-subscribers-table"
 import { PlanInfoSidebar } from "./plan-info-sidebar"
 import { subscriptionQueryKeys } from "@/lib/api/v1/query-key-factory"
-import { getAllSubscriptions } from "@/lib/api/v1/subscriptions/queries"
+import { getSubscriptions } from "@/lib/api/v1/subscriptions/queries"
 import { useParams } from "next/navigation"
 import { buildPlanDetails } from "./subscription-view-model"
 
 export function SubscriptionDetailsContent() {
   const { id } = useParams()
   const productId = String(id)
-  const { data: subscriptions = [] } = useQuery({
+  const { data: subscriptionResponse } = useQuery({
     queryKey: subscriptionQueryKeys.list(1, 100, null, productId),
-    queryFn: () => getAllSubscriptions({ product_id: productId }),
+    queryFn: () => getSubscriptions({ product_id: productId, page_size: 100 }),
     enabled: Boolean(productId),
   })
 
-  const plan = buildPlanDetails(productId, subscriptions)
+  const plan = buildPlanDetails(productId, subscriptionResponse?.items ?? [])
 
   return (
     <div className="flex h-full w-full flex-col gap-8 p-4 sm:p-6 lg:p-8">
