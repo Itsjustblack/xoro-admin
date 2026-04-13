@@ -15,6 +15,7 @@ import {
 import { createBeneficiary } from "@/lib/api/v1/payout/actions"
 import { getBanks, getPayoutCategories } from "@/lib/api/v1/payout/queries"
 import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { getApiErrorMessage } from "@/lib/get-api-error-message"
 import { type AddBeneficiaryFormValues } from "@/lib/schemas/beneficiary"
 import { useCurrentMerchant } from "@/store/merchant"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
@@ -36,6 +37,19 @@ export function AddBeneficiarySheet({
 }: AddBeneficiarySheetProps) {
   const merchant = useCurrentMerchant()
   const queryClient = useQueryClient()
+  const [internalOpen, setInternalOpen] = React.useState(false)
+  const resolvedOpen = open ?? internalOpen
+
+  const handleOpenChange = React.useCallback(
+    (nextOpen: boolean) => {
+      if (open === undefined) {
+        setInternalOpen(nextOpen)
+      }
+
+      onOpenChange?.(nextOpen)
+    },
+    [onOpenChange, open],
+  )
 
   const { data: categories = [] } = useQuery({
     queryKey: payoutQueryKeys.categories(merchant?.id ?? ""),
@@ -57,10 +71,10 @@ export function AddBeneficiarySheet({
         })
       }
       toast.success("Beneficiary created successfully")
-      onOpenChange?.(false)
+      handleOpenChange(false)
     },
-    onError: () => {
-      toast.error("Unable to create beneficiary")
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error, "Unable to create beneficiary"))
     },
   })
 
@@ -88,17 +102,17 @@ export function AddBeneficiarySheet({
       category_id: values.category_id ? Number(values.category_id) : null,
       default_amount: values.default_amount,
       phone_number: formatPhoneNumber(values.phone_code, values.phone_number),
-      whatsapp_number: values.whatsapp_number?.trim() || undefined,
-      narration: undefined,
+      whatsapp_number: values.whatsapp_number?.trim() || null,
+      narration: null,
     })
   }
 
   const handleCancel = () => {
-    onOpenChange?.(false)
+    handleOpenChange(false)
   }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={resolvedOpen} onOpenChange={handleOpenChange}>
       {children && <SheetTrigger asChild>{children}</SheetTrigger>}
 
       <SheetContent

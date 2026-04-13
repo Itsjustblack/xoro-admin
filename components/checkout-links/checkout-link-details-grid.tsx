@@ -19,7 +19,7 @@ function formatDate(value?: string) {
   }).format(date)
 }
 
-function getExpiryLabel(expiresAt?: string) {
+function getExpiryLabel(expiresAt?: string | null) {
   if (!expiresAt) return "No expiry set"
   return formatDate(expiresAt)
 }

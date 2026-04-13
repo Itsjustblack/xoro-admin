@@ -16,7 +16,6 @@ export const createCheckoutLinkSchema = z.object({
     .optional()
     .or(z.literal("")),
   expires_at: z.string().optional(),
-  metadata: z.string().optional(),
 }).superRefine((values, ctx) => {
   if (values.amount_type === "static" && !values.amount?.trim()) {
     ctx.addIssue({
@@ -24,6 +23,24 @@ export const createCheckoutLinkSchema = z.object({
       message: "Amount is required",
       path: ["amount"],
     })
+  }
+
+  if (values.type === "recurring") {
+    if (!values.max_uses?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Max uses is required",
+        path: ["max_uses"],
+      })
+    }
+
+    if (!values.expires_at?.trim()) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Expiry date is required",
+        path: ["expires_at"],
+      })
+    }
   }
 })
 

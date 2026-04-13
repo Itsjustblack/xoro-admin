@@ -121,13 +121,13 @@ function formatDate(value?: string) {
   }).format(date)
 }
 
-function getInitials(name: string) {
+function getInitials(name?: string) {
   return name
-    .split(" ")
+    ?.split(" ")
     .map((part) => part[0] ?? "")
     .join("")
     .slice(0, 2)
-    .toUpperCase()
+    .toUpperCase() || "--"
 }
 
 export function CheckoutLinkDetailsTable({

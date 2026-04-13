@@ -140,10 +140,10 @@ export interface Beneficiary extends BankAccount {
   name: string
   email: string
   merchant_id: string
-  phone_number?: string
-  whatsapp_number?: string
+  phone_number?: string | null
+  whatsapp_number?: string | null
   default_amount: number
-  narration?: string
+  narration?: string | null
   is_active: boolean
   category_id: number | null
   created_at: string
@@ -197,7 +197,7 @@ export interface CreateBulkPayoutPayload {
   merchant_id: string
   mode: Mode
   name: string
-  data: BulkPayoutItemPayload[]
+  data: BulkPayoutItemPayload[] | null
   category_ids?: number[]
   beneficiary_ids?: number[]
 }
@@ -602,7 +602,7 @@ export interface PayoutPayload {
   amount: number
   currency: string
   customer: BankAccount
-  narration?: string
+  narration?: string | null
 }
 
 export interface IPayoutsAnalytics {
@@ -676,6 +676,7 @@ export interface PortalPaymentLinkDetails {
 }
 
 export interface PaymentLinkCreatePayload {
+  merchant_id: string
   title: string
   description?: string | null
   amount_type: CheckoutType
@@ -715,7 +716,7 @@ export interface CheckoutLink {
   max_uses: number | null
   current_uses: number
   redirect_url: string | null
-  expires_at: string
+  expires_at: string | null
   is_active: boolean
   created_at: string
   updated_at: string

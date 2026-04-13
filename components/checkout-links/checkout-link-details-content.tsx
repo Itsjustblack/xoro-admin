@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import { deactivateCheckoutLink } from "@/lib/api/v1/link/actions"
 import { getCheckoutLinkById } from "@/lib/api/v1/link/queries"
 import { checkoutLinkQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { getApiErrorMessage } from "@/lib/get-api-error-message"
 import type { CheckoutLink, CheckoutLinkDetails } from "@/lib/types"
 import { cn, formatCurrency } from "@/lib/utils"
 import { useCurrentMerchant } from "@/store/merchant"
@@ -41,7 +42,12 @@ export function CheckoutLinkDetailsContent({
   const [searchQuery, setSearchQuery] = useState("")
   const merchant = useCurrentMerchant()
   const queryClient = useQueryClient()
-  const { data: link, isPending } = useQuery<CheckoutLinkDetails>({
+  const {
+    data: link,
+    isPending,
+    isError,
+    error,
+  } = useQuery<CheckoutLinkDetails>({
     queryKey: checkoutLinkQueryKeys.detail(id),
     queryFn: () => getCheckoutLinkById(id),
     enabled: !!id,
@@ -84,6 +90,27 @@ export function CheckoutLinkDetailsContent({
         .includes(query),
     )
   }, [link, searchQuery])
+
+  if (isError && !link) {
+    return (
+      <div className="flex min-h-full w-full flex-col">
+        <div className="flex flex-1 flex-col gap-8 p-4 sm:p-6 md:gap-10 lg:p-8">
+          <section className="rounded-3xl border border-status-danger/20 bg-white p-8 shadow-sm">
+            <h1 className="text-2xl font-black text-text-primary">
+              Checkout Link Details
+            </h1>
+            <p className="mt-2 text-sm text-text-secondary">
+              {getApiErrorMessage(
+                error,
+                "Unable to load this checkout link right now.",
+              )}
+            </p>
+          </section>
+        </div>
+        <SiteFooter />
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-full w-full flex-col">
@@ -183,17 +210,29 @@ export function CheckoutLinkDetailsContent({
           />
         </section>
 
-        <PaymentActivityChart transactions={link?.transactions ?? []} />
+        {link ? (
+          <>
+            <PaymentActivityChart transactions={link.transactions ?? []} />
 
-        <CheckoutLinkDetailsTable
-          data={filteredTransactions}
-          totalCount={link?.transactions?.length ?? 0}
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-          isPending={isPending}
-        />
+            <CheckoutLinkDetailsTable
+              data={filteredTransactions}
+              totalCount={link.transactions?.length ?? 0}
+              searchQuery={searchQuery}
+              onSearchQueryChange={setSearchQuery}
+              isPending={isPending}
+            />
 
-        <CheckoutLinkDetailsGrid link={link} />
+            <CheckoutLinkDetailsGrid link={link} />
+          </>
+        ) : (
+          <section className="rounded-3xl border border-surface-3 bg-surface-1 p-8 shadow-sm">
+            <p className="text-sm text-text-secondary">
+              {isPending
+                ? "Loading checkout link details..."
+                : "No checkout link details available."}
+            </p>
+          </section>
+        )}
       </div>
       <SiteFooter />
     </div>

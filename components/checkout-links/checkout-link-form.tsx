@@ -23,7 +23,7 @@ import {
 } from "@/lib/schemas/checkout-link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { Controller, useForm, useWatch } from "react-hook-form"
 
 const CURRENCIES = [
   { name: "Nigerian Naira", code: "NGN" },
@@ -75,11 +75,32 @@ export function CheckoutLinkForm({
       max_uses: "",
       redirect_url: "",
       expires_at: "",
-      metadata: "",
     },
   })
 
-  const amountType = form.watch("amount_type")
+  const amountType = useWatch({
+    control: form.control,
+    name: "amount_type",
+  })
+  const linkType = useWatch({
+    control: form.control,
+    name: "type",
+  })
+
+  useEffect(() => {
+    if (amountType === "dynamic") {
+      form.setValue("amount", "")
+      form.clearErrors("amount")
+    }
+  }, [amountType, form])
+
+  useEffect(() => {
+    if (linkType === "one_time") {
+      form.setValue("max_uses", "")
+      form.setValue("expires_at", "")
+      form.clearErrors(["max_uses", "expires_at"])
+    }
+  }, [form, linkType])
 
   useEffect(() => {
     if (initialValues) {
@@ -193,30 +214,36 @@ export function CheckoutLinkForm({
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Controller
-                name="amount"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel className="text-sm font-semibold text-text-subtitle">
-                      Amount
-                    </FieldLabel>
-                    <div className="relative">
-                      <Input
-                        {...field}
-                        type="number"
-                        placeholder={amountType === "dynamic" ? "N/A" : "0.00"}
-                        className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors pl-4"
-                        value={field.value ?? ""}
-                      />
-                    </div>
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
+            <div
+              className={`grid grid-cols-1 gap-4 ${
+                amountType === "static" ? "sm:grid-cols-2" : ""
+              }`}
+            >
+              {amountType === "static" ? (
+                <Controller
+                  name="amount"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                        Amount
+                      </FieldLabel>
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          type="number"
+                          placeholder="0.00"
+                          className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors pl-4"
+                          value={field.value ?? ""}
+                        />
+                      </div>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              ) : null}
 
               <Controller
                 name="currency"
@@ -246,48 +273,50 @@ export function CheckoutLinkForm({
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Controller
-                name="max_uses"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel className="text-sm font-semibold text-text-subtitle">
-                      Max Uses (Optional)
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      type="number"
-                      placeholder="e.g. 10"
-                      className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
+            {linkType === "recurring" ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Controller
+                  name="max_uses"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                        Max Uses
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder="e.g. 10"
+                        className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
 
-              <Controller
-                name="expires_at"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel className="text-sm font-semibold text-text-subtitle">
-                      Expires At (Optional)
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      type="datetime-local"
-                      className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
-            </div>
+                <Controller
+                  name="expires_at"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                        Expires At
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        type="datetime-local"
+                        className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+            ) : null}
 
             <Controller
               name="redirect_url"
@@ -310,25 +339,6 @@ export function CheckoutLinkForm({
               )}
             />
 
-            <Controller
-              name="metadata"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel className="text-sm font-semibold text-text-subtitle">
-                    Metadata (Optional)
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    placeholder="e.g. campaign=donation2025"
-                    className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
           </FieldGroup>
         </form>
       </div>

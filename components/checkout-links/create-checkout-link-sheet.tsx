@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet"
 import { createCheckoutLink } from "@/lib/api/v1/link/actions"
 import { checkoutLinkQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { getApiErrorMessage } from "@/lib/get-api-error-message"
 import { type CreateCheckoutLinkFormValues } from "@/lib/schemas/checkout-link"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -36,6 +37,19 @@ export function CreateCheckoutLinkSheet({
   const merchant = useCurrentMerchant()
   const mode = useCurrentMode()
   const queryClient = useQueryClient()
+  const [internalOpen, setInternalOpen] = React.useState(false)
+  const resolvedOpen = open ?? internalOpen
+
+  const handleOpenChange = React.useCallback(
+    (nextOpen: boolean) => {
+      if (open === undefined) {
+        setInternalOpen(nextOpen)
+      }
+
+      onOpenChange?.(nextOpen)
+    },
+    [onOpenChange, open],
+  )
 
   const { mutate: submitCheckoutLink, isPending } = useMutation({
     mutationFn: createCheckoutLink,
@@ -46,15 +60,21 @@ export function CreateCheckoutLinkSheet({
         })
       }
       toast.success(`Checkout link "${link.title}" created successfully`)
-      onOpenChange?.(false)
+      handleOpenChange(false)
     },
-    onError: () => {
-      toast.error("Unable to create checkout link")
+    onError: (error) => {
+      toast.error(getApiErrorMessage(error, "Unable to create checkout link"))
     },
   })
 
   const handleSubmit = async (values: CreateCheckoutLinkFormValues) => {
+    if (!merchant?.id) {
+      toast.error("No merchant selected")
+      return
+    }
+
     submitCheckoutLink({
+      merchant_id: merchant.id,
       title: values.title,
       description: values.description?.trim() || null,
       amount_type: values.amount_type,
@@ -68,16 +88,15 @@ export function CreateCheckoutLinkSheet({
       max_uses: values.max_uses?.trim() ? Number(values.max_uses) : null,
       redirect_url: values.redirect_url?.trim() || null,
       expires_at: values.expires_at?.trim() || null,
-      metadata: values.metadata?.trim() || null,
     })
   }
 
   const handleCancel = () => {
-    onOpenChange?.(false)
+    handleOpenChange(false)
   }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={resolvedOpen} onOpenChange={handleOpenChange}>
       {children && <SheetTrigger asChild>{children}</SheetTrigger>}
       
       <SheetContent 
