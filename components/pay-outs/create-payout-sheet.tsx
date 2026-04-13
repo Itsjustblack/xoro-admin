@@ -19,13 +19,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { PAYMENT_METHODS } from "@/lib/constants"
 import { merchantPayout } from "@/lib/api/v1/payout/actions"
 import { getPayoutBeneficiaries } from "@/lib/api/v1/payout/queries"
 import {
   payoutQueryKeys,
   transactionQueryKeys,
 } from "@/lib/api/v1/query-key-factory"
+import { PAYMENT_METHODS } from "@/lib/constants"
 import { getApiErrorMessage } from "@/lib/get-api-error-message"
 import {
   individualPayoutSchema,
@@ -232,7 +232,7 @@ export function CreatePayoutSheet({
               {!selectedBeneficiary ? (
                 <>
                   <div className="relative">
-                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-text-muted" />
+                    <Search className="absolute left-4 top-1/3 h-5 w-5 -translate-y-1/3 text-text-muted" />
                     <Input
                       placeholder="Search beneficiary..."
                       value={searchQuery}
