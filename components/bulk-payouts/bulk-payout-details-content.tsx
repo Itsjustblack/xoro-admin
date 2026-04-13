@@ -125,6 +125,7 @@ export function BulkPayoutDetailsContent({
 
       <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <MetricCard
+          isLoading={isPending}
           title="Total Payout Volume"
           value={`NGN ${totalAmount.toLocaleString("en-NG", {
             minimumFractionDigits: 2,
@@ -137,6 +138,7 @@ export function BulkPayoutDetailsContent({
           changeClassName="text-success-2"
         />
         <MetricCard
+          isLoading={isPending}
           title="Success Rate"
           value={`${successRate.toFixed(1)}%`}
           changeLabel=""
@@ -146,6 +148,7 @@ export function BulkPayoutDetailsContent({
           borderClassName="border-success-2"
         />
         <MetricCard
+          isLoading={isPending}
           title="Pending Batches"
           value={String(pendingCount)}
           changeLabel="Requiring immediate attention"

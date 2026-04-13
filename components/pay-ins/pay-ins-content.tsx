@@ -158,6 +158,7 @@ export function PayInsContent() {
 
       <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <MetricCard
+          isLoading={isPending}
           title="Total Volume"
           value={formatCurrency(totalVolume)}
           changeLabel={`${transactionCount} transactions on this page`}
@@ -166,6 +167,7 @@ export function PayInsContent() {
           borderClassName="border-brand-primary-dark"
         />
         <MetricCard
+          isLoading={isPending}
           title="Transaction Count"
           value={String(transactionCount)}
           changeLabel={`${transactionResponse?.total_items ?? transactionCount} total filtered records`}
@@ -174,6 +176,7 @@ export function PayInsContent() {
           borderClassName="border-brand-primary"
         />
         <MetricCard
+          isLoading={isPending}
           title="Average Pay-In"
           value={formatCurrency(averagePayIn)}
           changeLabel="Calculated from current page"

@@ -34,6 +34,7 @@ export function RefundsContent() {
 
       <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
+          isLoading={false}
           title="Pending"
           value="N/A"
           changeLabel="Unavailable until refund data is connected"
@@ -41,6 +42,7 @@ export function RefundsContent() {
           borderClassName="border-brand-primary-dark"
         />
         <MetricCard
+          isLoading={false}
           title="Processing"
           value="N/A"
           changeLabel="Unavailable until refund data is connected"
@@ -48,6 +50,7 @@ export function RefundsContent() {
           borderClassName="border-status-warning"
         />
         <MetricCard
+          isLoading={false}
           title="Completed"
           value="N/A"
           changeLabel="Unavailable until refund data is connected"
@@ -55,6 +58,7 @@ export function RefundsContent() {
           borderClassName="border-status-success"
         />
         <MetricCard
+          isLoading={false}
           title="Failed"
           value="N/A"
           changeLabel="Unavailable until refund data is connected"

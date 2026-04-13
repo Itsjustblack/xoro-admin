@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button"
 import type { Beneficiary } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
-import { ChevronLeft, ChevronRight, Plus, UserPlus } from "lucide-react"
+import {
+  ChevronLeft,
+  ChevronRight,
+  MoreVertical,
+  Plus,
+  UserPlus,
+} from "lucide-react"
 import type { Dispatch, SetStateAction } from "react"
 import { AddBeneficiarySheet } from "./add-beneficiary-sheet"
 
@@ -13,12 +19,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "name",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         Name
       </span>
     ),
     cell: ({ row }) => (
-      <span className="font-bold text-text-primary">
+      <span className="block text-center font-bold text-text-primary">
         {row.getValue("name")}
       </span>
     ),
@@ -26,12 +32,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "account_number",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         Account Number
       </span>
     ),
     cell: ({ row }) => (
-      <span className="font-mono text-sm text-text-secondary">
+      <span className="block text-center font-mono text-sm text-text-secondary">
         {row.getValue("account_number")}
       </span>
     ),
@@ -39,12 +45,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "email",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         Email
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-sm text-text-secondary">
+      <span className="block text-center text-sm text-text-secondary">
         {row.getValue("email")}
       </span>
     ),
@@ -52,7 +58,7 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "category_id",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         Category
       </span>
     ),
@@ -60,7 +66,7 @@ const columns: ColumnDef<Beneficiary>[] = [
       const categoryId = row.getValue("category_id") as number | null
 
       return (
-        <span className="text-sm text-text-secondary">
+        <span className="block text-center text-sm text-text-secondary">
           {categoryId ? `Category ${categoryId}` : "Uncategorized"}
         </span>
       )
@@ -69,7 +75,7 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "default_amount",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         Amount (NGN)
       </span>
     ),
@@ -77,7 +83,7 @@ const columns: ColumnDef<Beneficiary>[] = [
       const amount = row.getValue("default_amount") as number
 
       return (
-        <span className="font-bold text-text-primary">
+        <span className="block text-center font-bold text-text-primary">
           {amount.toLocaleString("en-NG", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
@@ -89,12 +95,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "phone_number",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         Phone No.
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-sm text-text-secondary">
+      <span className="block text-center text-sm text-text-secondary">
         {row.getValue("phone_number") || "-"}
       </span>
     ),
@@ -102,12 +108,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "whatsapp_number",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         WhatsApp No.
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-sm text-text-secondary">
+      <span className="block text-center text-sm text-text-secondary">
         {row.getValue("whatsapp_number") || "-"}
       </span>
     ),
@@ -115,11 +121,22 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     id: "actions",
     header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
         Actions
       </span>
     ),
-    cell: () => null,
+    cell: () => (
+      <div className="flex justify-center">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-text-muted hover:text-text-primary"
+        >
+          <MoreVertical className="size-4" />
+          <span className="sr-only">Open beneficiary actions</span>
+        </Button>
+      </div>
+    ),
   },
 ]
 
@@ -215,7 +232,7 @@ export function BeneficiariesTable({
         headerRowClassName="border-t border-surface-6 bg-surface-2 hover:bg-surface-2"
         headClassName="h-auto whitespace-nowrap bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4"
         bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
-        bodyCellClassName="whitespace-nowrap px-4 py-3 text-sm text-text-primary sm:px-8 sm:py-4"
+        bodyCellClassName="whitespace-nowrap px-4 py-3 text-center text-sm text-text-primary sm:px-8 sm:py-4"
         emptyStateClassName="h-48 text-center"
       />
 

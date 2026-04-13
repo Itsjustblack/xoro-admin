@@ -26,7 +26,7 @@ export function BulkPayoutsContent() {
     pageSize: PAGE_SIZE,
   })
 
-  const { data: payoutAnalytics } = useQuery({
+  const { data: payoutAnalytics, isPending: isPayoutAnalyticsPending } = useQuery({
     queryKey: analyticsQueryKeys.payouts(merchant?.id ?? "", mode),
     queryFn: () => getPayoutsAnalytics(merchant!.id, mode),
     enabled: !!merchant?.id,
@@ -83,6 +83,7 @@ export function BulkPayoutsContent() {
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <MetricCard
+          isLoading={isPayoutAnalyticsPending}
           title="Total Payout Volume"
           value={formatCurrency(
             payoutAnalytics?.total_payouts ?? 0,
@@ -95,6 +96,7 @@ export function BulkPayoutsContent() {
           changeClassName="text-green-600"
         />
         <MetricCard
+          isLoading={isPayoutAnalyticsPending}
           title="Success Rate"
           value={formatPercent(successRate)}
           change={formatCount(payoutAnalytics?.successful_payouts ?? 0)}
@@ -105,6 +107,7 @@ export function BulkPayoutsContent() {
           progressValue={successRate}
         />
         <MetricCard
+          isLoading={isPayoutAnalyticsPending}
           title="Pending Batches"
           value={formatCount(payoutAnalytics?.pending_payouts ?? 0)}
           changeLabel="Requiring immediate attention"

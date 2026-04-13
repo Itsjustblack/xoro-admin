@@ -136,6 +136,7 @@ export function CheckoutLinkDetailsContent({
 
         <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
+            isLoading={isPending}
             title="Link Amount"
             value={getAmountLabel(link)}
             changeLabel={link?.currency ?? ""}
@@ -143,6 +144,7 @@ export function CheckoutLinkDetailsContent({
             iconClassName="rounded-full bg-brand-primary/10 p-2 text-brand-primary"
           />
           <MetricCard
+            isLoading={isPending}
             title="Current Uses"
             value={String(link?.current_uses ?? 0)}
             changeLabel="Successful checkouts"
@@ -151,6 +153,7 @@ export function CheckoutLinkDetailsContent({
             changeClassName="text-text-muted"
           />
           <MetricCard
+            isLoading={isPending}
             title="Checkout Type"
             value={
               !link
@@ -165,6 +168,7 @@ export function CheckoutLinkDetailsContent({
             changeClassName="text-text-muted"
           />
           <MetricCard
+            isLoading={isPending}
             title="Mode"
             value={link?.mode?.toUpperCase() ?? "-"}
             change={

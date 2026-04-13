@@ -135,6 +135,7 @@ export function PayOutsContent() {
 
         <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <MetricCard
+            isLoading={isPending}
             title="Total Paid (MTD)"
             value={formatCurrency(totalPaid)}
             changeLabel="Calculated from current page"
@@ -143,6 +144,7 @@ export function PayOutsContent() {
             borderClassName="border-brand-primary"
           />
           <MetricCard
+            isLoading={isPending}
             title="Pending Processing"
             value={String(pendingProcessing)}
             changeLabel="Pending and processing payouts"
@@ -151,6 +153,7 @@ export function PayOutsContent() {
             borderClassName="border-brand-primary"
           />
           <MetricCard
+            isLoading={isPending}
             title="Failed Payouts"
             value={String(failedPayouts)}
             changeLabel="Failed payouts on current page"

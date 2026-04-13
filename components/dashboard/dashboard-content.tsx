@@ -18,17 +18,19 @@ const DashboardContent = () => {
   const merchant = useCurrentMerchant()
   const mode = useCurrentMode()
 
-  const { data: dashboardAnalytics } = useQuery({
+  const { data: dashboardAnalytics, isPending: isDashboardAnalyticsPending } = useQuery({
     queryKey: analyticsQueryKeys.dashboard(merchant?.id ?? "", mode),
     queryFn: () => getDashboardAnalytics(merchant!.id, mode),
     enabled: !!merchant?.id,
   })
 
-  const { data: revenueAnalytics } = useQuery({
+  const { data: revenueAnalytics, isPending: isRevenueAnalyticsPending } = useQuery({
     queryKey: analyticsQueryKeys.revenue(merchant?.id ?? "", mode),
     queryFn: () => getRevenueAnalytics(merchant!.id, mode),
     enabled: !!merchant?.id,
   })
+
+  const isLoading = isDashboardAnalyticsPending || isRevenueAnalyticsPending
 
   const revenueMetrics = dashboardAnalytics?.revenue_metrics
   const transactionBreakdown = dashboardAnalytics?.transaction_breakdown
@@ -109,6 +111,7 @@ const DashboardContent = () => {
           {metricCards.map((card) => (
             <MetricCard
               key={card.title}
+              isLoading={isLoading}
               change={card.change}
               changeClassName={card.changeClassName}
               changeLabel={card.changeLabel}

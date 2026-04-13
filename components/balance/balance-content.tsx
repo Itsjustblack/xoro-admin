@@ -111,13 +111,13 @@ const BalanceContent = () => {
       ? appliedFilters.currency[0]
       : undefined
 
-  const { data: walletSummary } = useQuery({
+  const { data: walletSummary, isPending: isWalletSummaryPending } = useQuery({
     queryKey: walletQueryKeys.summary(merchant?.id ?? "", mode),
     queryFn: () => getWalletBalanceSummary(merchant!.id, mode),
     enabled: !!merchant?.id,
   })
 
-  const { data: wallets } = useQuery({
+  const { data: wallets, isPending: isWalletsPending } = useQuery({
     queryKey: walletQueryKeys.list(merchant?.id ?? "", mode),
     queryFn: () => getAllWallets(merchant!.id, mode),
     enabled: !!merchant?.id,
@@ -175,6 +175,7 @@ const BalanceContent = () => {
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <MetricCard
+            isLoading={isWalletSummaryPending || isWalletsPending}
             title="AVAILABLE BALANCE"
             value={formatCurrency(walletSummary?.total_balance ?? 0)}
             change={formatCount(currencyCards.length)}

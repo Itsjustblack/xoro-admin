@@ -90,6 +90,7 @@ export function CheckoutLinksContent() {
 
         <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <MetricCard
+            isLoading={isPending}
             title="Total Links Generated"
             value={String(checkoutLinks.length)}
             changeLabel=""
@@ -98,6 +99,7 @@ export function CheckoutLinksContent() {
             changeClassName="text-success-2"
           />
           <MetricCard
+            isLoading={isPending}
             title="Active Links"
             value={String(activeLinks.length)}
             change={String(
@@ -109,6 +111,7 @@ export function CheckoutLinksContent() {
             changeClassName="text-success-2"
           />
           <MetricCard
+            isLoading={isPending}
             title="Avg. Click-to-Pay Rate"
             value={clickToPayRate}
             changeLabel=""

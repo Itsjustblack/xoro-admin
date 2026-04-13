@@ -83,6 +83,7 @@ export function BeneficiariesContent() {
 
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <MetricCard
+            isLoading={isPending}
             title="TOTAL AMOUNT (ACROSS ALL ACCOUNTS)"
             value={`NGN ${totalAmount.toLocaleString("en-NG", {
               minimumFractionDigits: 2,
@@ -95,6 +96,7 @@ export function BeneficiariesContent() {
             iconClassName="p-2 rounded-lg bg-brand-primary-dark/10 text-brand-primary"
           />
           <MetricCard
+            isLoading={isPending}
             title="TOTAL BENEFICIARIES"
             value={String(totalBeneficiaries)}
             changeLabel=""
