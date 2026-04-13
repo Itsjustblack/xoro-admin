@@ -65,8 +65,9 @@ export function applyBalanceFilters(
     status: string
     paymentMethod?: string
     currency?: string
-    amount: string
-    date: string
+    amount: string | number
+    date?: string
+    created_at?: string
   },
   filters: FilterState,
 ): boolean {
@@ -93,7 +94,10 @@ export function applyBalanceFilters(
   }
 
   if (filters.amount.min || filters.amount.max) {
-    const amountVal = parseFloat(transaction.amount.replace(/[^0-9.-]+/g, ""))
+    const amountVal =
+      typeof transaction.amount === "number"
+        ? transaction.amount
+        : parseFloat(transaction.amount.replace(/[^0-9.-]+/g, ""))
     const min = filters.amount.min ? parseFloat(filters.amount.min) : -Infinity
     const max = filters.amount.max ? parseFloat(filters.amount.max) : Infinity
 
@@ -103,7 +107,9 @@ export function applyBalanceFilters(
   }
 
   if (filters.dateRange.type && filters.dateRange.from && filters.dateRange.to) {
-    const txDate = parseTransactionDate(transaction.date)
+    const txDate = parseTransactionDate(
+      transaction.date ?? transaction.created_at ?? "",
+    )
     if (!txDate) return false
 
     txDate.setHours(0, 0, 0, 0)

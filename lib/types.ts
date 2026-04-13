@@ -101,6 +101,10 @@ export interface ITransaction {
   charge: number
   processor_reference: string
   reference: string
+  currency?: string
+  paymentMethod?: string
+  payment_method?: string
+  date?: string
   customer: { name: string; email: string }
   created_at: string
 }
@@ -114,31 +118,21 @@ export interface TransactionsResponse {
 }
 
 export type MerchantTransactionType =
+  | TransactionType
   | "Payout"
   | "Refund"
   | "Sales Income"
   | "Top-up"
 
 export interface MerchantTransactionsResponse {
-  transactions: BalanceTransaction[]
+  transactions: ITransaction[]
   total_items: number
   total_pages: number
   current_page: number
   page_size: number
-  data?: BalanceTransaction[]
-  items?: BalanceTransaction[]
-  results?: BalanceTransaction[]
-}
-
-export interface BalanceTransaction {
-  id: string
-  type: string
-  reference: string
-  amount: string
-  currency?: string
-  paymentMethod?: string
-  status: string
-  date: string
+  data?: ITransaction[]
+  items?: ITransaction[]
+  results?: ITransaction[]
 }
 
 export interface Beneficiary extends BankAccount {
@@ -440,13 +434,13 @@ export interface DetailedSubscription {
 }
 
 export interface ISubscriptionAnalytics {
-  total: number,
-  active: number,
-  pending: number,
-  past_due: number,
-  grace: number,
-  expired: number,
-  cancelled: number,
+  total: number
+  active: number
+  pending: number
+  past_due: number
+  grace: number
+  expired: number
+  cancelled: number
   paused: number
 }
 
@@ -640,6 +634,70 @@ export interface PaymentLinkResponse {
   reference: string
   checkout_url: string
   processor: string
+}
+
+export interface PaymentLinkCreateRequest {
+  subscription_id: string
+  discount_code?: string | null
+  expires_hours?: number
+}
+
+export interface PaymentLinkDetails {
+  id: string
+  subscription_id: string
+  merchant_id: string
+  reference: string
+  amount: string
+  currency: string
+  discount_amount: string
+  final_amount: string
+  status: string
+  checkout_url: string | null
+  expires_at: string
+  period_start: string
+  period_end: string
+  link_type: string
+  paid_at: string | null
+  created_at: string | null
+  updated_at: string | null
+}
+
+export interface PortalPaymentLinkDetails {
+  id: string
+  product_name: string
+  status: string
+  subscriber_email: string
+  subscriber_name: string | null
+  current_period_start: string | null
+  current_period_end: string | null
+  grace_period_end: string | null
+  amount_due: string | null
+  checkout_url: string | null
+}
+
+export interface PaymentLinkCreatePayload {
+  title: string
+  description?: string | null
+  amount_type: CheckoutType
+  mode: Mode
+  type: ChargeType | "subgroup"
+  currency: string
+  amount?: number | null
+  max_uses?: number | null
+  redirect_url?: string | null
+  expires_at?: string | null
+  metadata?: string | null
+}
+
+export interface PaymentLinkUpdatePayload {
+  title?: string | null
+  description?: string | null
+  amount?: number | null
+  max_uses?: number | null
+  redirect_url?: string | null
+  expires_at?: string | null
+  metadata?: string | null
+  is_active?: boolean | null
 }
 
 export interface CheckoutLink {

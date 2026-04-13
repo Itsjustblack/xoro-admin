@@ -8,6 +8,7 @@ import { getSubscriptions } from "@/lib/api/v1/subscriptions/queries"
 import { SiteFooter } from "../shared/site-footer"
 import { MRRChart } from "./mrr-chart"
 import { SubscriptionPlansTable } from "./subscription-plans-table"
+import { AddSubscriptionSheet } from "./add-subscription-sheet"
 import {
   buildSubscriptionPlans,
   buildSubscriptionTrend,
@@ -55,13 +56,14 @@ const churnRate = totalSubscriptions > 0
               Manage your billing plans and monitor subscriber growth.
             </p>
           </div>
-          <Button
-            disabled
-            className="flex h-auto items-center gap-2 rounded-xl bg-brand-primary px-5 py-2 text-white hover:bg-brand-primary/90"
-          >
-            <Plus className="size-4" />
-            <span className="font-semibold">Create New Plan</span>
-          </Button>
+          <AddSubscriptionSheet>
+            <Button
+              className="flex h-auto items-center gap-2 rounded-xl bg-brand-primary px-5 py-2 text-white hover:bg-brand-primary/90"
+            >
+              <Plus className="size-4" />
+              <span className="font-semibold">Add New Subscription</span>
+            </Button>
+          </AddSubscriptionSheet>
         </section>
 
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">

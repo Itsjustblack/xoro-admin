@@ -6,12 +6,14 @@ const TRANSACTION_KEY = "transactions" as const
 const BULK_PAYOUT_KEY = "bulk-payouts" as const
 const PAYOUT_KEY = "payout" as const
 const CHECKOUT_LINK_KEY = "checkout-links" as const
+const PAYMENT_LINK_KEY = "payment-links" as const
 const SUBSCRIPTION_KEY = "subscriptions" as const
 
 export const merchantQueryKeys = {
   all: [MERCHANT_KEY] as const,
   list: () => [...merchantQueryKeys.all, "list"] as const,
   detail: (id: string) => [...merchantQueryKeys.all, "detail", id] as const,
+  apiKeys: (id: string) => [...merchantQueryKeys.all, "api-keys", id] as const,
 }
 
 export const userQueryKeys = {
@@ -99,6 +101,40 @@ export const transactionQueryKeys = {
       currency ?? null,
       transactionType ?? null,
     ] as const,
+  merchantPayIns: (
+    merchantId: string,
+    mode: string,
+    page: number,
+    pageSize: number,
+    currency?: string | null,
+  ) =>
+    [
+      ...transactionQueryKeys.all,
+      "merchant-payins",
+      merchantId,
+      mode,
+      page,
+      pageSize,
+      currency ?? null,
+      "credit",
+    ] as const,
+  merchantPayOuts: (
+    merchantId: string,
+    mode: string,
+    page: number,
+    pageSize: number,
+    currency?: string | null,
+  ) =>
+    [
+      ...transactionQueryKeys.all,
+      "merchant-payouts",
+      merchantId,
+      mode,
+      page,
+      pageSize,
+      currency ?? null,
+      "debit",
+    ] as const,
 }
 
 export const bulkPayoutQueryKeys = {
@@ -118,6 +154,7 @@ export const bulkPayoutQueryKeys = {
 
 export const payoutQueryKeys = {
   all: [PAYOUT_KEY] as const,
+  banks: () => [...payoutQueryKeys.all, "banks"] as const,
   categories: (merchantId: string) =>
     [...payoutQueryKeys.all, "categories", merchantId] as const,
   category: (merchantId: string, categoryId: number) =>
@@ -144,6 +181,16 @@ export const checkoutLinkQueryKeys = {
     [...checkoutLinkQueryKeys.all, "list", merchantId] as const,
   detail: (linkId: string) =>
     [...checkoutLinkQueryKeys.all, "detail", linkId] as const,
+  reference: (reference: string) =>
+    [...checkoutLinkQueryKeys.all, "reference", reference] as const,
+}
+
+export const paymentLinkQueryKeys = {
+  all: [PAYMENT_LINK_KEY] as const,
+  detail: (reference: string) =>
+    [...paymentLinkQueryKeys.all, "detail", reference] as const,
+  portalDetail: (reference: string) =>
+    [...paymentLinkQueryKeys.all, "portal-detail", reference] as const,
 }
 
 export const subscriptionQueryKeys = {

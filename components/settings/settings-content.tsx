@@ -1,13 +1,29 @@
 "use client"
 
+import { useQuery } from "@tanstack/react-query"
+import { KeyRound } from "lucide-react"
+import { getMerchantAPIKeys } from "@/lib/api/v1/merchant/actions"
+import { merchantQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { useCurrentMerchant } from "@/store/merchant"
 import { MerchantProfileCard } from "./merchant-profile-card"
 import { APIKeyCard } from "./api-key-card"
 import { WebhooksCard } from "./webhooks-card"
 import { AccountActions } from "./account-actions"
 import { AccountMetadata } from "./account-metadata"
-import { KeyRound } from "lucide-react"
 
 export function SettingsContent() {
+  const merchant = useCurrentMerchant()
+  const { data } = useQuery({
+    queryKey: merchantQueryKeys.apiKeys(merchant?.id ?? ""),
+    queryFn: () => getMerchantAPIKeys(merchant!.id),
+    enabled: !!merchant?.id,
+  })
+
+  const livePublicKey = data?.live.public ?? "***************"
+  const liveSecretKey = data?.live.secret ?? "***************"
+  const testPublicKey = data?.test.public ?? "***************"
+  const testSecretKey = data?.test.secret ?? "***************"
+
   return (
     <div className="flex h-full w-full flex-col gap-10 p-4 sm:p-6 lg:p-10 max-w-6xl mx-auto">
       <section className="space-y-2">
@@ -28,18 +44,18 @@ export function SettingsContent() {
             API Integrations
           </h2>
         </div>
-        
+
         <div className="flex flex-col gap-8">
-          <APIKeyCard 
+          <APIKeyCard
             isCols
             type="Live"
-            publicKey="pk_live_51MvW2SHowZ9OvX9qJ...r6T7"
-            secretKey="sk_live_51MvW2SHowZ9OvX9qJ...sk82"
+            publicKey={livePublicKey}
+            secretKey={liveSecretKey}
           />
-          <APIKeyCard 
+          <APIKeyCard
             type="Test"
-            publicKey="pk_test_x7y2...91ab"
-            secretKey="sk_test_••••••••"
+            publicKey={testPublicKey}
+            secretKey={testSecretKey}
           />
         </div>
       </div>

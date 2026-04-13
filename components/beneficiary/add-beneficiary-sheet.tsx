@@ -13,10 +13,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { createBeneficiary } from "@/lib/api/v1/payout/actions"
+import { getBanks, getPayoutCategories } from "@/lib/api/v1/payout/queries"
 import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { type AddBeneficiaryFormValues } from "@/lib/schemas/beneficiary"
 import { useCurrentMerchant } from "@/store/merchant"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { BeneficiaryForm } from "./beneficiary-form"
 
@@ -35,6 +36,17 @@ export function AddBeneficiarySheet({
 }: AddBeneficiarySheetProps) {
   const merchant = useCurrentMerchant()
   const queryClient = useQueryClient()
+
+  const { data: categories = [] } = useQuery({
+    queryKey: payoutQueryKeys.categories(merchant?.id ?? ""),
+    queryFn: () => getPayoutCategories(merchant!.id),
+    enabled: !!merchant?.id,
+  })
+
+  const { data: banks = [] } = useQuery({
+    queryKey: payoutQueryKeys.banks(),
+    queryFn: getBanks,
+  })
 
   const { mutate: submitBeneficiary, isPending } = useMutation({
     mutationFn: createBeneficiary,
@@ -88,9 +100,9 @@ export function AddBeneficiarySheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       {children && <SheetTrigger asChild>{children}</SheetTrigger>}
-      
-      <SheetContent 
-        side="right" 
+
+      <SheetContent
+        side="right"
         showCloseButton={false}
         className="w-full data-[side=right]:sm:max-w-125 bg-surface-1 p-0  gap-0 border-l flex flex-col h-full"
       >
@@ -113,11 +125,13 @@ export function AddBeneficiarySheet({
         </SheetHeader>
 
         <div className="flex-1 overflow-hidden">
-          <BeneficiaryForm 
+          <BeneficiaryForm
             formId={BENEFICIARY_FORM_ID}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             submitLabel="Add New Beneficiary"
+            banks={banks}
+            categories={categories}
             isPending={isPending}
           />
         </div>

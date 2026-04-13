@@ -1,8 +1,10 @@
 import { Card } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import type { ReactNode } from "react"
+import { Skeleton } from "../ui/skeleton"
 
 type MetricCardProps = {
+  isLoading?: boolean
   title: string
   value: string
   change?: string
@@ -16,6 +18,7 @@ type MetricCardProps = {
 }
 
 const MetricCard = ({
+  isLoading,
   title,
   value,
   change,
@@ -34,7 +37,15 @@ const MetricCard = ({
           "flex flex-col text-text-primary justify-between border-t-[5px] gap-3 p-4 sm:p-5",
           borderClassName,
         )}
-      >
+      >   
+        {isLoading ? (
+          <div className="space-y-3">
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-10 w-1/3" />
+            <Skeleton className="h-3 w-full" />
+          </div>
+        ) : (
+          <>
         <div className="flex items-start justify-between gap-3  ">
           <div className="space-y-3 flex-1">
             <div className="flex items-center justify-between gap-2">
@@ -68,6 +79,8 @@ const MetricCard = ({
               {changeLabel}
             </span>
           </p>
+        )}
+          </>
         )}
       </div>
     </Card>

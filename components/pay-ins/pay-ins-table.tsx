@@ -8,9 +8,12 @@ import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
   Bitcoin,
+  ChevronLeft,
+  ChevronRight,
   Landmark,
   MoreVertical,
 } from "lucide-react"
+import type { Dispatch, SetStateAction } from "react"
 import { Card } from "../icons"
 
 const columns: ColumnDef<PayInTransaction>[] = [
@@ -156,16 +159,34 @@ const columns: ColumnDef<PayInTransaction>[] = [
 
 interface PayInsTableProps {
   data: PayInTransaction[]
+  isPending: boolean
+  pagination: { pageIndex: number; pageSize: number }
+  setPagination: Dispatch<
+    SetStateAction<{ pageIndex: number; pageSize: number }>
+  >
+  pageCount: number
+  totalCount: number
 }
 
-export function PayInsTable({ data }: PayInsTableProps) {
+export function PayInsTable({
+  data,
+  isPending,
+  pagination,
+  setPagination,
+  pageCount,
+  totalCount,
+}: PayInsTableProps) {
+  const startRange =
+    data.length === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
+  const endRange = data.length === 0 ? 0 : startRange + data.length - 1
+
   return (
     <div className="flex flex-col rounded-4xl border border-surface-3 bg-surface-1 shadow-sm overflow-hidden">
       <section className="w-full">
         <DataTable
           data={data}
           columns={columns}
-          isPending={false}
+          isPending={isPending}
           getRowId={(row) => row.id}
           withPagination={false}
           tableWrapperClassName="w-full"
@@ -178,21 +199,35 @@ export function PayInsTable({ data }: PayInsTableProps) {
 
       <div className="flex h-16 items-center justify-between px-6 py-4 border-t border-surface-3 bg-surface-2">
         <p className="text-sm font-medium text-text-muted">
-          Showing 1-5 of 128 results
+          Showing {startRange} to {endRange} of {totalCount} results
         </p>
 
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             className="h-auto py-1 px-3 rounded-xl border-surface-3 bg-surface-1 text-text-secondary font-bold hover:bg-surface-2"
+            disabled={pagination.pageIndex === 0}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex - 1,
+              }))
+            }
           >
-            Previous
+            <ChevronLeft size={16} />
           </Button>
           <Button
             variant="outline"
             className="h-auto py-1 px-3 rounded-xl border-surface-3 bg-surface-1 text-text-secondary font-bold hover:bg-surface-2"
+            disabled={pagination.pageIndex >= pageCount - 1}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex + 1,
+              }))
+            }
           >
-            Next
+            <ChevronRight size={16} />
           </Button>
         </div>
       </div>

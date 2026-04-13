@@ -2,8 +2,8 @@
 
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
-import { BalanceTransaction } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import type { ITransaction } from "@/lib/types"
+import { cn, formatCurrency } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
   ArrowDownCircle,
@@ -47,7 +47,7 @@ const transactionTypeMap: Record<string, TransactionTypeConfig> = {
   },
 }
 
-const columns: ColumnDef<BalanceTransaction>[] = [
+const columns: ColumnDef<ITransaction>[] = [
   {
     accessorKey: "type",
     header: () => (
@@ -56,7 +56,7 @@ const columns: ColumnDef<BalanceTransaction>[] = [
       </span>
     ),
     cell: ({ row }) => {
-      const type = row.getValue("type") as string
+      const type = String(row.getValue("type"))
       const config = transactionTypeMap[type.toLowerCase()] ?? {
         icon: ArrowDownCircle,
         className: "bg-blue-100 text-blue-500",
@@ -99,16 +99,23 @@ const columns: ColumnDef<BalanceTransaction>[] = [
       </span>
     ),
     cell: ({ row }) => {
-      const amount = row.getValue("amount") as string
+      const amount = row.getValue("amount")
+      const numericAmount =
+        typeof amount === "number"
+          ? amount
+          : Number.parseFloat(String(amount).replace(/[^0-9.-]+/g, ""))
+      const displayAmount = Number.isFinite(numericAmount)
+        ? formatCurrency(numericAmount, row.original.currency)
+        : String(amount)
 
       return (
         <span
           className={cn(
             "font-bold",
-            amount.startsWith("-") ? "text-red-500" : "text-text-primary",
+            numericAmount < 0 ? "text-red-500" : "text-text-primary",
           )}
         >
-          {amount}
+          {displayAmount}
         </span>
       )
     },
@@ -130,13 +137,15 @@ const columns: ColumnDef<BalanceTransaction>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-text-secondary">{row.getValue("date")}</span>
+      <span className="text-text-secondary">
+        {row.original.date || row.original.created_at}
+      </span>
     ),
   },
 ]
 
 interface BalanceTransactionsTableProps {
-  data: BalanceTransaction[]
+  data: ITransaction[]
   isPending: boolean
   pageCount: number
   totalCount: number
@@ -218,7 +227,7 @@ export default function BalanceTransactionsTable({
           data={filteredData}
           columns={columns}
           isPending={isPending}
-          getRowId={(row) => row.id}
+          getRowId={(row) => String(row.id)}
           withPagination={false}
           tableWrapperClassName="w-full overflow-x-auto"
           headerClassName="sticky top-0 z-10 bg-surface-2"

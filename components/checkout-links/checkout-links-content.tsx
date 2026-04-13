@@ -16,6 +16,7 @@ import {
   CheckoutLinksTable,
   CheckoutLinkTableRow,
 } from "./checkout-links-table"
+import { CreateCheckoutLinkSheet } from "./create-checkout-link-sheet"
 
 function formatCheckoutLinkDate(value: string) {
   const date = new Date(value)
@@ -79,10 +80,12 @@ export function CheckoutLinksContent() {
               Manage and share payment links for your products
             </p>
           </div>
-          <Button className="flex h-auto items-center gap-2 rounded-xl bg-brand-primary px-5 py-2 text-white hover:bg-brand-primary/90">
-            <Plus className="size-4" />
-            <span className="font-semibold">Create Checkout Link</span>
-          </Button>
+          <CreateCheckoutLinkSheet>
+            <Button className="flex h-auto items-center gap-2 rounded-xl bg-brand-primary px-5 py-2 text-white hover:bg-brand-primary/90">
+              <Plus className="size-4" />
+              <span className="font-semibold">Create Checkout Link</span>
+            </Button>
+          </CreateCheckoutLinkSheet>
         </section>
 
         <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

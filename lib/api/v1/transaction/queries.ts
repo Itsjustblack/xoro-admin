@@ -1,8 +1,8 @@
 import ApiClient from "@/lib/api-client"
 import {
-  MerchantTransactionsResponse,
   MerchantTransactionType,
   Mode,
+  TransactionsResponse,
 } from "@/lib/types"
 
 type GetMerchantTransactionsParams = {
@@ -24,7 +24,7 @@ export async function getMerchantTransactions({
   currency,
   transaction_type,
 }: GetMerchantTransactionsParams) {
-  const res = await ApiClient.get<MerchantTransactionsResponse>(
+  const res = await ApiClient.get<TransactionsResponse>(
     "/merchant-transactions",
     {
       params: {

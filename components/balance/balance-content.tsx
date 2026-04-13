@@ -13,7 +13,7 @@ import {
 } from "@/lib/api/v1/wallet/queries"
 import { PAGE_SIZE } from "@/lib/constants"
 import {
-  BalanceTransaction,
+  ITransaction,
   MerchantTransactionsResponse,
   Wallet,
 } from "@/lib/types"
@@ -152,14 +152,14 @@ const BalanceContent = () => {
   const transactionsResponse = merchantTransactions as
     | MerchantTransactionsResponse
     | undefined
-  const balanceTransactions: BalanceTransaction[] = Array.isArray(
+  const balanceTransactions: ITransaction[] = Array.isArray(
     transactionsResponse?.data,
   )
-    ? (transactionsResponse.data as BalanceTransaction[])
+    ? (transactionsResponse.data as ITransaction[])
     : ((transactionsResponse?.transactions ??
         transactionsResponse?.items ??
         transactionsResponse?.results ??
-        []) as BalanceTransaction[])
+        []) as ITransaction[])
 
   return (
     <section className="p-4 sm:p-6 lg:p-8">

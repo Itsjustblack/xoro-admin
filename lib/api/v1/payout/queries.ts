@@ -4,6 +4,7 @@ import type {
   BulkPayoutsResponse,
   Category,
   GetPayoutBeneficiariesParams,
+  IBank,
   IBulkTransactionData,
   Mode,
 } from "@/lib/types"
@@ -29,7 +30,7 @@ export async function getBulkPayout({
 
 export async function getBulkPayoutByReference(reference: string) {
   const res = await ApiClient.get<IBulkTransactionData>(
-    `/bulk-payouts/${reference}`,
+    `/bulk-payout/${reference}`,
   )
   return res.data
 }
@@ -38,6 +39,11 @@ export async function getPayoutCategories(merchant_id: string) {
   const res = await ApiClient.get<Category[]>("/payout-category", {
     params: { merchant_id },
   })
+  return res.data
+}
+
+export async function getBanks() {
+  const res = await ApiClient.get<IBank[]>("/banks")
   return res.data
 }
 

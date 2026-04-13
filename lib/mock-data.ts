@@ -1,5 +1,4 @@
 import type {
-  BalanceTransaction,
   BeneficiariesResponse,
   BulkPayout,
   BulkPayoutBatch,
@@ -16,7 +15,6 @@ import type {
   ISubscriptionAnalytics,
   ITransaction,
   IUser,
-  MerchantTransactionsResponse,
   Message,
   MonthlyPayoutPoint,
   Notification,
@@ -366,7 +364,7 @@ export const mockNotifications: Notification[] = [
   },
 ]
 
-export const mockBalanceTransactions: BalanceTransaction[] = [
+export const mockBalanceTransactions = [
   {
     id: "1",
     type: "Payout",
@@ -573,7 +571,7 @@ export const mockMonthlyPayoutVolume: MonthlyPayoutPoint[] = [
   { month: "Dec", value: 0, payoutCount: 0 },
 ]
 
-export const mockMerchantTransactions: MerchantTransactionsResponse = {
+export const mockMerchantTransactions = {
   transactions: [
     {
       id: "txn-001",

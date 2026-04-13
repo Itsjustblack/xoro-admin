@@ -1,7 +1,8 @@
 "use client"
 
-import { ChevronLeft, ChevronRight, Copy } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
+import { CopyButton } from "@/components/copy-button"
 import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -57,13 +58,14 @@ const columns: ColumnDef<CheckoutLinkTableRow>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <div className="flex items-center gap-2">
-        <span className="font-bold text-brand-primary truncate max-w-50">
+      <div className="flex min-w-0 items-center gap-2">
+        <span className="max-w-50 truncate font-bold text-brand-primary">
           {row.getValue("linkUrl")}
         </span>
-        <button className="text-text-muted hover:text-brand-primary transition-colors">
-          <Copy className="size-3.5" />
-        </button>
+        <CopyButton
+          value={row.original.linkUrl}
+          className="size-8 shrink-0 text-text-muted hover:text-brand-primary"
+        />
       </div>
     ),
   },

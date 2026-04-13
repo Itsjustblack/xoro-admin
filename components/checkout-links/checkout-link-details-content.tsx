@@ -2,25 +2,28 @@
 
 import {
   Calendar,
-  Copy,
   CreditCard,
   Eye,
   Users,
 } from "lucide-react"
 import { useMemo, useState } from "react"
 
+import { CopyButton } from "@/components/copy-button"
 import MetricCard from "@/components/dashboard/metric-card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { deactivateCheckoutLink } from "@/lib/api/v1/link/actions"
 import { getCheckoutLinkById } from "@/lib/api/v1/link/queries"
 import { checkoutLinkQueryKeys } from "@/lib/api/v1/query-key-factory"
 import type { CheckoutLink, CheckoutLinkDetails } from "@/lib/types"
 import { cn, formatCurrency } from "@/lib/utils"
-import { useQuery } from "@tanstack/react-query"
+import { useCurrentMerchant } from "@/store/merchant"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { SiteFooter } from "../shared/site-footer"
 import { CheckoutLinkDetailsGrid } from "./checkout-link-details-grid"
 import { CheckoutLinkDetailsTable } from "./checkout-link-details-table"
 import { PaymentActivityChart } from "./payment-activity-chart"
+import { toast } from "sonner"
 
 interface CheckoutLinkDetailsContentProps {
   id: string
@@ -36,10 +39,30 @@ export function CheckoutLinkDetailsContent({
   id,
 }: CheckoutLinkDetailsContentProps) {
   const [searchQuery, setSearchQuery] = useState("")
+  const merchant = useCurrentMerchant()
+  const queryClient = useQueryClient()
   const { data: link, isPending } = useQuery<CheckoutLinkDetails>({
     queryKey: checkoutLinkQueryKeys.detail(id),
     queryFn: () => getCheckoutLinkById(id),
     enabled: !!id,
+  })
+
+  const { mutate: disableLink, isPending: isDisablingLink } = useMutation({
+    mutationFn: deactivateCheckoutLink,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: checkoutLinkQueryKeys.detail(id),
+      })
+      if (merchant?.id) {
+        await queryClient.invalidateQueries({
+          queryKey: checkoutLinkQueryKeys.list(merchant.id),
+        })
+      }
+      toast.success("Checkout link disabled successfully")
+    },
+    onError: () => {
+      toast.error("Unable to disable checkout link")
+    },
   })
 
   const filteredTransactions = useMemo(() => {
@@ -93,15 +116,20 @@ export function CheckoutLinkDetailsContent({
             >
               Share
             </Button>
-            <Button className="h-11 rounded-xl bg-brand-primary px-6 font-semibold text-white hover:bg-brand-primary-dark">
-              <Copy className="size-4" />
+            <CopyButton
+              value={link?.url ?? ""}
+              className="h-11 w-auto rounded-xl bg-brand-primary px-6 font-semibold text-white hover:bg-brand-primary-dark hover:text-white"
+              iconClassName="size-4"
+            >
               <span>Copy Link</span>
-            </Button>
+            </CopyButton>
             <Button
               variant="outline"
               className="h-11 rounded-xl border-status-danger bg-white px-6 font-semibold text-status-danger hover:bg-status-danger/5"
+              onClick={() => disableLink(id)}
+              disabled={!link?.is_active || isDisablingLink}
             >
-              Disable Link
+              {isDisablingLink ? "Disabling..." : "Disable Link"}
             </Button>
           </div>
         </section>

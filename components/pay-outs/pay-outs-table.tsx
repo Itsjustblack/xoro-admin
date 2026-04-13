@@ -15,6 +15,8 @@ import {
   MoreVertical,
   RefreshCw
 } from "lucide-react"
+import type { Dispatch, SetStateAction } from "react"
+
 const columns: ColumnDef<PayOutTransaction>[] = [
   {
     accessorKey: "recipientName",
@@ -91,13 +93,31 @@ const columns: ColumnDef<PayOutTransaction>[] = [
 
 interface PayOutsTableProps {
   data: PayOutTransaction[]
+  isPending: boolean
+  pagination: { pageIndex: number; pageSize: number }
+  setPagination: Dispatch<
+    SetStateAction<{ pageIndex: number; pageSize: number }>
+  >
+  pageCount: number
+  totalCount: number
 }
 
-export function PayOutsTable({ data }: PayOutsTableProps) {
+export function PayOutsTable({
+  data,
+  isPending,
+  pagination,
+  setPagination,
+  pageCount,
+  totalCount,
+}: PayOutsTableProps) {
+  const startRange =
+    data.length === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
+  const endRange = data.length === 0 ? 0 : startRange + data.length - 1
+
   return (
     <div className="rounded-4xl border border-surface-3 bg-surface-1 shadow-sm overflow-hidden">
       <DataTable 
-        isPending={false}
+        isPending={isPending}
         columns={columns} 
         data={data}
         getRowId={(row) => row.id}
@@ -110,26 +130,53 @@ export function PayOutsTable({ data }: PayOutsTableProps) {
 
       <div className="flex items-center justify-between border-t border-surface-3 px-6 py-4 bg-surface-2">
         <p className="text-sm font-medium text-text-secondary">
-          Showing 1-5 of 128 payouts
+          Showing {startRange} to {endRange} of {totalCount} payouts
         </p>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-surface-6 bg-white hover:bg-surface-5">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-9 w-9 rounded-lg border-surface-6 bg-white hover:bg-surface-5"
+            disabled={pagination.pageIndex === 0}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex - 1,
+              }))
+            }
+          >
             <ChevronLeft size={16} />
           </Button>
-          {[1, 2, 3].map((page, i) => (
+          {Array.from({ length: Math.max(pageCount, 1) }).map((_, index) => (
             <Button
-              key={i}
-              variant={page === 1 ? "default" : "outline"}
+              key={index}
+              variant={pagination.pageIndex === index ? "default" : "outline"}
               className={cn(
                 "h-9 w-9 rounded-lg border-transparent font-bold text-sm",
-                page === 1 ? "bg-brand-primary text-white hover:bg-brand-primary/90" : "bg-transparent text-text-secondary hover:bg-white"
+                pagination.pageIndex === index
+                  ? "bg-brand-primary text-white hover:bg-brand-primary/90"
+                  : "bg-transparent text-text-secondary hover:bg-white"
               )}
+              onClick={() =>
+                setPagination((current) => ({ ...current, pageIndex: index }))
+              }
             >
-              {page}
+              {index + 1}
             </Button>
           ))}
-          <Button variant="outline" size="icon" className="h-9 w-9 rounded-lg border-surface-6 bg-white hover:bg-surface-5">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-9 w-9 rounded-lg border-surface-6 bg-white hover:bg-surface-5"
+            disabled={pagination.pageIndex >= pageCount - 1}
+            onClick={() =>
+              setPagination((current) => ({
+                ...current,
+                pageIndex: current.pageIndex + 1,
+              }))
+            }
+          >
             <ChevronRight size={16} />
           </Button>
         </div>

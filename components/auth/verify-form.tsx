@@ -9,7 +9,12 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import { useCountdown } from "@/hooks/use-count-down"
-import { verifyLoginOtp, verifySignupOtp } from "@/lib/api/v1/auth/actions"
+import {
+  loginUser,
+  signupUser,
+  verifyLoginOtp,
+  verifySignupOtp,
+} from "@/lib/api/v1/auth/actions"
 import { verifySchema, type VerifyFormValues } from "@/lib/schemas/auth"
 import { maskEmail } from "@/lib/utils"
 import {
@@ -95,6 +100,36 @@ export function VerifyForm({ email }: VerifyFormProps) {
     },
   })
 
+  const { mutate: resendLoginOtp, isPending: isResendingLoginOtp } =
+    useMutation({
+      mutationFn: loginUser,
+      onSuccess: () => {
+        resetCountdown()
+        form.reset({ otp: "" })
+        toast.success("Verification code resent", {
+          description: email || "Please check your inbox",
+        })
+      },
+      onError: () => {
+        toast.error("Unable to resend verification code")
+      },
+    })
+
+  const { mutate: resendSignupOtp, isPending: isResendingSignupOtp } =
+    useMutation({
+      mutationFn: signupUser,
+      onSuccess: () => {
+        resetCountdown()
+        form.reset({ otp: "" })
+        toast.success("Verification code resent", {
+          description: email || "Please check your inbox",
+        })
+      },
+      onError: () => {
+        toast.error("Unable to resend verification code")
+      },
+    })
+
   useEffect(() => {
     if (
       !loginCredentials &&
@@ -137,13 +172,20 @@ export function VerifyForm({ email }: VerifyFormProps) {
   }
 
   const handleResend = () => {
-    resetCountdown()
-    form.reset({ otp: "" })
-    toast("Verification code resent", {
-      description: email || "Please check your inbox",
-      position: "bottom-right",
-    })
+    if (loginCredentials) {
+      resendLoginOtp(loginCredentials)
+      return
+    }
+
+    if (signupCredentials) {
+      resendSignupOtp(signupCredentials)
+      return
+    }
+
+    toast.error("Unable to resend verification code")
   }
+
+  const isResendPending = isResendingLoginOtp || isResendingSignupOtp
 
   return (
     <>
@@ -210,9 +252,9 @@ export function VerifyForm({ email }: VerifyFormProps) {
           variant="link"
           className="h-auto p-0 text-brand-primary font-semibold"
           onClick={handleResend}
-          disabled={secondsRemaining > 0}
+          disabled={secondsRemaining > 0 || isResendPending}
         >
-          Resend code
+          {isResendPending ? "Resending..." : "Resend code"}
         </Button>
       </div>
 
