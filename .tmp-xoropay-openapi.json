@@ -1,0 +1,6031 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "FastAPI", "version": "0.1.0" },
+  "paths": {
+    "/docs": {
+      "get": {
+        "summary": "Custom Swagger Ui",
+        "operationId": "custom_swagger_ui_docs_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBasic": [] }]
+      }
+    },
+    "/redoc": {
+      "get": {
+        "summary": "Custom Redoc Ui",
+        "operationId": "custom_redoc_ui_redoc_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBasic": [] }]
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "summary": "Protected Openapi",
+        "operationId": "protected_openapi_openapi_json_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBasic": [] }]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Signup",
+        "operationId": "signup_auth_signup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login/verify-otp": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login Otp",
+        "operationId": "login_otp_auth_login_verify_otp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VerifyLoginOtpRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signup/verify-otp": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Signup Otp",
+        "operationId": "signup_otp_auth_signup_verify_otp_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifySignupOtpRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/change-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Change Password",
+        "operationId": "change_password_auth_change_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ChangePasswordRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Forgot Password",
+        "operationId": "forgot_password_auth_forgot_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ForgotPasswordRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/forgot-password/verify-reset": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Forgot Password",
+        "operationId": "forgot_password_auth_forgot_password_verify_reset_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyForgotPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/validate-key": {
+      "get": {
+        "tags": ["Auth", "Auth"],
+        "summary": "Validate an API secret key",
+        "description": "Validates a merchant's API secret key (aggsk_...) passed as a Bearer token. Returns the merchant's details if the key is valid.",
+        "operationId": "validate_key_auth_validate_key_get",
+        "responses": {
+          "200": {
+            "description": "Key is valid — merchant details returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MerchantResponse" },
+                "example": {
+                  "id": "agg-683c3",
+                  "name": "Acme Inc.",
+                  "email": "merchant@example.com",
+                  "is_verified": false,
+                  "is_active": true,
+                  "joined_at": "2024-01-01T00:00:00Z",
+                  "test_balance": 0.0,
+                  "live_balance": 0.0,
+                  "percentage_charge": 1.5,
+                  "flat_charge": 0.0
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or malformed API key",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_format": {
+                    "summary": "Key format is wrong",
+                    "value": { "detail": "Invalid API key format" }
+                  },
+                  "invalid_key": {
+                    "summary": "Key does not match any merchant",
+                    "value": { "detail": "Invalid API key" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Merchant associated with key not found",
+            "content": {
+              "application/json": {
+                "example": { "detail": "Merchant not found" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Admin Login",
+        "operationId": "admin_login_admin_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AdminLoginRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LoginResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/merchants": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get All Merchants",
+        "operationId": "get_all_merchants_admin_merchants_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/MerchantResponse" },
+                  "type": "array",
+                  "title": "Response Get All Merchants Admin Merchants Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/admin/total-balance": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Total Balance",
+        "description": "Get total system balance, optionally filtered by currency",
+        "operationId": "get_total_balance_admin_total_balance_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency (e.g., NGN, USD)",
+              "title": "Currency"
+            },
+            "description": "Filter by currency (e.g., NGN, USD)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TotalBalanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/total-amounts": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Total Amounts",
+        "description": "Get total charges and profit, optionally filtered by currency",
+        "operationId": "get_total_amounts_admin_total_amounts_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency (e.g., NGN, USD)",
+              "title": "Currency"
+            },
+            "description": "Filter by currency (e.g., NGN, USD)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TotalAmountsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/activate-merchant": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Activatate Merchant",
+        "operationId": "activatate_merchant_admin_activate_merchant_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivateMerchantRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MerchantResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/admin/deactivate-merchant": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Deactivatate Merchant",
+        "operationId": "deactivatate_merchant_admin_deactivate_merchant_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivateMerchantRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MerchantResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/admin/merchant-amounts": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Merchant Total Amounts",
+        "description": "Get merchant charges and profit, optionally filtered by currency",
+        "operationId": "get_merchant_total_amounts_admin_merchant_amounts_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "merchant_email",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Merchant email",
+              "title": "Merchant Email"
+            },
+            "description": "Merchant email"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency (e.g., NGN, USD)",
+              "title": "Currency"
+            },
+            "description": "Filter by currency (e.g., NGN, USD)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MerchantAmountsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/balances-by-currency": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Balances By Currency",
+        "description": "Get wallet balances grouped by currency for a specific mode",
+        "operationId": "get_balances_by_currency_admin_balances_by_currency_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalancesByCurrencyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/charges-by-currency": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Charges By Currency",
+        "description": "Get system charges and processor charges grouped by currency",
+        "operationId": "get_charges_by_currency_admin_charges_by_currency_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChargesByCurrencyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/system-balance-by-currency": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get System Balance By Currency",
+        "description": "Get system balance (merchant balance + profit) grouped by currency",
+        "operationId": "get_system_balance_by_currency_admin_system_balance_by_currency_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemBalanceByCurrencyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/merchant-balance": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Get Total Merchant Balance",
+        "description": "Get total merchant wallet balances across all merchants, optionally filtered by currency",
+        "operationId": "get_total_merchant_balance_admin_merchant_balance_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency (e.g., NGN, USD)",
+              "title": "Currency"
+            },
+            "description": "Filter by currency (e.g., NGN, USD)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TotalBalanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-user": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get User",
+        "operationId": "get_user_get_user_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/add-user": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Add User",
+        "operationId": "add_user_add_user_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserAddRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/create-merchant": {
+      "post": {
+        "tags": ["Merchants"],
+        "summary": "Create Merchant",
+        "operationId": "create_merchant_create_merchant_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MerchantCreateRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/get-token": {
+      "post": {
+        "tags": ["Merchants"],
+        "summary": "Get Merchant Tokens",
+        "operationId": "get_merchant_tokens_get_token_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MerchantGetRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/get-merchant": {
+      "get": {
+        "tags": ["Merchants"],
+        "summary": "Get Merchant",
+        "operationId": "get_merchant_get_merchant_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant email",
+              "title": "Email"
+            },
+            "description": "Merchant email"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merchant/revenue": {
+      "get": {
+        "tags": ["Merchants"],
+        "summary": "Get Merchant Revenue",
+        "operationId": "get_merchant_revenue_merchant_revenue_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Merchant ID"
+            },
+            "description": "Merchant ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merchant/periodic-revenue": {
+      "get": {
+        "tags": ["Merchants"],
+        "summary": "Get Merchant Periodic Revenue",
+        "operationId": "get_merchant_periodic_revenue_merchant_periodic_revenue_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Mrchant's Id",
+              "title": "Id"
+            },
+            "description": "Mrchant's Id"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "live or test",
+              "default": "test"
+            },
+            "description": "live or test"
+          },
+          {
+            "name": "group_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/GroupBy",
+              "description": "Group by 'day', 'week' or 'month'",
+              "default": "month"
+            },
+            "description": "Group by 'day', 'week' or 'month'"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "date" },
+                { "type": "null" }
+              ],
+              "title": "Start Date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "date" },
+                { "type": "null" }
+              ],
+              "title": "End Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/create": {
+      "post": {
+        "tags": ["Wallets"],
+        "summary": "Create Wallet",
+        "description": "Create a new wallet for a merchant with specific currency and mode.",
+        "operationId": "create_wallet_wallets_create_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WalletCreateRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/wallets": {
+      "get": {
+        "tags": ["Wallets"],
+        "summary": "Get Merchant Wallets",
+        "description": "Get all wallets for a merchant, optionally filtered by mode.",
+        "operationId": "get_merchant_wallets_wallets_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by mode: test or live",
+              "title": "Mode"
+            },
+            "description": "Filter by mode: test or live"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/WalletResponse" },
+                  "title": "Response Get Merchant Wallets Wallets Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/by-criteria": {
+      "get": {
+        "tags": ["Wallets"],
+        "summary": "Get Wallets By Criteria",
+        "description": "Get wallets by merchant, currencies (multiple), and optional mode.",
+        "operationId": "get_wallets_by_criteria_wallets_by_criteria_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "currencies",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Comma-separated list of currencies (e.g., 'NGN,USD,GHS')",
+              "title": "Currencies"
+            },
+            "description": "Comma-separated list of currencies (e.g., 'NGN,USD,GHS')"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by mode: test or live",
+              "title": "Mode"
+            },
+            "description": "Filter by mode: test or live"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/WalletResponse" },
+                  "title": "Response Get Wallets By Criteria Wallets By Criteria Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{wallet_id}": {
+      "get": {
+        "tags": ["Wallets"],
+        "summary": "Get Wallet By Id",
+        "description": "Get a specific wallet by ID.",
+        "operationId": "get_wallet_by_id_wallets__wallet_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Wallet Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Wallets"],
+        "summary": "Delete Wallet",
+        "description": "Delete a wallet (only if balance is zero).",
+        "operationId": "delete_wallet_wallets__wallet_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Wallet Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/balance/summary": {
+      "get": {
+        "tags": ["Wallets"],
+        "summary": "Get Wallet Balance Summary",
+        "description": "Get balance summary for all merchant wallets.",
+        "operationId": "get_wallet_balance_summary_wallets_balance_summary_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by mode: test or live",
+              "title": "Mode"
+            },
+            "description": "Filter by mode: test or live"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletBalanceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{wallet_id}/charges": {
+      "patch": {
+        "tags": ["Wallets"],
+        "summary": "Update Wallet Charges",
+        "description": "Update charge configuration for a wallet.",
+        "operationId": "update_wallet_charges_wallets__wallet_id__charges_patch",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Wallet Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WalletUpdateChargesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/{wallet_id}/toggle-active": {
+      "patch": {
+        "tags": ["Wallets"],
+        "summary": "Toggle Wallet Active",
+        "description": "Toggle wallet active status.",
+        "operationId": "toggle_wallet_active_wallets__wallet_id__toggle_active_patch",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Wallet Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WalletResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallets/transfer": {
+      "post": {
+        "tags": ["Wallets"],
+        "summary": "Transfer Between Wallets",
+        "description": "Transfer funds between two wallets (must belong to same merchant).",
+        "operationId": "transfer_between_wallets_wallets_transfer_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WalletTransferRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/analytics/dashboard": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Dashboard Summary",
+        "description": "Get comprehensive dashboard summary for merchant\nIncludes revenue metrics, transaction breakdown, top currency, and wallet stats",
+        "operationId": "get_dashboard_summary_analytics_dashboard_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Period: today, week, month, quarter, year, all_time",
+              "default": "month",
+              "title": "Period"
+            },
+            "description": "Period: today, week, month, quarter, year, all_time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardSummaryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/revenue": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Revenue Analytics",
+        "description": "Get detailed revenue analytics with time series data",
+        "operationId": "get_revenue_analytics_analytics_revenue_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Start date (ISO format)",
+              "title": "Start Date"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "End date (ISO format)",
+              "title": "End Date"
+            },
+            "description": "End date (ISO format)"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency",
+              "title": "Currency"
+            },
+            "description": "Filter by currency"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Time series interval: day, week, month",
+              "default": "day",
+              "title": "Interval"
+            },
+            "description": "Time series interval: day, week, month"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevenueAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/transactions": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Transaction Analytics",
+        "description": "Get detailed transaction analytics including channel breakdown",
+        "operationId": "get_transaction_analytics_analytics_transactions_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Start date (ISO format)",
+              "title": "Start Date"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "End date (ISO format)",
+              "title": "End Date"
+            },
+            "description": "End date (ISO format)"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency",
+              "title": "Currency"
+            },
+            "description": "Filter by currency"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Time series interval: day, week, month",
+              "default": "day",
+              "title": "Interval"
+            },
+            "description": "Time series interval: day, week, month"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/wallets": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Wallet Analytics",
+        "description": "Get comprehensive wallet analytics for all merchant wallets",
+        "operationId": "get_wallet_analytics_analytics_wallets_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WalletAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/customers": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Customer Analytics",
+        "description": "Get customer analytics including top customers and repeat rate",
+        "operationId": "get_customer_analytics_analytics_customers_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Start date (ISO format)",
+              "title": "Start Date"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "End date (ISO format)",
+              "title": "End Date"
+            },
+            "description": "End date (ISO format)"
+          },
+          {
+            "name": "top_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Number of top customers to return",
+              "default": 10,
+              "title": "Top Limit"
+            },
+            "description": "Number of top customers to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/payouts": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Payout Analytics",
+        "description": "Get payout analytics with time series data",
+        "operationId": "get_payout_analytics_analytics_payouts_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Start date (ISO format)",
+              "title": "Start Date"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "End date (ISO format)",
+              "title": "End Date"
+            },
+            "description": "End date (ISO format)"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency",
+              "title": "Currency"
+            },
+            "description": "Filter by currency"
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Time series interval: day, week, month",
+              "default": "day",
+              "title": "Interval"
+            },
+            "description": "Time series interval: day, week, month"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutAnalyticsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/patterns": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Transaction Patterns",
+        "description": "Get transaction patterns - hourly and day-of-week distribution\nHelps identify peak transaction times",
+        "operationId": "get_transaction_patterns_analytics_patterns_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Start date (ISO format)",
+              "title": "Start Date"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "End date (ISO format)",
+              "title": "End Date"
+            },
+            "description": "End date (ISO format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionPatternResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/comparison": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get Comparison Analytics",
+        "description": "Compare metrics between current and previous periods\nShows growth trends and changes",
+        "operationId": "get_comparison_analytics_analytics_comparison_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live",
+              "default": "test"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "current_period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Current period: week, month, quarter, year",
+              "default": "month",
+              "title": "Current Period"
+            },
+            "description": "Current period: week, month, quarter, year"
+          },
+          {
+            "name": "compare_with",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Compare with: previous (same period before)",
+              "default": "previous",
+              "title": "Compare With"
+            },
+            "description": "Compare with: previous (same period before)"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "description": "Filter by currency",
+              "title": "Currency"
+            },
+            "description": "Filter by currency"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/links/": {
+      "post": {
+        "tags": ["payment_links"],
+        "summary": "Create Link",
+        "operationId": "create_link_links__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentLinkCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PaymentLinkResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/links/merchant/{merchant_id}": {
+      "get": {
+        "tags": ["payment_links"],
+        "summary": "List Links",
+        "operationId": "list_links_links_merchant__merchant_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentLinkResponse"
+                  },
+                  "title": "Response List Links Links Merchant  Merchant Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/links/r/{reference}": {
+      "get": {
+        "tags": ["payment_links"],
+        "summary": "Public Fetch By Reference",
+        "operationId": "public_fetch_by_reference_links_r__reference__get",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Reference" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PaymentLinkResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/links/r/{reference}/checkout": {
+      "post": {
+        "tags": ["payment_links"],
+        "summary": "Init Checkout",
+        "operationId": "init_checkout_links_r__reference__checkout_post",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Reference" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CheckoutRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/links/{link_id}": {
+      "get": {
+        "tags": ["payment_links"],
+        "summary": "Get Link Detail",
+        "operationId": "get_link_detail_links__link_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "link_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Link Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentLinkDetailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["payment_links"],
+        "summary": "Update Link",
+        "operationId": "update_link_links__link_id__put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "link_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Link Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentLinkUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PaymentLinkResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["payment_links"],
+        "summary": "Deactivate Link",
+        "operationId": "deactivate_link_links__link_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "link_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Link Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PaymentLinkResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/links/verify-transaction": {
+      "post": {
+        "tags": ["payment_links"],
+        "summary": "Verify Transaction",
+        "operationId": "verify_transaction_links_verify_transaction_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyTransactionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payout-category": {
+      "post": {
+        "tags": ["Payout categories"],
+        "summary": "Create Category",
+        "operationId": "create_category_payout_category_post",
+        "security": [{ "HTTPBearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PayoutCategoryCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutCategoryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Payout categories"],
+        "summary": "List Categories",
+        "operationId": "list_categories_payout_category_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PayoutCategoryResponse"
+                  },
+                  "title": "Response List Categories Payout Category Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payout-category/{category_id}": {
+      "get": {
+        "tags": ["Payout categories"],
+        "summary": "Get Category",
+        "operationId": "get_category_payout_category__category_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Category Id" }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Payout categories"],
+        "summary": "Delete Category",
+        "operationId": "delete_category_payout_category__category_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Category Id" }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payout-category/{category_id}/beneficiaries": {
+      "get": {
+        "tags": ["Payout categories"],
+        "summary": "Fetch Beneficiaries",
+        "operationId": "fetch_beneficiaries_payout_category__category_id__beneficiaries_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Category Id" }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PayoutBeneficiaryResponse"
+                  },
+                  "title": "Response Fetch Beneficiaries Payout Category  Category Id  Beneficiaries Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payout-beneficiary": {
+      "post": {
+        "tags": ["Payout beneficiaries"],
+        "summary": "Create Beneficiary",
+        "operationId": "create_beneficiary_payout_beneficiary_post",
+        "security": [{ "HTTPBearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayoutBeneficiaryCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutBeneficiaryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Payout beneficiaries"],
+        "summary": "List Beneficiaries",
+        "operationId": "list_beneficiaries_payout_beneficiary_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "default": 10,
+              "title": "Size"
+            }
+          },
+          {
+            "name": "category_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "integer" }, { "type": "null" }],
+              "title": "Category Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payout-beneficiary/{beneficiary_id}": {
+      "get": {
+        "tags": ["Payout beneficiaries"],
+        "summary": "Get Beneficiary",
+        "operationId": "get_beneficiary_payout_beneficiary__beneficiary_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "beneficiary_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Beneficiary Id" }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutBeneficiaryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Payout beneficiaries"],
+        "summary": "Update Beneficiary",
+        "operationId": "update_beneficiary_payout_beneficiary__beneficiary_id__put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "beneficiary_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Beneficiary Id" }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayoutBeneficiaryUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutBeneficiaryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Payout beneficiaries"],
+        "summary": "Delete Beneficiary",
+        "operationId": "delete_beneficiary_payout_beneficiary__beneficiary_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "beneficiary_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Beneficiary Id" }
+          },
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Merchant Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merchant-transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Merchant Transactions",
+        "description": "Get merchant transactions with optional filters for wallet, currency, and type.",
+        "operationId": "get_merchant_transactions_merchant_transactions_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "default": 10,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "default": "test"
+            }
+          },
+          {
+            "name": "wallet_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Filter by wallet ID",
+              "title": "Wallet Id"
+            },
+            "description": "Filter by wallet ID"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by currency",
+              "title": "Currency"
+            },
+            "description": "Filter by currency"
+          },
+          {
+            "name": "transaction_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionType",
+              "description": "Filter by transaction type"
+            },
+            "description": "Filter by transaction type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checkout-reference": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Checkout Reference",
+        "description": "Get transaction by reference and datetime",
+        "operationId": "get_checkout_reference_checkout_reference_get",
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Reference" }
+          },
+          {
+            "name": "datetime",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "title": "Datetime" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TransactionResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payout": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Payout",
+        "operationId": "payout_payout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemas__transactionSchema__PayoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/bulk-payout": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Bulk Payout",
+        "operationId": "bulk_payout_bulk_payout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/BulkPayoutRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/generate-payment-link": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Generate Payment Url",
+        "operationId": "generate_payment_url_generate_payment_link_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PaymentLinkRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/bulk-payouts": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Merchant Transactions",
+        "operationId": "get_merchant_transactions_bulk_payouts_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "default": 10,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "default": "test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bulk-payout/{reference}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Bulk Payout Detail",
+        "operationId": "get_bulk_payout_detail_bulk_payout__reference__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Reference" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate-receipt": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Generate Receipt",
+        "operationId": "generate_receipt_generate_receipt_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateReceiptRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/wallet-transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Wallet Transactions",
+        "description": "Get all transactions for a specific wallet with pagination.",
+        "operationId": "get_wallet_transactions_wallet_transactions_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Wallet ID",
+              "title": "Wallet Id"
+            },
+            "description": "Wallet ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "default": 10,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "transaction_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/TransactionType",
+              "description": "Filter by transaction type"
+            },
+            "description": "Filter by transaction type"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet-transaction-stats": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Wallet Transaction Statistics",
+        "description": "Get transaction statistics for a specific wallet.",
+        "operationId": "get_wallet_transaction_statistics_wallet_transaction_stats_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Wallet ID",
+              "title": "Wallet Id"
+            },
+            "description": "Wallet ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merchant-transactions-by-wallet": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Merchant Transactions Grouped By Wallet",
+        "description": "Get merchant transactions grouped by wallet.",
+        "operationId": "get_merchant_transactions_grouped_by_wallet_merchant_transactions_by_wallet_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "merchant_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Merchant ID",
+              "title": "Merchant Id"
+            },
+            "description": "Merchant ID"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TokenMode",
+              "description": "Mode: test or live"
+            },
+            "description": "Mode: test or live"
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter by currency",
+              "title": "Currency"
+            },
+            "description": "Filter by currency"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet-revenue-trends": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get Wallet Revenue Trends",
+        "description": "Get revenue trends for a wallet over time, grouped by day/week/month/year.",
+        "operationId": "get_wallet_revenue_trends_wallet_revenue_trends_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "wallet_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "Wallet ID",
+              "title": "Wallet Id"
+            },
+            "description": "Wallet ID"
+          },
+          {
+            "name": "group_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/GroupBy",
+              "description": "Group by: day, week, month, year",
+              "default": "day"
+            },
+            "description": "Group by: day, week, month, year"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Start date (ISO format)",
+              "title": "Start Date"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "End date (ISO format)",
+              "title": "End Date"
+            },
+            "description": "End date (ISO format)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/initiate": {
+      "post": {
+        "tags": ["V1"],
+        "summary": "Initiate Checkout",
+        "operationId": "initiate_checkout_api_v1_initiate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitializeTransactionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, e.g., duplicate transaction reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeErrorResponse"
+                },
+                "examples": {
+                  "duplicate_reference": {
+                    "summary": "Duplicate reference",
+                    "value": {
+                      "detail": "Transaction reference not unique for merchant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid payment secret key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeErrorResponse"
+                },
+                "examples": {
+                  "invalid_token": {
+                    "summary": "Invalid token",
+                    "value": { "detail": "Invalid payment secret key provided" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Merchant not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeErrorResponse"
+                },
+                "examples": {
+                  "merchant_not_found": {
+                    "summary": "Merchant not found",
+                    "value": { "detail": "Merchant not found" }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v2/initiate": {
+      "post": {
+        "tags": ["V1"],
+        "summary": "Initiate Checkout V2",
+        "operationId": "initiate_checkout_V2_api_v2_initiate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitializeTransactionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, e.g., duplicate transaction reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeErrorResponse"
+                },
+                "examples": {
+                  "duplicate_reference": {
+                    "summary": "Duplicate reference",
+                    "value": {
+                      "detail": "Transaction reference not unique for merchant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid payment secret key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeErrorResponse"
+                },
+                "examples": {
+                  "invalid_token": {
+                    "summary": "Invalid token",
+                    "value": { "detail": "Invalid payment secret key provided" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Merchant not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitializeErrorResponse"
+                },
+                "examples": {
+                  "merchant_not_found": {
+                    "summary": "Merchant not found",
+                    "value": { "detail": "Merchant not found" }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/payout": {
+      "post": {
+        "tags": ["V1"],
+        "summary": "Payout",
+        "operationId": "payout_api_v1_payout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/schemas__v1Schema__PayoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PayoutResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, e.g., insufficient balance or duplicate reference",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutErrorResponse"
+                },
+                "examples": {
+                  "insufficient_balance": {
+                    "summary": "Insufficient balance",
+                    "value": { "detail": "Insufficient balance" }
+                  },
+                  "duplicate_reference": {
+                    "summary": "Duplicate reference",
+                    "value": {
+                      "detail": "Transaction reference not unique for merchant"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid token or bank code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutErrorResponse"
+                },
+                "examples": {
+                  "invalid_token": {
+                    "summary": "Invalid token",
+                    "value": { "detail": "Invalid payment secret key" }
+                  },
+                  "invalid_bank_code": {
+                    "summary": "Invalid bank code",
+                    "value": { "detail": "Invalid bank code provided" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Merchant not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutErrorResponse"
+                },
+                "examples": {
+                  "merchant_not_found": {
+                    "summary": "Merchant not found",
+                    "value": { "detail": "Merchant not found" }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - invalid account",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_account": {
+                    "summary": "Invalid account conflict",
+                    "value": {
+                      "status": false,
+                      "message": "Invalid account.",
+                      "data": {
+                        "amount": 5000,
+                        "fee": 50,
+                        "reference": "PAYOUT_12346",
+                        "customer": {
+                          "email": "user@example.com",
+                          "name": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid request, e.g., amount less than minimum 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutErrorResponse"
+                },
+                "examples": {
+                  "amount_too_low": {
+                    "summary": "Amount less than minimum",
+                    "value": { "detail": "Amount must be greater than 200" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/transactions/verify": {
+      "get": {
+        "tags": ["V1"],
+        "summary": "Verify",
+        "operationId": "verify_api_v1_transactions_verify_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Transaction reference",
+              "title": "Reference"
+            },
+            "description": "Transaction reference"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyTransactionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request or verification failed",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_ref": {
+                    "summary": "Invalid reference format",
+                    "value": {
+                      "detail": "Verification failed: invalid reference format"
+                    }
+                  }
+                },
+                "schema": { "$ref": "#/components/schemas/VerifyErrorResponse" }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid payment secret key",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "invalid_token": {
+                    "summary": "Invalid token",
+                    "value": { "detail": "Invalid payment secret key provided" }
+                  }
+                },
+                "schema": { "$ref": "#/components/schemas/VerifyErrorResponse" }
+              }
+            }
+          },
+          "404": {
+            "description": "Merchant or transaction not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "merchant_not_found": {
+                    "summary": "Merchant not found",
+                    "value": { "detail": "Merchant not found" }
+                  },
+                  "transaction_not_found": {
+                    "summary": "Transaction not found",
+                    "value": { "detail": "Transaction not found" }
+                  },
+                  "test_mode_error": {
+                    "summary": "Test mode cannot see live transaction",
+                    "value": {
+                      "detail": "Test domain can only see transactions in test mode"
+                    }
+                  }
+                },
+                "schema": { "$ref": "#/components/schemas/VerifyErrorResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/banks": {
+      "get": {
+        "tags": ["V1"],
+        "summary": "Get Banks",
+        "operationId": "get_banks_banks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/cryptos": {
+      "get": {
+        "tags": ["V1"],
+        "summary": "Get Cryptos",
+        "operationId": "get_cryptos_cryptos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/CryptoDetail" },
+                  "type": "array",
+                  "title": "Response Get Cryptos Cryptos Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/complete": {
+      "post": {
+        "tags": ["V2 Checkout"],
+        "summary": "Complete Checkout V2",
+        "operationId": "complete_checkout_v2_api_v2_complete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteTransactionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/complete/authorize": {
+      "post": {
+        "tags": ["V2 Checkout"],
+        "summary": "Authorize Mobile Money Checkout",
+        "description": "Authorize mobile money transaction with OTP/PIN\nThis endpoint is called after the initial mobile money charge has been initiated\nand the user has received an OTP or PIN prompt",
+        "operationId": "authorize_mobile_money_checkout_api_v2_complete_authorize_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AuthroizeMmRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook/test-signature": {
+      "post": {
+        "tags": ["Webhooks", "Webhooks"],
+        "summary": "Test Webhook Signature",
+        "description": "Generate a signed webhook payload using your full secret key and verify it —\nexactly as your merchant server should do.\n\nPass your full secret token (e.g. aggsk_test_xxxxx_merchant_id).\nThe raw HMAC secret is extracted automatically.\n\nReturns the payload string, the signature to expect in X-AGGREGATOR-SIGNATURE,\nand a tamper test confirming a wrong secret is rejected.",
+        "operationId": "test_webhook_signature_webhook_test_signature_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WebhookTestRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivateMerchantRequest": {
+        "properties": {
+          "merchant_id": { "type": "string", "title": "Merchant Id" }
+        },
+        "type": "object",
+        "required": ["merchant_id"],
+        "title": "ActivateMerchantRequest"
+      },
+      "AdminLoginRequest": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "password": { "type": "string", "title": "Password" }
+        },
+        "type": "object",
+        "required": ["email", "password"],
+        "title": "AdminLoginRequest"
+      },
+      "AdminResponse": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "is_active": { "type": "boolean", "title": "Is Active" }
+        },
+        "type": "object",
+        "required": ["name", "email", "is_active"],
+        "title": "AdminResponse"
+      },
+      "AmountType": {
+        "type": "string",
+        "enum": ["static", "dynamic"],
+        "title": "AmountType"
+      },
+      "AuthroizeMmRequest": {
+        "properties": {
+          "reference": { "type": "string", "title": "Reference" },
+          "datetime": { "type": "string", "title": "Datetime" },
+          "otp": { "type": "string", "title": "Otp" }
+        },
+        "type": "object",
+        "required": ["reference", "datetime", "otp"],
+        "title": "AuthroizeMmRequest"
+      },
+      "BalancesByCurrencyResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "balances": {
+            "additionalProperties": { "type": "number" },
+            "type": "object",
+            "title": "Balances"
+          },
+          "total_currencies": { "type": "integer", "title": "Total Currencies" }
+        },
+        "type": "object",
+        "required": ["mode", "balances", "total_currencies"],
+        "title": "BalancesByCurrencyResponse",
+        "description": "Response for wallet balances grouped by currency"
+      },
+      "BulkPayoutCustomerDetails": {
+        "properties": {
+          "account_number": { "type": "string", "title": "Account Number" },
+          "bank_slug": { "type": "string", "title": "Bank Slug" },
+          "email": {
+            "anyOf": [
+              { "type": "string", "format": "email" },
+              { "type": "null" }
+            ],
+            "title": "Email"
+          },
+          "whatsapp_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Whatsapp Number",
+            "examples": ["+2348012345678"]
+          },
+          "phone_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone Number",
+            "examples": ["+2348012345678"]
+          }
+        },
+        "type": "object",
+        "required": ["account_number", "bank_slug"],
+        "title": "BulkPayoutCustomerDetails"
+      },
+      "BulkPayoutItem": {
+        "properties": {
+          "merchant_id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Merchant Id"
+          },
+          "amount": { "type": "number", "title": "Amount" },
+          "currency": {
+            "$ref": "#/components/schemas/TransactionCurrency",
+            "default": "NGN"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/BulkPayoutCustomerDetails"
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          }
+        },
+        "type": "object",
+        "required": ["amount", "customer"],
+        "title": "BulkPayoutItem"
+      },
+      "BulkPayoutRequest": {
+        "properties": {
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "mode": {
+            "$ref": "#/components/schemas/TokenMode",
+            "default": "test"
+          },
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name",
+            "examples": ["Farmer's market employee payroll"]
+          },
+          "data": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/BulkPayoutItem" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ],
+            "title": "Data"
+          },
+          "category_ids": {
+            "anyOf": [
+              { "items": { "type": "integer" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Category Ids"
+          },
+          "beneficiary_ids": {
+            "anyOf": [
+              { "items": { "type": "integer" }, "type": "array" },
+              { "type": "null" }
+            ],
+            "title": "Beneficiary Ids"
+          }
+        },
+        "type": "object",
+        "required": ["merchant_id"],
+        "title": "BulkPayoutRequest"
+      },
+      "ChangePasswordRequest": {
+        "properties": {
+          "current_password": { "type": "string", "title": "Current Password" },
+          "new_password": { "type": "string", "title": "New Password" }
+        },
+        "type": "object",
+        "required": ["current_password", "new_password"],
+        "title": "ChangePasswordRequest"
+      },
+      "ChannelMetrics": {
+        "properties": {
+          "channel": { "type": "string", "title": "Channel" },
+          "total_revenue": { "type": "number", "title": "Total Revenue" },
+          "transaction_count": {
+            "type": "integer",
+            "title": "Transaction Count"
+          },
+          "success_rate": { "type": "number", "title": "Success Rate" }
+        },
+        "type": "object",
+        "required": [
+          "channel",
+          "total_revenue",
+          "transaction_count",
+          "success_rate"
+        ],
+        "title": "ChannelMetrics",
+        "description": "Metrics for a specific payment channel"
+      },
+      "ChargesByCurrencyResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "charges": {
+            "additionalProperties": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Charges"
+          },
+          "total_currencies": { "type": "integer", "title": "Total Currencies" }
+        },
+        "type": "object",
+        "required": ["mode", "charges", "total_currencies"],
+        "title": "ChargesByCurrencyResponse",
+        "description": "Response for charges grouped by currency"
+      },
+      "CheckoutRequest": {
+        "properties": {
+          "amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Amount"
+          },
+          "customer_email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Customer Email"
+          },
+          "currency": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Currency",
+            "default": "NGN"
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          },
+          "channel": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Channel"
+          }
+        },
+        "type": "object",
+        "title": "CheckoutRequest"
+      },
+      "CompleteTransactionRequest": {
+        "properties": {
+          "reference": { "type": "string", "title": "Reference" },
+          "datetime": { "type": "string", "title": "Datetime" },
+          "channel": { "$ref": "#/components/schemas/TransactionChannel" },
+          "mobile_money_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Mobile Money Number"
+          }
+        },
+        "type": "object",
+        "required": ["reference", "datetime", "channel"],
+        "title": "CompleteTransactionRequest"
+      },
+      "CryptoDetail": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "Unique identifier for the cryptocurrency",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of the cryptocurrency",
+            "example": "Bitcoin"
+          },
+          "slug": {
+            "type": "string",
+            "title": "Slug",
+            "description": "A short identifier for the cryptocurrency",
+            "example": "btc"
+          },
+          "blockchain": {
+            "type": "string",
+            "title": "Blockchain",
+            "description": "The blockchain network it belongs to",
+            "example": "bitcoin"
+          },
+          "standard": {
+            "type": "string",
+            "title": "Standard",
+            "description": "Token standard (e.g., ERC20, native)",
+            "example": "native"
+          },
+          "symbol": {
+            "type": "string",
+            "title": "Symbol",
+            "description": "The symbol of the cryptocurrency",
+            "example": "BTC"
+          }
+        },
+        "type": "object",
+        "required": ["id", "name", "slug", "blockchain", "standard", "symbol"],
+        "title": "CryptoDetail"
+      },
+      "CurrencyMetrics": {
+        "properties": {
+          "currency": { "type": "string", "title": "Currency" },
+          "total_revenue": { "type": "number", "title": "Total Revenue" },
+          "transaction_count": {
+            "type": "integer",
+            "title": "Transaction Count"
+          },
+          "total_charges": { "type": "number", "title": "Total Charges" },
+          "net_revenue": { "type": "number", "title": "Net Revenue" },
+          "average_transaction_value": {
+            "type": "number",
+            "title": "Average Transaction Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "currency",
+          "total_revenue",
+          "transaction_count",
+          "total_charges",
+          "net_revenue",
+          "average_transaction_value"
+        ],
+        "title": "CurrencyMetrics",
+        "description": "Metrics for a specific currency"
+      },
+      "Customer": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": ["email"],
+        "title": "Customer"
+      },
+      "CustomerAnalyticsResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "start_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "End Date"
+          },
+          "total_customers": { "type": "integer", "title": "Total Customers" },
+          "active_customers": {
+            "type": "integer",
+            "title": "Active Customers"
+          },
+          "new_customers": { "type": "integer", "title": "New Customers" },
+          "top_customers": {
+            "items": { "$ref": "#/components/schemas/TopCustomer" },
+            "type": "array",
+            "title": "Top Customers"
+          },
+          "repeat_customer_rate": {
+            "type": "number",
+            "title": "Repeat Customer Rate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "start_date",
+          "end_date",
+          "total_customers",
+          "active_customers",
+          "new_customers",
+          "top_customers",
+          "repeat_customer_rate"
+        ],
+        "title": "CustomerAnalyticsResponse",
+        "description": "Customer analytics response"
+      },
+      "CustomerModel": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "email": {
+            "anyOf": [
+              { "type": "string", "format": "email" },
+              { "type": "string" }
+            ],
+            "title": "Email"
+          }
+        },
+        "type": "object",
+        "required": ["email"],
+        "title": "CustomerModel"
+      },
+      "CustomerResponse": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "email": {
+            "anyOf": [
+              { "type": "string", "format": "email" },
+              { "type": "string" }
+            ],
+            "title": "Email"
+          }
+        },
+        "type": "object",
+        "required": ["email"],
+        "title": "CustomerResponse"
+      },
+      "DashboardSummaryResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "period": { "type": "string", "title": "Period" },
+          "revenue_metrics": { "$ref": "#/components/schemas/RevenueMetrics" },
+          "transaction_breakdown": {
+            "$ref": "#/components/schemas/TransactionBreakdown"
+          },
+          "top_currency": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/CurrencyMetrics" },
+              { "type": "null" }
+            ]
+          },
+          "wallet_count": { "type": "integer", "title": "Wallet Count" },
+          "total_balance": { "type": "number", "title": "Total Balance" },
+          "pending_payouts": { "type": "integer", "title": "Pending Payouts" },
+          "pending_payout_amount": {
+            "type": "number",
+            "title": "Pending Payout Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "period",
+          "revenue_metrics",
+          "transaction_breakdown",
+          "top_currency",
+          "wallet_count",
+          "total_balance",
+          "pending_payouts",
+          "pending_payout_amount"
+        ],
+        "title": "DashboardSummaryResponse",
+        "description": "Comprehensive dashboard summary"
+      },
+      "DayOfWeekDistribution": {
+        "properties": {
+          "day": { "type": "string", "title": "Day" },
+          "transaction_count": {
+            "type": "integer",
+            "title": "Transaction Count"
+          },
+          "total_revenue": { "type": "number", "title": "Total Revenue" }
+        },
+        "type": "object",
+        "required": ["day", "transaction_count", "total_revenue"],
+        "title": "DayOfWeekDistribution",
+        "description": "Transaction distribution by day of week"
+      },
+      "Destination": {
+        "properties": {
+          "bank_code": {
+            "type": "string",
+            "title": "Bank Code",
+            "description": "Bank code of the destination bank",
+            "example": "044"
+          },
+          "account_number": {
+            "type": "string",
+            "title": "Account Number",
+            "description": "Destination bank account number",
+            "example": "0123456789"
+          }
+        },
+        "type": "object",
+        "required": ["bank_code", "account_number"],
+        "title": "Destination"
+      },
+      "ForgotPasswordRequest": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" }
+        },
+        "type": "object",
+        "required": ["email"],
+        "title": "ForgotPasswordRequest"
+      },
+      "GenerateReceiptRequest": {
+        "properties": {
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "reference": { "type": "string", "title": "Reference" }
+        },
+        "type": "object",
+        "required": ["merchant_id", "reference"],
+        "title": "GenerateReceiptRequest"
+      },
+      "GroupBy": {
+        "type": "string",
+        "enum": ["day", "week", "month"],
+        "title": "GroupBy"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HourlyDistribution": {
+        "properties": {
+          "hour": { "type": "integer", "title": "Hour" },
+          "transaction_count": {
+            "type": "integer",
+            "title": "Transaction Count"
+          },
+          "total_revenue": { "type": "number", "title": "Total Revenue" }
+        },
+        "type": "object",
+        "required": ["hour", "transaction_count", "total_revenue"],
+        "title": "HourlyDistribution",
+        "description": "Transaction distribution by hour"
+      },
+      "InitializeErrorResponse": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "Error message describing what went wrong",
+            "example": "Error message"
+          }
+        },
+        "type": "object",
+        "required": ["detail"],
+        "title": "InitializeErrorResponse"
+      },
+      "InitializeTransactionRequest": {
+        "properties": {
+          "customer": { "$ref": "#/components/schemas/Customer" },
+          "amount": { "type": "number", "title": "Amount" },
+          "currency": {
+            "$ref": "#/components/schemas/TransactionCurrency",
+            "description": "Currency in lower case"
+          },
+          "reference": { "type": "string", "title": "Reference" },
+          "redirect_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Redirect Url"
+          },
+          "notification_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Notification Url"
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          },
+          "mode": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/TransactionChannel" },
+              { "type": "null" }
+            ]
+          },
+          "metadata": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": ["customer", "amount", "currency", "reference"],
+        "title": "InitializeTransactionRequest"
+      },
+      "InitializeTransactionResponse": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status",
+            "description": "Indicates if the transaction initialization was successful",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable message",
+            "example": "Charge created successfully"
+          },
+          "reference": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reference",
+            "description": "Transaction reference",
+            "example": "TXN_123456"
+          },
+          "checkout_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Checkout Url",
+            "description": "URL for customer to complete payment",
+            "example": "https://checkout.payment.com/tx/123"
+          }
+        },
+        "type": "object",
+        "required": ["status", "message"],
+        "title": "InitializeTransactionResponse"
+      },
+      "LinkMode": {
+        "type": "string",
+        "enum": ["live", "test"],
+        "title": "LinkMode"
+      },
+      "LinkType": {
+        "type": "string",
+        "enum": ["one_time", "subgroup", "recurring"],
+        "title": "LinkType"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "password": { "type": "string", "title": "Password" }
+        },
+        "type": "object",
+        "required": ["email", "password"],
+        "title": "LoginRequest"
+      },
+      "LoginResponse": {
+        "properties": {
+          "status": { "type": "boolean", "title": "Status" },
+          "message": { "type": "string", "title": "Message" },
+          "data": { "$ref": "#/components/schemas/AdminResponse" },
+          "access_token": { "type": "string", "title": "Access Token" },
+          "token_type": { "type": "string", "title": "Token Type" }
+        },
+        "type": "object",
+        "required": ["status", "message", "data", "access_token", "token_type"],
+        "title": "LoginResponse"
+      },
+      "MerchantAmountsResponse": {
+        "properties": {
+          "merchant": { "$ref": "#/components/schemas/MerchantResponse" },
+          "merchant_processor_charges": {
+            "type": "number",
+            "title": "Merchant Processor Charges"
+          },
+          "merchant_system_charges": {
+            "type": "number",
+            "title": "Merchant System Charges"
+          },
+          "profit": { "type": "number", "title": "Profit" }
+        },
+        "type": "object",
+        "required": [
+          "merchant",
+          "merchant_processor_charges",
+          "merchant_system_charges",
+          "profit"
+        ],
+        "title": "MerchantAmountsResponse"
+      },
+      "MerchantCreateRequest": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "role": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Role"
+          }
+        },
+        "type": "object",
+        "required": ["name", "email"],
+        "title": "MerchantCreateRequest"
+      },
+      "MerchantGetRequest": {
+        "properties": {
+          "id": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Id"
+          },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          }
+        },
+        "type": "object",
+        "title": "MerchantGetRequest"
+      },
+      "MerchantResponse": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "name": { "type": "string", "title": "Name" },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "is_verified": { "type": "boolean", "title": "Is Verified" },
+          "is_active": { "type": "boolean", "title": "Is Active" },
+          "joined_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Joined At"
+          },
+          "test_balance": { "type": "number", "title": "Test Balance" },
+          "live_balance": { "type": "number", "title": "Live Balance" },
+          "percentage_charge": {
+            "type": "number",
+            "title": "Percentage Charge"
+          },
+          "flat_charge": { "type": "number", "title": "Flat Charge" },
+          "role": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Role"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "email",
+          "is_verified",
+          "is_active",
+          "joined_at",
+          "test_balance",
+          "live_balance",
+          "percentage_charge",
+          "flat_charge"
+        ],
+        "title": "MerchantResponse"
+      },
+      "PaymentLinkCreateRequest": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "example": "Support My Project"
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description",
+            "example": "Donation link for open source work"
+          },
+          "amount_type": {
+            "$ref": "#/components/schemas/AmountType",
+            "example": "static"
+          },
+          "mode": {
+            "$ref": "#/components/schemas/LinkMode",
+            "example": "test"
+          },
+          "type": {
+            "$ref": "#/components/schemas/LinkType",
+            "example": "recurring"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/TransactionCurrency",
+            "example": "NGN"
+          },
+          "amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Amount",
+            "example": 1000.0
+          },
+          "max_uses": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Max Uses",
+            "example": 10
+          },
+          "redirect_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Redirect Url",
+            "example": "https://example.com/thank-you"
+          },
+          "expires_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Expires At"
+          },
+          "metadata": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Metadata",
+            "example": "campaign=donation2025"
+          },
+          "merchant_id": {
+            "type": "string",
+            "title": "Merchant Id",
+            "example": "merchant_123"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "amount_type",
+          "mode",
+          "type",
+          "currency",
+          "merchant_id"
+        ],
+        "title": "PaymentLinkCreateRequest"
+      },
+      "PaymentLinkDetailResponse": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "reference": { "type": "string", "title": "Reference" },
+          "title": { "type": "string", "title": "Title" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "url": { "type": "string", "title": "Url" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "amount_type": { "$ref": "#/components/schemas/AmountType" },
+          "mode": { "$ref": "#/components/schemas/LinkMode" },
+          "type": { "$ref": "#/components/schemas/LinkType" },
+          "currency": { "$ref": "#/components/schemas/TransactionCurrency" },
+          "amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Amount"
+          },
+          "max_uses": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Max Uses"
+          },
+          "current_uses": { "type": "integer", "title": "Current Uses" },
+          "redirect_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Redirect Url"
+          },
+          "expires_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Expires At"
+          },
+          "is_active": { "type": "boolean", "title": "Is Active" },
+          "created_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          },
+          "transactions": {
+            "items": { "$ref": "#/components/schemas/TransactionResponse" },
+            "type": "array",
+            "title": "Transactions",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "reference",
+          "title",
+          "merchant_id",
+          "url",
+          "description",
+          "amount_type",
+          "mode",
+          "type",
+          "currency",
+          "amount",
+          "max_uses",
+          "current_uses",
+          "redirect_url",
+          "expires_at",
+          "is_active",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PaymentLinkDetailResponse",
+        "description": "Detailed view including transactions"
+      },
+      "PaymentLinkRequest": {
+        "properties": {
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "amount": { "type": "number", "title": "Amount" },
+          "currency": {
+            "$ref": "#/components/schemas/TransactionCurrency",
+            "default": "NGN"
+          },
+          "customer": { "$ref": "#/components/schemas/CustomerResponse" },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          },
+          "processor": { "$ref": "#/components/schemas/TransactionProcessor" },
+          "mode": { "$ref": "#/components/schemas/TokenMode" }
+        },
+        "type": "object",
+        "required": ["merchant_id", "amount", "customer", "processor", "mode"],
+        "title": "PaymentLinkRequest"
+      },
+      "PaymentLinkResponse": {
+        "properties": {
+          "id": { "type": "string", "title": "Id" },
+          "reference": { "type": "string", "title": "Reference" },
+          "title": { "type": "string", "title": "Title" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "url": { "type": "string", "title": "Url" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "amount_type": { "$ref": "#/components/schemas/AmountType" },
+          "mode": { "$ref": "#/components/schemas/LinkMode" },
+          "type": { "$ref": "#/components/schemas/LinkType" },
+          "currency": { "$ref": "#/components/schemas/TransactionCurrency" },
+          "amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Amount"
+          },
+          "max_uses": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Max Uses"
+          },
+          "current_uses": { "type": "integer", "title": "Current Uses" },
+          "redirect_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Redirect Url"
+          },
+          "expires_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Expires At"
+          },
+          "is_active": { "type": "boolean", "title": "Is Active" },
+          "created_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "reference",
+          "title",
+          "merchant_id",
+          "url",
+          "description",
+          "amount_type",
+          "mode",
+          "type",
+          "currency",
+          "amount",
+          "max_uses",
+          "current_uses",
+          "redirect_url",
+          "expires_at",
+          "is_active",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PaymentLinkResponse"
+      },
+      "PaymentLinkUpdateRequest": {
+        "properties": {
+          "title": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Amount"
+          },
+          "max_uses": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Max Uses"
+          },
+          "redirect_url": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Redirect Url"
+          },
+          "expires_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Expires At"
+          },
+          "metadata": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Metadata"
+          },
+          "is_active": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Is Active"
+          }
+        },
+        "type": "object",
+        "title": "PaymentLinkUpdateRequest"
+      },
+      "PayoutAnalyticsResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "start_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "End Date"
+          },
+          "currency": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Currency"
+          },
+          "total_payouts": { "type": "number", "title": "Total Payouts" },
+          "payout_count": { "type": "integer", "title": "Payout Count" },
+          "successful_payouts": {
+            "type": "integer",
+            "title": "Successful Payouts"
+          },
+          "failed_payouts": { "type": "integer", "title": "Failed Payouts" },
+          "pending_payouts": { "type": "integer", "title": "Pending Payouts" },
+          "total_payout_charges": {
+            "type": "number",
+            "title": "Total Payout Charges"
+          },
+          "average_payout_amount": {
+            "type": "number",
+            "title": "Average Payout Amount"
+          },
+          "time_series": {
+            "items": { "$ref": "#/components/schemas/TimeSeriesDataPoint" },
+            "type": "array",
+            "title": "Time Series"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "start_date",
+          "end_date",
+          "currency",
+          "total_payouts",
+          "payout_count",
+          "successful_payouts",
+          "failed_payouts",
+          "pending_payouts",
+          "total_payout_charges",
+          "average_payout_amount",
+          "time_series"
+        ],
+        "title": "PayoutAnalyticsResponse",
+        "description": "Payout analytics response"
+      },
+      "PayoutBeneficiaryCreate": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "bank_code": { "type": "string", "title": "Bank Code" },
+          "account_number": { "type": "string", "title": "Account Number" },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "phone_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone Number"
+          },
+          "whatsapp_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Whatsapp Number"
+          },
+          "default_amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Default Amount"
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          },
+          "category_id": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Category Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "bank_code",
+          "account_number",
+          "email",
+          "merchant_id"
+        ],
+        "title": "PayoutBeneficiaryCreate"
+      },
+      "PayoutBeneficiaryResponse": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "bank_code": { "type": "string", "title": "Bank Code" },
+          "account_number": { "type": "string", "title": "Account Number" },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "phone_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone Number"
+          },
+          "whatsapp_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Whatsapp Number"
+          },
+          "default_amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Default Amount"
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "category_id": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Category Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "bank_code",
+          "account_number",
+          "email",
+          "merchant_id",
+          "id",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PayoutBeneficiaryResponse"
+      },
+      "PayoutBeneficiaryUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Name"
+          },
+          "bank_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Bank Code"
+          },
+          "account_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Account Number"
+          },
+          "email": {
+            "anyOf": [
+              { "type": "string", "format": "email" },
+              { "type": "null" }
+            ],
+            "title": "Email"
+          },
+          "phone_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Phone Number"
+          },
+          "whatsapp_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Whatsapp Number"
+          },
+          "default_amount": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Default Amount"
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          },
+          "category_id": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Category Id"
+          }
+        },
+        "type": "object",
+        "title": "PayoutBeneficiaryUpdate"
+      },
+      "PayoutCategoryCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "examples": ["Vendors", "Employees", "Freelancers"]
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "merchant_id": { "type": "string", "title": "Merchant Id" }
+        },
+        "type": "object",
+        "required": ["name", "merchant_id"],
+        "title": "PayoutCategoryCreate"
+      },
+      "PayoutCategoryResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "examples": ["Vendors", "Employees", "Freelancers"]
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["name", "id", "merchant_id", "created_at", "updated_at"],
+        "title": "PayoutCategoryResponse"
+      },
+      "PayoutCustomerDetails": {
+        "properties": {
+          "account_number": { "type": "string", "title": "Account Number" },
+          "bank_code": { "type": "string", "title": "Bank Code" }
+        },
+        "type": "object",
+        "required": ["account_number", "bank_code"],
+        "title": "PayoutCustomerDetails"
+      },
+      "PayoutErrorResponse": {
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "title": "Status Code",
+            "description": "HTTP status code",
+            "examples": [400, 403, 404, 422]
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "Error message describing what went wrong",
+            "example": "Error message"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email",
+            "description": "Customer's email address",
+            "example": "customer@example.com"
+          }
+        },
+        "type": "object",
+        "required": ["status_code", "detail", "email"],
+        "title": "PayoutErrorResponse"
+      },
+      "PayoutResponse": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status",
+            "description": "Indicates if the payout was successful",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable message",
+            "example": "Payout processed successfully"
+          },
+          "data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Data",
+            "description": "Details of the payout including fees and customer information",
+            "example": {
+              "amount": 5000.0,
+              "customer": {
+                "email": "customer@example.com",
+                "name": "John Doe"
+              },
+              "fee": 50.0,
+              "reference": "PAYOUT_123456"
+            }
+          }
+        },
+        "type": "object",
+        "required": ["status", "message", "data"],
+        "title": "PayoutResponse"
+      },
+      "RevenueAnalyticsResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "start_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "End Date"
+          },
+          "currency": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Currency"
+          },
+          "revenue_metrics": { "$ref": "#/components/schemas/RevenueMetrics" },
+          "time_series": {
+            "items": { "$ref": "#/components/schemas/TimeSeriesDataPoint" },
+            "type": "array",
+            "title": "Time Series"
+          },
+          "currency_breakdown": {
+            "items": { "$ref": "#/components/schemas/CurrencyMetrics" },
+            "type": "array",
+            "title": "Currency Breakdown"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "start_date",
+          "end_date",
+          "currency",
+          "revenue_metrics",
+          "time_series",
+          "currency_breakdown"
+        ],
+        "title": "RevenueAnalyticsResponse",
+        "description": "Revenue analytics with time series"
+      },
+      "RevenueMetrics": {
+        "properties": {
+          "total_revenue": { "type": "number", "title": "Total Revenue" },
+          "total_transactions": {
+            "type": "integer",
+            "title": "Total Transactions"
+          },
+          "total_charges": { "type": "number", "title": "Total Charges" },
+          "net_revenue": { "type": "number", "title": "Net Revenue" },
+          "average_transaction_value": {
+            "type": "number",
+            "title": "Average Transaction Value"
+          },
+          "success_rate": { "type": "number", "title": "Success Rate" }
+        },
+        "type": "object",
+        "required": [
+          "total_revenue",
+          "total_transactions",
+          "total_charges",
+          "net_revenue",
+          "average_transaction_value",
+          "success_rate"
+        ],
+        "title": "RevenueMetrics",
+        "description": "Revenue metrics for a period"
+      },
+      "SystemBalanceByCurrencyResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "balances": {
+            "additionalProperties": { "type": "number" },
+            "type": "object",
+            "title": "Balances"
+          },
+          "total_currencies": {
+            "type": "integer",
+            "title": "Total Currencies"
+          },
+          "grand_total": { "type": "number", "title": "Grand Total" }
+        },
+        "type": "object",
+        "required": ["mode", "balances", "total_currencies", "grand_total"],
+        "title": "SystemBalanceByCurrencyResponse",
+        "description": "Response for system balance grouped by currency"
+      },
+      "TimeSeriesDataPoint": {
+        "properties": {
+          "date": { "type": "string", "title": "Date" },
+          "value": { "type": "number", "title": "Value" },
+          "count": { "type": "integer", "title": "Count" }
+        },
+        "type": "object",
+        "required": ["date", "value", "count"],
+        "title": "TimeSeriesDataPoint",
+        "description": "Single data point in time series"
+      },
+      "TokenMode": {
+        "type": "string",
+        "enum": ["live", "test"],
+        "title": "TokenMode"
+      },
+      "TopCustomer": {
+        "properties": {
+          "customer_email": { "type": "string", "title": "Customer Email" },
+          "total_spent": { "type": "number", "title": "Total Spent" },
+          "transaction_count": {
+            "type": "integer",
+            "title": "Transaction Count"
+          },
+          "last_transaction_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Transaction Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "customer_email",
+          "total_spent",
+          "transaction_count",
+          "last_transaction_date"
+        ],
+        "title": "TopCustomer",
+        "description": "Top customer by transaction volume"
+      },
+      "TotalAmountsResponse": {
+        "properties": {
+          "processor_charges": {
+            "type": "number",
+            "title": "Processor Charges"
+          },
+          "system_charges": { "type": "number", "title": "System Charges" },
+          "profit": { "type": "number", "title": "Profit" }
+        },
+        "type": "object",
+        "required": ["processor_charges", "system_charges", "profit"],
+        "title": "TotalAmountsResponse"
+      },
+      "TotalBalanceResponse": {
+        "properties": {
+          "test_balance": { "type": "number", "title": "Test Balance" },
+          "live_balance": { "type": "number", "title": "Live Balance" }
+        },
+        "type": "object",
+        "required": ["test_balance", "live_balance"],
+        "title": "TotalBalanceResponse"
+      },
+      "TransactionAnalyticsResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "start_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "End Date"
+          },
+          "currency": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Currency"
+          },
+          "transaction_breakdown": {
+            "$ref": "#/components/schemas/TransactionBreakdown"
+          },
+          "channel_breakdown": {
+            "items": { "$ref": "#/components/schemas/ChannelMetrics" },
+            "type": "array",
+            "title": "Channel Breakdown"
+          },
+          "time_series": {
+            "items": { "$ref": "#/components/schemas/TimeSeriesDataPoint" },
+            "type": "array",
+            "title": "Time Series"
+          },
+          "average_processing_time": {
+            "anyOf": [{ "type": "number" }, { "type": "null" }],
+            "title": "Average Processing Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "start_date",
+          "end_date",
+          "currency",
+          "transaction_breakdown",
+          "channel_breakdown",
+          "time_series",
+          "average_processing_time"
+        ],
+        "title": "TransactionAnalyticsResponse",
+        "description": "Transaction analytics"
+      },
+      "TransactionBreakdown": {
+        "properties": {
+          "successful": { "type": "integer", "title": "Successful" },
+          "pending": { "type": "integer", "title": "Pending" },
+          "failed": { "type": "integer", "title": "Failed" },
+          "total": { "type": "integer", "title": "Total" }
+        },
+        "type": "object",
+        "required": ["successful", "pending", "failed", "total"],
+        "title": "TransactionBreakdown",
+        "description": "Transaction breakdown by status"
+      },
+      "TransactionChannel": {
+        "type": "string",
+        "enum": ["card", "bank_transfer", "crypto", "mobile_money"],
+        "title": "TransactionChannel"
+      },
+      "TransactionCurrency": {
+        "type": "string",
+        "enum": [
+          "NGN",
+          "KES",
+          "GES",
+          "XAF",
+          "XOF",
+          "EGP",
+          "TZS",
+          "BTC",
+          "ETH",
+          "USDT",
+          "SOL"
+        ],
+        "title": "TransactionCurrency"
+      },
+      "TransactionData": {
+        "properties": {
+          "domain": {
+            "type": "string",
+            "title": "Domain",
+            "description": "Transaction domain/mode",
+            "example": "TEST"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "description": "Transaction type",
+            "example": "PAYMENT"
+          },
+          "amount": {
+            "type": "number",
+            "title": "Amount",
+            "description": "Transaction amount",
+            "example": 5000.0
+          },
+          "fee": {
+            "type": "number",
+            "title": "Fee",
+            "description": "Transaction fee",
+            "example": 50.0
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "Currency code in ISO format",
+            "example": "NGN"
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration",
+            "description": "Optional narration",
+            "example": "Payment for order 123"
+          },
+          "metadata": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Metadata",
+            "description": "Custom metadata",
+            "example": { "order_id": "123" }
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At",
+            "description": "Timestamp when transaction was created",
+            "example": "2025-09-17T12:00:00Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At",
+            "description": "Timestamp when transaction was last updated",
+            "example": "2025-09-17T12:05:00Z"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer",
+            "description": "Customer details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "domain",
+          "type",
+          "amount",
+          "fee",
+          "currency",
+          "created_at",
+          "updated_at",
+          "customer"
+        ],
+        "title": "TransactionData"
+      },
+      "TransactionPatternResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "start_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "End Date"
+          },
+          "hourly_distribution": {
+            "items": { "$ref": "#/components/schemas/HourlyDistribution" },
+            "type": "array",
+            "title": "Hourly Distribution"
+          },
+          "day_of_week_distribution": {
+            "items": { "$ref": "#/components/schemas/DayOfWeekDistribution" },
+            "type": "array",
+            "title": "Day Of Week Distribution"
+          },
+          "peak_hour": { "type": "integer", "title": "Peak Hour" },
+          "peak_day": { "type": "string", "title": "Peak Day" },
+          "average_daily_transactions": {
+            "type": "number",
+            "title": "Average Daily Transactions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "start_date",
+          "end_date",
+          "hourly_distribution",
+          "day_of_week_distribution",
+          "peak_hour",
+          "peak_day",
+          "average_daily_transactions"
+        ],
+        "title": "TransactionPatternResponse",
+        "description": "Transaction pattern analytics"
+      },
+      "TransactionProcessor": {
+        "type": "string",
+        "enum": ["fltw", "kora", "pstk"],
+        "title": "TransactionProcessor"
+      },
+      "TransactionResponse": {
+        "properties": {
+          "id": { "type": "integer", "title": "Id" },
+          "type": {
+            "anyOf": [
+              { "$ref": "#/components/schemas/TransactionType" },
+              { "type": "null" }
+            ]
+          },
+          "mode": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Mode"
+          },
+          "reference": { "type": "string", "title": "Reference" },
+          "status": { "$ref": "#/components/schemas/TransactionStatus" },
+          "currency": { "$ref": "#/components/schemas/TransactionCurrency" },
+          "amount": { "type": "number", "title": "Amount" },
+          "charge": { "type": "number", "title": "Charge" },
+          "processor_reference": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Processor Reference"
+          },
+          "customer": { "$ref": "#/components/schemas/CustomerModel" },
+          "details": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Details"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "mode",
+          "reference",
+          "status",
+          "currency",
+          "amount",
+          "charge",
+          "customer",
+          "details",
+          "created_at"
+        ],
+        "title": "TransactionResponse"
+      },
+      "TransactionStatus": {
+        "type": "string",
+        "enum": ["pending", "success", "failed", "refunded", "abandoned"],
+        "title": "TransactionStatus"
+      },
+      "TransactionType": {
+        "type": "string",
+        "enum": ["credit", "debit"],
+        "title": "TransactionType"
+      },
+      "UserAddRequest": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "role": { "$ref": "#/components/schemas/UserRole" }
+        },
+        "type": "object",
+        "required": ["email", "merchant_id", "role"],
+        "title": "UserAddRequest"
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": ["admin", "owner", "developer", "operations"],
+        "title": "UserRole"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      },
+      "VerifyErrorResponse": {
+        "properties": {
+          "status_code": {
+            "type": "integer",
+            "title": "Status Code",
+            "description": "HTTP status code",
+            "example": 404
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "Error message describing what went wrong",
+            "example": "Transaction not found"
+          }
+        },
+        "type": "object",
+        "required": ["status_code", "detail"],
+        "title": "VerifyErrorResponse"
+      },
+      "VerifyForgotPasswordRequest": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "new_password": { "type": "string", "title": "New Password" },
+          "token": { "type": "string", "title": "Token" }
+        },
+        "type": "object",
+        "required": ["email", "new_password", "token"],
+        "title": "VerifyForgotPasswordRequest"
+      },
+      "VerifyLoginOtpRequest": {
+        "properties": {
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "password": { "type": "string", "title": "Password" },
+          "otp": { "type": "string", "title": "Otp" }
+        },
+        "type": "object",
+        "required": ["email", "password", "otp"],
+        "title": "VerifyLoginOtpRequest"
+      },
+      "VerifySignupOtpRequest": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "email": { "type": "string", "format": "email", "title": "Email" },
+          "password": { "type": "string", "title": "Password" },
+          "otp": { "type": "string", "title": "Otp" }
+        },
+        "type": "object",
+        "required": ["name", "email", "password", "otp"],
+        "title": "VerifySignupOtpRequest"
+      },
+      "VerifyTransactionRequest": {
+        "properties": {
+          "reference": { "type": "string", "title": "Reference" },
+          "customer_email": { "type": "string", "title": "Customer Email" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" }
+        },
+        "type": "object",
+        "required": ["reference", "customer_email", "merchant_id"],
+        "title": "VerifyTransactionRequest"
+      },
+      "VerifyTransactionResponse": {
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "title": "Status",
+            "description": "Indicates if verification was successful",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable message",
+            "example": "Verification successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/TransactionData",
+            "description": "Details of the verified transaction"
+          }
+        },
+        "type": "object",
+        "required": ["status", "message", "data"],
+        "title": "VerifyTransactionResponse"
+      },
+      "WalletAnalytics": {
+        "properties": {
+          "wallet_id": { "type": "integer", "title": "Wallet Id" },
+          "currency": { "type": "string", "title": "Currency" },
+          "current_balance": { "type": "number", "title": "Current Balance" },
+          "total_credits": { "type": "number", "title": "Total Credits" },
+          "total_debits": { "type": "number", "title": "Total Debits" },
+          "credit_count": { "type": "integer", "title": "Credit Count" },
+          "debit_count": { "type": "integer", "title": "Debit Count" },
+          "total_charges_earned": {
+            "type": "number",
+            "title": "Total Charges Earned"
+          },
+          "net_flow": { "type": "number", "title": "Net Flow" }
+        },
+        "type": "object",
+        "required": [
+          "wallet_id",
+          "currency",
+          "current_balance",
+          "total_credits",
+          "total_debits",
+          "credit_count",
+          "debit_count",
+          "total_charges_earned",
+          "net_flow"
+        ],
+        "title": "WalletAnalytics",
+        "description": "Analytics for a specific wallet"
+      },
+      "WalletAnalyticsResponse": {
+        "properties": {
+          "mode": { "type": "string", "title": "Mode" },
+          "wallets": {
+            "items": { "$ref": "#/components/schemas/WalletAnalytics" },
+            "type": "array",
+            "title": "Wallets"
+          },
+          "total_balance": { "type": "number", "title": "Total Balance" },
+          "total_credits": { "type": "number", "title": "Total Credits" },
+          "total_debits": { "type": "number", "title": "Total Debits" },
+          "total_charges_earned": {
+            "type": "number",
+            "title": "Total Charges Earned"
+          },
+          "currency_count": { "type": "integer", "title": "Currency Count" }
+        },
+        "type": "object",
+        "required": [
+          "mode",
+          "wallets",
+          "total_balance",
+          "total_credits",
+          "total_debits",
+          "total_charges_earned",
+          "currency_count"
+        ],
+        "title": "WalletAnalyticsResponse",
+        "description": "Wallet analytics response"
+      },
+      "WalletBalanceResponse": {
+        "properties": {
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "wallets": {
+            "items": { "$ref": "#/components/schemas/WalletResponse" },
+            "type": "array",
+            "title": "Wallets"
+          },
+          "total_balances_by_currency": {
+            "additionalProperties": { "type": "number" },
+            "type": "object",
+            "title": "Total Balances By Currency"
+          }
+        },
+        "type": "object",
+        "required": ["merchant_id", "wallets", "total_balances_by_currency"],
+        "title": "WalletBalanceResponse"
+      },
+      "WalletCreateRequest": {
+        "properties": {
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "examples": ["NGN", "USD", "GHS", "KES"]
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "examples": ["test", "live"]
+          },
+          "percentage_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Percentage Charge",
+            "description": "Payin percentage charge",
+            "default": 1.5
+          },
+          "flat_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Flat Charge",
+            "description": "Payin flat charge",
+            "default": 0.0
+          },
+          "payout_percentage_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Payout Percentage Charge",
+            "description": "Payout percentage charge",
+            "default": 0.0
+          },
+          "payout_flat_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Payout Flat Charge",
+            "description": "Payout flat charge",
+            "default": 50.0
+          }
+        },
+        "type": "object",
+        "required": ["merchant_id", "currency", "mode"],
+        "title": "WalletCreateRequest"
+      },
+      "WalletResponse": {
+        "properties": {
+          "id": { "type": "integer", "title": "Id" },
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "currency": { "type": "string", "title": "Currency" },
+          "balance": { "type": "number", "title": "Balance" },
+          "mode": { "type": "string", "title": "Mode" },
+          "percentage_charge": {
+            "type": "number",
+            "title": "Percentage Charge"
+          },
+          "flat_charge": { "type": "number", "title": "Flat Charge" },
+          "payout_percentage_charge": {
+            "type": "number",
+            "title": "Payout Percentage Charge"
+          },
+          "payout_flat_charge": {
+            "type": "number",
+            "title": "Payout Flat Charge"
+          },
+          "is_active": { "type": "boolean", "title": "Is Active" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "merchant_id",
+          "currency",
+          "balance",
+          "mode",
+          "percentage_charge",
+          "flat_charge",
+          "payout_percentage_charge",
+          "payout_flat_charge",
+          "is_active",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "WalletResponse"
+      },
+      "WalletTransferRequest": {
+        "properties": {
+          "from_wallet_id": { "type": "integer", "title": "From Wallet Id" },
+          "to_wallet_id": { "type": "integer", "title": "To Wallet Id" },
+          "amount": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Amount",
+            "description": "Amount to transfer"
+          }
+        },
+        "type": "object",
+        "required": ["from_wallet_id", "to_wallet_id", "amount"],
+        "title": "WalletTransferRequest"
+      },
+      "WalletUpdateChargesRequest": {
+        "properties": {
+          "percentage_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Percentage Charge",
+            "description": "Payin percentage charge"
+          },
+          "flat_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Flat Charge",
+            "description": "Payin flat charge"
+          },
+          "payout_percentage_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Payout Percentage Charge",
+            "description": "Payout percentage charge"
+          },
+          "payout_flat_charge": {
+            "anyOf": [{ "type": "number", "minimum": 0.0 }, { "type": "null" }],
+            "title": "Payout Flat Charge",
+            "description": "Payout flat charge"
+          }
+        },
+        "type": "object",
+        "title": "WalletUpdateChargesRequest"
+      },
+      "WebhookTestRequest": {
+        "properties": {
+          "secret_key": { "type": "string", "title": "Secret Key" },
+          "payload": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Payload"
+          }
+        },
+        "type": "object",
+        "required": ["secret_key"],
+        "title": "WebhookTestRequest"
+      },
+      "schemas__transactionSchema__PayoutRequest": {
+        "properties": {
+          "merchant_id": { "type": "string", "title": "Merchant Id" },
+          "amount": { "type": "number", "title": "Amount" },
+          "currency": {
+            "$ref": "#/components/schemas/TransactionCurrency",
+            "default": "NGN"
+          },
+          "customer": { "$ref": "#/components/schemas/PayoutCustomerDetails" },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration"
+          }
+        },
+        "type": "object",
+        "required": ["merchant_id", "amount", "customer"],
+        "title": "PayoutRequest"
+      },
+      "schemas__v1Schema__PayoutRequest": {
+        "properties": {
+          "amount": {
+            "type": "number",
+            "title": "Amount",
+            "description": "Amount to payout",
+            "example": 5000.0
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "description": "Currency code in ISO format",
+            "example": "NGN"
+          },
+          "reference": {
+            "type": "string",
+            "title": "Reference",
+            "description": "Unique payout reference",
+            "example": "PAYOUT_123456"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer",
+            "description": "Customer details"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Destination",
+            "description": "Destination bank details"
+          },
+          "metadata": {
+            "anyOf": [
+              { "additionalProperties": true, "type": "object" },
+              { "type": "null" }
+            ],
+            "title": "Metadata",
+            "description": "Custom metadata for the payout",
+            "example": { "order_id": "123" }
+          },
+          "narration": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Narration",
+            "description": "Optional narration for the payout",
+            "example": "Payment for order 123"
+          }
+        },
+        "type": "object",
+        "required": [
+          "amount",
+          "currency",
+          "reference",
+          "customer",
+          "destination"
+        ],
+        "title": "PayoutRequest"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBasic": { "type": "http", "scheme": "basic" },
+      "HTTPBearer": { "type": "http", "scheme": "bearer" }
+    }
+  }
+}

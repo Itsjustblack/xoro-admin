@@ -170,4 +170,11 @@ export const subscriptionQueryKeys = {
     ] as const,
   detail: (subscriptionId: string) =>
     [...subscriptionQueryKeys.all, "detail", subscriptionId] as const,
+  billingPreview: (subscriptionId: string, discountCode?: string | null) =>
+    [
+      ...subscriptionQueryKeys.all,
+      "billing-preview",
+      subscriptionId,
+      discountCode ?? null,
+    ] as const,
 }

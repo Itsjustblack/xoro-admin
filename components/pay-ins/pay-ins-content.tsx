@@ -3,20 +3,14 @@
 import MetricCard from "@/components/dashboard/metric-card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { mockPayInKPIs, mockPayInTransactions } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { Download } from "lucide-react"
 import { useState } from "react"
-import { PayInsTable } from "./pay-ins-table"
 
 const TABS = ["All", "Card", "Transfer", "Crypto"] as const
 
 export function PayInsContent() {
   const [activeTab, setActiveTab] = useState<string>("All")
-  const filteredData = mockPayInTransactions.filter((tx) => {
-    if (activeTab === "All") return true
-    return tx.method === activeTab
-  })
 
   return (
     <div className="flex h-full w-full flex-col gap-10 p-4 sm:p-6 lg:p-8">
@@ -60,34 +54,29 @@ export function PayInsContent() {
       <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <MetricCard
           title="Total Volume"
-          value={mockPayInKPIs.totalVolume}
-          change={mockPayInKPIs.volumeChange}
-          changeLabel="vs last month"
+          value="N/A"
+          changeLabel="Unavailable until pay-in data is connected"
           iconClassName="text-brand-primary-dark"
           changeClassName="text-success-4"
           borderClassName="border-brand-primary-dark"
         />
         <MetricCard
           title="Transaction Count"
-          value={mockPayInKPIs.transactionCount}
-          change={mockPayInKPIs.countChange}
-          changeLabel="vs last month"
+          value="N/A"
+          changeLabel="Unavailable until pay-in data is connected"
           iconClassName="text-brand-primary"
           changeClassName="text-success-4"
           borderClassName="border-brand-primary"
         />
         <MetricCard
           title="Average Pay-In"
-          value={mockPayInKPIs.averagePayIn}
-          change="Steady"
-          changeLabel=""
+          value="N/A"
+          changeLabel="Unavailable until pay-in data is connected"
           iconClassName="text-text-secondary"
           changeClassName="text-text-muted"
           borderClassName="border-0"
         />
       </section>
-
-      <PayInsTable data={filteredData} />
     </div>
   )
 }

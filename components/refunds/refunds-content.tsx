@@ -1,10 +1,8 @@
 "use client"
 
+import MetricCard from "@/components/dashboard/metric-card"
 import { Button } from "@/components/ui/button"
-import { mockRefundKPIs, mockRefundRequests } from "@/lib/mock-data"
 import { Download, Plus } from "lucide-react"
-import { RefundsKPIs } from "./refunds-kpis"
-import { RefundsTable } from "./refunds-table"
 
 export function RefundsContent() {
   return (
@@ -34,11 +32,36 @@ export function RefundsContent() {
         </div>
       </section>
 
-      {/* KPI Metrics */}
-      <RefundsKPIs kpis={mockRefundKPIs} />
-
-      {/* Refunds Table */}
-      <RefundsTable data={mockRefundRequests} />
+      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <MetricCard
+          title="Pending"
+          value="N/A"
+          changeLabel="Unavailable until refund data is connected"
+          iconClassName="text-brand-primary-dark"
+          borderClassName="border-brand-primary-dark"
+        />
+        <MetricCard
+          title="Processing"
+          value="N/A"
+          changeLabel="Unavailable until refund data is connected"
+          iconClassName="text-status-warning"
+          borderClassName="border-status-warning"
+        />
+        <MetricCard
+          title="Completed"
+          value="N/A"
+          changeLabel="Unavailable until refund data is connected"
+          iconClassName="text-status-success"
+          borderClassName="border-status-success"
+        />
+        <MetricCard
+          title="Failed"
+          value="N/A"
+          changeLabel="Unavailable until refund data is connected"
+          iconClassName="text-status-danger"
+          borderClassName="border-status-danger"
+        />
+      </section>
     </div>
   )
 }

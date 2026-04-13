@@ -5,7 +5,7 @@ import { create } from "zustand"
 import {
   createInitialFilterState,
   type FilterState,
-} from "../components/balance/balance-filter-utils"
+} from "../lib/balance-filter-utils"
 
 const cloneFilters = (filters: FilterState): FilterState => ({
   ...filters,

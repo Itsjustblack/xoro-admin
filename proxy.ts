@@ -1,6 +1,5 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { isMockDataMode } from "./lib/mock-mode"
 
 const PUBLIC_PATHS = [
   "/login",
@@ -16,7 +15,7 @@ export function proxy(request: NextRequest) {
   const isPublicPath =
     PUBLIC_PATHS.includes(pathname) || pathname.startsWith("/pay/")
 
-  if (isPublicPath || token || isMockDataMode()) {
+  if (isPublicPath || token) {
     return NextResponse.next()
   }
 

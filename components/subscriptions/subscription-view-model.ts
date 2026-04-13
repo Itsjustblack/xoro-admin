@@ -291,6 +291,10 @@ export function buildPlanDetails(
       timestamp: event.timestamp,
     }))
 
+  const activeSubscription = sortedSubscriptions[0]
+  const activeSubscriptionAmountValue =
+    parseNumericValue(activeSubscription?.price_override) ?? null
+
   return {
     id: productId,
     planName: formatShortProductId(productId),
@@ -341,6 +345,15 @@ export function buildPlanDetails(
             },
           ],
     subscribers,
+    activeSubscriptionId: activeSubscription?.id ?? null,
+    activeSubscriptionStatus: activeSubscription?.status ?? "N/A",
+    activeSubscriptionEmail: activeSubscription?.subscriber_email ?? "N/A",
+    activeSubscriptionName:
+      activeSubscription?.subscriber_name ||
+      activeSubscription?.subscriber_email ||
+      "N/A",
+    activeSubscriptionPeriodEnd: activeSubscription?.current_period_end ?? null,
+    activeSubscriptionAmountValue,
   }
 }
 

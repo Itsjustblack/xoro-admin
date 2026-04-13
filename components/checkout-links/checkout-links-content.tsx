@@ -51,6 +51,21 @@ export function CheckoutLinksContent() {
   })
 
   const tableRows = mapCheckoutLinksToRows(checkoutLinks)
+  const activeLinks = checkoutLinks.filter((link) => link.is_active)
+  const linksWithUsageLimit = checkoutLinks.filter(
+    (link) => typeof link.max_uses === "number" && link.max_uses > 0,
+  )
+  const clickToPayRate =
+    linksWithUsageLimit.length > 0
+      ? `${Math.round(
+          (linksWithUsageLimit.reduce(
+            (total, link) => total + link.current_uses / (link.max_uses ?? 1),
+            0,
+          ) /
+            linksWithUsageLimit.length) *
+            100,
+        )}%`
+      : "N/A"
 
   return (
     <div className="flex min-h-full w-full flex-col">
@@ -74,25 +89,25 @@ export function CheckoutLinksContent() {
           <MetricCard
             title="Total Links Generated"
             value={String(checkoutLinks.length)}
-            change="+12% from last month"
             changeLabel=""
             icon={<Link2 className="size-5" />}
             iconClassName="rounded-full text-brand-primary"
             changeClassName="text-success-2"
           />
           <MetricCard
-            title="Active Link Revenue"
-            value="$12,482.50"
-            change="+8.4% from last month"
-            changeLabel=""
+            title="Active Links"
+            value={String(activeLinks.length)}
+            change={String(
+              activeLinks.reduce((total, link) => total + link.current_uses, 0),
+            )}
+            changeLabel="total successful uses"
             icon={<PaymentIcon className="size-5" />}
             iconClassName="rounded-full text-brand-primary"
             changeClassName="text-success-2"
           />
           <MetricCard
             title="Avg. Click-to-Pay Rate"
-            value="64.2%"
-            change="Consistent performance"
+            value={clickToPayRate}
             changeLabel=""
             icon={<CursorClickIcon className="size-5" />}
             iconClassName="rounded-full text-brand-primary"

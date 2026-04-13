@@ -2,11 +2,9 @@
 
 import MetricCard from "@/components/dashboard/metric-card"
 import { Button } from "@/components/ui/button"
-import { mockPayOutKPIs, mockPayOutTransactions } from "@/lib/mock-data"
 import { Plus } from "lucide-react"
 import { SiteFooter } from "../shared/site-footer"
 import { CreatePayoutSheet } from "./create-payout-sheet"
-import { PayOutsTable } from "./pay-outs-table"
 
 export function PayOutsContent() {
   return (
@@ -32,7 +30,7 @@ export function PayOutsContent() {
         <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <MetricCard
             title="Total Paid (MTD)"
-            value={mockPayOutKPIs.totalPaid}
+            value="N/A"
             changeLabel=""
             iconClassName="text-brand-primary"
             changeClassName="text-success-2"
@@ -40,7 +38,7 @@ export function PayOutsContent() {
           />
           <MetricCard
             title="Pending Processing"
-            value={mockPayOutKPIs.pendingProcessing}
+            value="N/A"
             changeLabel=""
             iconClassName="text-brand-primary"
             changeClassName="text-status-warning"
@@ -48,15 +46,13 @@ export function PayOutsContent() {
           />
           <MetricCard
             title="Failed Payouts"
-            value={mockPayOutKPIs.failedPayouts}
+            value="N/A"
             changeLabel=""
             iconClassName="text-status-danger"
             changeClassName="text-status-danger"
             borderClassName="border-status-danger text-status-warning!"
           />
         </section>
-
-        <PayOutsTable data={mockPayOutTransactions} />
       </div>
       <SiteFooter />
     </div>

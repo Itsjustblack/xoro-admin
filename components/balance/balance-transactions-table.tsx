@@ -21,7 +21,7 @@ import { useMemo } from "react"
 import { useAppliedBalanceFilters } from "../../store/balance-filter-store"
 import { StatusBadge } from "../dashboard/transactions-table"
 import { BalanceFilterPanel } from "./balance-filter-panel"
-import { applyBalanceFilters } from "./balance-filter-utils"
+import { applyBalanceFilters } from "../../lib/balance-filter-utils"
 
 type TransactionTypeConfig = {
   icon: LucideIcon

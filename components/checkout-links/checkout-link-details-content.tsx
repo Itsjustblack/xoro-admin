@@ -17,7 +17,6 @@ import { checkoutLinkQueryKeys } from "@/lib/api/v1/query-key-factory"
 import type { CheckoutLink, CheckoutLinkDetails } from "@/lib/types"
 import { cn, formatCurrency } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
-import { ProInsights } from "../shared/pro-insights"
 import { SiteFooter } from "../shared/site-footer"
 import { CheckoutLinkDetailsGrid } from "./checkout-link-details-grid"
 import { CheckoutLinkDetailsTable } from "./checkout-link-details-table"
@@ -125,7 +124,13 @@ export function CheckoutLinkDetailsContent({
           />
           <MetricCard
             title="Checkout Type"
-            value={link?.amount_type === "dynamic" ? "Flexible" : "Fixed"}
+            value={
+              !link
+                ? "-"
+                : link.amount_type === "dynamic"
+                  ? "Flexible"
+                  : "Fixed"
+            }
             changeLabel={link?.type ? link.type.replace("_", " ") : ""}
             icon={<Eye className="size-5" />}
             iconClassName="rounded-full bg-brand-primary/10 p-2 text-brand-primary"
@@ -146,7 +151,7 @@ export function CheckoutLinkDetailsContent({
           />
         </section>
 
-        <PaymentActivityChart />
+        <PaymentActivityChart transactions={link?.transactions ?? []} />
 
         <CheckoutLinkDetailsTable
           data={filteredTransactions}
@@ -157,11 +162,6 @@ export function CheckoutLinkDetailsContent({
         />
 
         <CheckoutLinkDetailsGrid link={link} />
-
-        <ProInsights 
-          content="Traffic peaked on Jan 13th following your social share. Consider adding a 'Suggested Amount' to increase average donation value by up to 15%."
-          className="mt-4"
-        />
       </div>
       <SiteFooter />
     </div>

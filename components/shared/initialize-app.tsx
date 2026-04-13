@@ -19,9 +19,10 @@ export default function InitializeApp({ children }: { children: ReactNode }) {
   const mode = useCurrentMode()
   const router = useRouter()
 
-  const { data: user } = useQuery({
+  const { data: user, isPending, isError } = useQuery({
     queryKey: userQueryKeys.current,
     queryFn: getUserInfo,
+    retry: false,
   })
 
   useEffect(() => {
@@ -34,6 +35,13 @@ export default function InitializeApp({ children }: { children: ReactNode }) {
   }, [user, setUser, setMerchants, router])
 
   useEffect(() => {
+    if (isPending || user) return
+    if (isError) {
+      router.replace("/login")
+    }
+  }, [isError, isPending, router, user])
+
+  useEffect(() => {
     document.cookie = currentMerchant?.id
       ? `current_merchant_id=${currentMerchant.id}; path=/; samesite=lax`
       : "current_merchant_id=; path=/; max-age=0; samesite=lax"
@@ -42,6 +50,10 @@ export default function InitializeApp({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.cookie = `dashboard_mode=${mode}; path=/; samesite=lax`
   }, [mode])
+
+  if (isPending || isError || !user) {
+    return null
+  }
 
   return <>{children}</>
 }

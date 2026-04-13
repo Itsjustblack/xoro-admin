@@ -123,7 +123,10 @@ const BalanceContent = () => {
     enabled: !!merchant?.id,
   })
 
-  const { data: merchantTransactions, isPending: isTransactionsPending } =
+  const {
+    data: merchantTransactions,
+    isPending: isTransactionsPending,
+  } =
     useQuery({
       queryKey: transactionQueryKeys.merchantTransactions(
         merchant?.id ?? "",
@@ -159,7 +162,7 @@ const BalanceContent = () => {
         []) as BalanceTransaction[])
 
   return (
-    <section className="min-h-screen p-4 sm:p-6 lg:p-8">
+    <section className="p-4 sm:p-6 lg:p-8">
       <div className="mx-auto flex w-full max-w-300 flex-col gap-8">
         <div>
           <h1 className="text-2xl font-black text-text-primary sm:text-3xl">

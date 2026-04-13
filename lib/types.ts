@@ -338,6 +338,12 @@ export interface DetailedPlanSubscription {
   healthStats: HealthStats
   recentActivity: ActivityEvent[]
   subscribers: IndividualSubscriber[]
+  activeSubscriptionId?: string | null
+  activeSubscriptionStatus?: string
+  activeSubscriptionEmail?: string
+  activeSubscriptionName?: string
+  activeSubscriptionPeriodEnd?: string | null
+  activeSubscriptionAmountValue?: number | null
 }
 
 export interface IndividualSubscriber {
@@ -502,9 +508,9 @@ export interface SubscriptionListParams {
 
 export interface CreateSubscriptionPayload {
   product_id: string
-  subscriber_id?: string | null
+  subscriber_id: string
   subscriber_email: string
-  subscriber_name: string
+  subscriber_name?: string | null
   subscriber_phone?: string | null
   grace_period_days?: number
   metadata?: SubscriptionMetadata | null
@@ -522,6 +528,55 @@ export interface UpdateSubscriptionPayload {
   metadata?: SubscriptionMetadata | null
   external_id?: string | null
   price_override?: number | string | null
+}
+
+export interface PauseSubscriptionPayload {
+  resume_at?: string | null
+  reason?: string | null
+}
+
+export interface CancelSubscriptionPayload {
+  cancel_at_period_end?: boolean
+  reason?: string | null
+}
+
+export interface BillingPreviewBreakdownItem {
+  [key: string]: unknown
+}
+
+export interface BillingPreviewResponse {
+  subscription_id: string
+  product_id: string
+  product_name: string
+  base_price: string
+  entity_charges: string
+  subtotal: string
+  discount_code: string | null
+  discount_amount: string
+  total: string
+  currency: string
+  billing_interval: string
+  entity_breakdown: BillingPreviewBreakdownItem[]
+}
+
+export interface RetryPaymentResponse {
+  id: string
+  subscription_id: string
+  merchant_id: string
+  reference: string
+  amount: string
+  currency: string
+  discount_amount: string
+  final_amount: string
+  status: string
+  checkout_url: string | null
+  expires_at: string
+  period_start: string
+  period_end: string
+  link_type: string
+  paid_at: string | null
+  created_at: string | null
+  updated_at: string | null
 }
 
 export interface IBulkTransactionData {

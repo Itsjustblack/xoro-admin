@@ -22,7 +22,7 @@ import {
   DATE_PRESETS,
   PAYMENT_METHOD_OPTIONS,
   STATUS_OPTIONS,
-} from "./balance-filter-utils"
+} from "../../lib/balance-filter-utils"
 
 interface BalanceFilterPanelProps {
   trigger: React.ReactNode

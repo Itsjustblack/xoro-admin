@@ -37,17 +37,18 @@ const MetricCard = ({
       >
         <div className="flex items-start justify-between gap-3  ">
           <div className="space-y-3 flex-1">
-            
-            <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
-              {title}
-            </p>
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-satoshi text-xs sm:text-sm font-semibold leading-relaxed sm:leading-6 text-text-secondary">
+                {title}
+              </p>
+              <div className={cn("shrink-0", iconClassName)}>{icon}</div>
+            </div>
             <div className="w-full">
               <p className="font-clash-display text-xl sm:text-2xl xl:text-3xl leading-none font-black ">
                 {value}
               </p>
             </div>
           </div>
-          <div className={cn("shrink-0", iconClassName)}>{icon}</div>
         </div>
         {typeof progressValue === "number" ? (
           <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-brand-primary-dark/10">
