@@ -1,0 +1,52 @@
+[
+	{
+		"name": "Nigeria",
+		"dial_code": "+234",
+		"code": "NG"
+	},
+	{
+		"name": "Canada",
+		"dial_code": "+1",
+		"code": "CA"
+	},
+	{
+		"name": "Germany",
+		"dial_code": "+49",
+		"code": "DE"
+	},
+	{
+		"name": "Japan",
+		"dial_code": "+81",
+		"code": "JP"
+	},
+	{
+		"name": "Brazil",
+		"dial_code": "+55",
+		"code": "BR"
+	},
+	{
+		"name": "South Africa",
+		"dial_code": "+27",
+		"code": "ZA"
+	},
+	{
+		"name": "India",
+		"dial_code": "+91",
+		"code": "IN"
+	},
+	{
+		"name": "Australia",
+		"dial_code": "+61",
+		"code": "AU"
+	},
+	{
+		"name": "France",
+		"dial_code": "+33",
+		"code": "FR"
+	},
+	{
+		"name": "Kenya",
+		"dial_code": "+254",
+		"code": "KE"
+	}
+]

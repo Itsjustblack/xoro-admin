@@ -20,18 +20,15 @@ import {
   type AddBeneficiaryFormInputValues,
   type AddBeneficiaryFormValues,
 } from "@/lib/schemas/beneficiary"
-import type { Category, IBank } from "@/lib/types"
+import countryCodes from "@/lib/country-codes.json"
+import type { Category, CountryPhoneCode, IBank } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
 import { Controller, FormProvider, useForm } from "react-hook-form"
 import BankSelector from "./bank-selector"
 
-const COUNTRY_CODES = [
-  { name: "Nigeria", code: "NG", dial_code: "+234", label: "NG" },
-  { name: "Ghana", code: "GH", dial_code: "+233", label: "GH" },
-  { name: "Kenya", code: "KE", dial_code: "+254", label: "KE" },
-]
+const COUNTRY_CODES = countryCodes as CountryPhoneCode[]
 
 interface BeneficiaryFormProps {
   initialValues?: AddBeneficiaryFormInputValues
@@ -228,7 +225,7 @@ export function BeneficiaryForm({
                               value={country.dial_code}
                             >
                               <span className="flex items-center gap-2">
-                                <span>{country.label}</span>
+                                <span>{country.code}</span>
                                 <span>{country.dial_code}</span>
                               </span>
                             </SelectItem>
