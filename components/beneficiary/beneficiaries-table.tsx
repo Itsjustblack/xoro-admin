@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
-import type { Beneficiary } from "@/lib/types"
+import type { BeneficiaryTableRow } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
@@ -15,16 +15,16 @@ import {
 import type { Dispatch, SetStateAction } from "react"
 import { AddBeneficiarySheet } from "./add-beneficiary-sheet"
 
-const columns: ColumnDef<Beneficiary>[] = [
+const columns: ColumnDef<BeneficiaryTableRow>[] = [
   {
     accessorKey: "name",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         Name
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block text-center font-bold text-text-primary">
+      <span className="block font-bold text-text-primary">
         {row.getValue("name")}
       </span>
     ),
@@ -32,12 +32,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "account_number",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         Account Number
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block text-center font-mono text-sm text-text-secondary">
+      <span className="block font-mono text-sm text-text-secondary">
         {row.getValue("account_number")}
       </span>
     ),
@@ -45,12 +45,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "email",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         Email
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block text-center text-sm text-text-secondary">
+      <span className="block text-sm text-text-secondary">
         {row.getValue("email")}
       </span>
     ),
@@ -58,16 +58,16 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "category_id",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         Category
       </span>
     ),
     cell: ({ row }) => {
-      const categoryId = row.getValue("category_id") as number | null
+      const categoryName = row.original.category_name
 
       return (
-        <span className="block text-center text-sm text-text-secondary">
-          {categoryId ? `Category ${categoryId}` : "Uncategorized"}
+        <span className="block text-sm text-text-secondary">
+          {categoryName || "Uncategorized"}
         </span>
       )
     },
@@ -75,7 +75,7 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "default_amount",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         Amount (NGN)
       </span>
     ),
@@ -83,7 +83,7 @@ const columns: ColumnDef<Beneficiary>[] = [
       const amount = row.getValue("default_amount") as number
 
       return (
-        <span className="block text-center font-bold text-text-primary">
+        <span className="block font-bold text-text-primary">
           {amount.toLocaleString("en-NG", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
@@ -95,12 +95,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "phone_number",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         Phone No.
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block text-center text-sm text-text-secondary">
+      <span className="block text-sm text-text-secondary">
         {row.getValue("phone_number") || "-"}
       </span>
     ),
@@ -108,12 +108,12 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     accessorKey: "whatsapp_number",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         WhatsApp No.
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block text-center text-sm text-text-secondary">
+      <span className="block text-sm text-text-secondary">
         {row.getValue("whatsapp_number") || "-"}
       </span>
     ),
@@ -121,7 +121,7 @@ const columns: ColumnDef<Beneficiary>[] = [
   {
     id: "actions",
     header: () => (
-      <span className="block text-center text-xs font-semibold uppercase text-text-muted">
+      <span className="block text-xs font-semibold uppercase text-text-muted">
         Actions
       </span>
     ),
@@ -141,7 +141,7 @@ const columns: ColumnDef<Beneficiary>[] = [
 ]
 
 interface BeneficiariesTableProps {
-  data: Beneficiary[]
+  data: BeneficiaryTableRow[]
   isPending: boolean
   pagination: { pageIndex: number; pageSize: number }
   setPagination: Dispatch<
@@ -198,7 +198,7 @@ export function BeneficiariesTable({
           </span>
         </div>
 
-        <div className="flex flex-col items-center justify-center p-12 text-center sm:p-24">
+        <div className="flex flex-col items-center justify-center p-12 sm:p-24">
           <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-surface-2">
             <UserPlus className="size-8 text-text-muted" />
           </div>
@@ -227,13 +227,13 @@ export function BeneficiariesTable({
         isPending={isPending}
         getRowId={(row) => String(row.id)}
         withPagination={false}
-        tableWrapperClassName="w-full overflow-x-auto"
+        tableWrapperClassName="w-full custom-scrollbar overflow-x-auto"
         headerClassName="sticky top-0 z-10 bg-surface-2"
         headerRowClassName="border-t border-surface-6 bg-surface-2 hover:bg-surface-2"
-        headClassName="h-auto whitespace-nowrap bg-surface-2 px-4 py-3 font-bold sm:px-8 sm:py-4"
+        headClassName="h-auto whitespace-nowrap bg-surface-2 px-4 py-3 font-bold sm:px-5 sm:py-4"
         bodyRowClassName="border-b border-surface-3 transition-colors duration-100 hover:bg-surface-2/40 last:border-0"
-        bodyCellClassName="whitespace-nowrap px-4 py-3 text-center text-sm text-text-primary sm:px-8 sm:py-4"
-        emptyStateClassName="h-48 text-center"
+        bodyCellClassName="whitespace-nowrap px-4 py-3 text-sm text-text-primary sm:px-5 sm:py-4"
+        emptyStateClassName="h-48"
       />
 
       <div className="flex items-center justify-between border-t border-surface-6 rounded-b-3xl px-6 py-4">

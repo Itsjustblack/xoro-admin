@@ -1,5 +1,10 @@
 "use client"
 
+import { AmountInput } from "@/components/amount-input"
+import {
+  AccountNameVerification,
+  type AccountVerificationStatus,
+} from "@/components/beneficiary/account-name-verification"
 import { Button } from "@/components/ui/button"
 import {
   Field,
@@ -24,8 +29,8 @@ import countryCodes from "@/lib/country-codes.json"
 import type { Category, CountryPhoneCode, IBank } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect } from "react"
-import { Controller, FormProvider, useForm } from "react-hook-form"
+import { useCallback, useEffect, useState } from "react"
+import { Controller, FormProvider, useForm, useWatch } from "react-hook-form"
 import BankSelector from "./bank-selector"
 
 const COUNTRY_CODES = countryCodes as CountryPhoneCode[]
@@ -70,11 +75,74 @@ export function BeneficiaryForm({
     },
   })
 
+  const [accountVerification, setAccountVerification] = useState<{
+    status: AccountVerificationStatus
+    accountName: string | null
+  }>({
+    status: "idle",
+    accountName: null,
+  })
+
+  const bankCode = useWatch({
+    control: form.control,
+    name: "bank_code",
+  })
+
+  const accountNumber = useWatch({
+    control: form.control,
+    name: "account_number",
+  })
+
+  const normalizedAccountNumber = (accountNumber ?? "").replace(/\D/g, "")
+  const shouldVerifyAccount =
+    Boolean(bankCode?.trim()) && normalizedAccountNumber.length === 10
+  const isAccountVerified =
+    shouldVerifyAccount && accountVerification.status === "success"
+  const isAccountVerificationLoading =
+    shouldVerifyAccount && accountVerification.status === "loading"
+
+  const handleAccountVerificationStatusChange = useCallback(
+    (status: AccountVerificationStatus, accountName: string | null) => {
+      setAccountVerification((previous) => {
+        if (
+          previous.status === status &&
+          previous.accountName === accountName
+        ) {
+          return previous
+        }
+
+        return { status, accountName }
+      })
+    },
+    [],
+  )
+
+  const handleFormSubmit = (values: AddBeneficiaryFormValues) => {
+    if (!isAccountVerified) {
+      form.setError("account_number", {
+        type: "manual",
+        message:
+          accountVerification.status === "error"
+            ? "Account could not be verified. Check bank and account number."
+            : "Please wait for account verification to complete before submitting.",
+      })
+      return
+    }
+
+    onSubmit(values)
+  }
+
   useEffect(() => {
     if (initialValues) {
       form.reset(initialValues)
     }
   }, [form, initialValues])
+
+  useEffect(() => {
+    if (isAccountVerified) {
+      form.clearErrors("account_number")
+    }
+  }, [form, isAccountVerified])
 
   return (
     <FormProvider {...form}>
@@ -82,34 +150,55 @@ export function BeneficiaryForm({
         <div className="custom-scrollbar flex-1 overflow-y-auto px-8 py-8">
           <form
             id={formId}
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleFormSubmit)}
             noValidate
-            className="space-y-6 font-manrope"
+            className="space-y-3 font-manrope"
           >
-            <FieldGroup className="gap-6">
-            <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel className="text-sm font-semibold text-text-subtitle">
-                    Full Name
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    placeholder="Enter beneficiary full name"
-                    className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
+            <FieldGroup className="gap-4">
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel className="text-xs font-semibold text-text-subtitle">
+                      Full Name
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      placeholder="Enter beneficiary full name"
+                      className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel className="text-xs font-semibold text-text-subtitle">
+                      Email Address
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      type="email"
+                      placeholder="Enter beneficiary email address"
+                      className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
               />
 
               <div className="grid grid-cols-2 gap-2">
                 <Field data-invalid={!!form.formState.errors.bank_code}>
-                  <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                  <FieldLabel className="text-xs font-semibold text-text-subtitle">
                     Select Bank
                   </FieldLabel>
                   <BankSelector
@@ -127,13 +216,20 @@ export function BeneficiaryForm({
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                      <FieldLabel className="text-xs font-semibold text-text-subtitle">
                         Account Number
                       </FieldLabel>
                       <Input
                         {...field}
                         placeholder="10-digit account number"
                         className="h-11.5 rounded-lg border-border-light bg-surface-1"
+                        inputMode="numeric"
+                        maxLength={10}
+                        onChange={(event) =>
+                          field.onChange(
+                            event.target.value.replace(/\D/g, "").slice(0, 10),
+                          )
+                        }
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -149,17 +245,20 @@ export function BeneficiaryForm({
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                      <FieldLabel className="text-xs font-semibold text-text-subtitle">
                         Category
                       </FieldLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <SelectTrigger className="h-11.5! rounded-lg border-border-light bg-surface-1">
                           <SelectValue placeholder="Select or create category" />
                         </SelectTrigger>
                         <SelectContent className="p-1">
                           {categories.map((category) => (
                             <SelectItem
-                            className="py-2 hover:bg-brand-primary/10!"
+                              className="py-2 hover:bg-brand-primary/10!"
                               key={category.id}
                               value={String(category.id)}
                             >
@@ -178,24 +277,19 @@ export function BeneficiaryForm({
                 <Controller
                   name="default_amount"
                   control={form.control}
-                  render={({ field, fieldState }) => (
+                  render={({ fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                      <FieldLabel className="text-xs font-semibold text-text-subtitle">
                         Default Payment Amount (NGN)
                       </FieldLabel>
-                      <div className="relative">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted">
-                          NGN
-                        </span>
-                        <Input
-                          {...field}
-                          type="number"
-                          placeholder="0.00"
-                          className="h-11.5 rounded-lg border-border-light bg-surface-1 pl-14"
-                          onChange={(event) => field.onChange(event.target.value)}
-                          value={field.value ?? ""}
-                        />
-                      </div>
+                      <AmountInput
+                        name="default_amount"
+                        control={form.control}
+                        prefix="NGN"
+                        wrapperClassName="h-11.5 rounded-lg border border-border-light bg-surface-1 px-4"
+                        prefixClassName="mr-2 text-sm text-text-muted"
+                        inputClassName="h-full border-0 bg-transparent p-0 text-sm text-text-primary shadow-none focus-visible:ring-0"
+                      />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
                       )}
@@ -204,8 +298,14 @@ export function BeneficiaryForm({
                 />
               </div>
 
+              <AccountNameVerification
+                bankCode={bankCode}
+                accountNumber={accountNumber}
+                onStatusChange={handleAccountVerificationStatusChange}
+              />
+
               <Field>
-                <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                <FieldLabel className="text-xs font-semibold text-text-subtitle">
                   Phone Number
                 </FieldLabel>
                 <div className="flex gap-2">
@@ -213,14 +313,17 @@ export function BeneficiaryForm({
                     name="phone_code"
                     control={form.control}
                     render={({ field }) => (
-                      <Select onValueChange={field.onChange} value={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
                         <SelectTrigger className="h-11.5! w-27.5 shrink-0 rounded-lg border-border-light bg-surface-1">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent className="p-1">
                           {COUNTRY_CODES.map((country) => (
-                            <SelectItem 
-                            className="py-2 hover:bg-brand-primary/10!"
+                            <SelectItem
+                              className="py-2 hover:bg-brand-primary/10!"
                               key={country.code}
                               value={country.dial_code}
                             >
@@ -262,7 +365,7 @@ export function BeneficiaryForm({
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel className="text-sm font-semibold text-text-subtitle">
+                    <FieldLabel className="text-xs font-semibold text-text-subtitle">
                       WhatsApp Number (Optional)
                     </FieldLabel>
                     <Input
@@ -294,7 +397,9 @@ export function BeneficiaryForm({
             <Button
               type="submit"
               form={formId}
-              disabled={isPending}
+              disabled={
+                isPending || isAccountVerificationLoading || !isAccountVerified
+              }
               className="h-11 rounded-xl bg-brand-primary px-8 font-semibold text-white shadow-sm shadow-brand-primary/20 hover:bg-brand-primary-dark"
             >
               {isPending ? "Saving..." : submitLabel}

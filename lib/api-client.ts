@@ -1,6 +1,7 @@
 import axios from "axios"
 
-const koraBaseUrl = process.env.NEXT_PUBLIC_KORA_API_BASE_URL
+const koraBaseUrl =
+  process.env.NEXT_PUBLIC_KORA_API_URL
 const subscriptionsBaseUrl = process.env.NEXT_PUBLIC_SUBSCRIPTIONS_API_URL
 
 export const koraApiClient = axios.create({

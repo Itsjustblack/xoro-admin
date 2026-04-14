@@ -1,9 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { getPayoutBeneficiaries } from "@/lib/api/v1/payout/queries"
+import {
+  getPayoutBeneficiaries,
+  getPayoutCategories,
+} from "@/lib/api/v1/payout/queries"
 import { payoutQueryKeys } from "@/lib/api/v1/query-key-factory"
 import { PAGE_SIZE } from "@/lib/constants"
+import type { BeneficiaryTableRow, Category } from "@/lib/types"
 import { useCurrentMerchant } from "@/store/merchant"
 import { useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
@@ -22,25 +26,51 @@ export function BeneficiariesContent() {
     pageSize: PAGE_SIZE,
   })
 
-  const { data: beneficiaryResponse, isPending } = useQuery({
-    queryKey: payoutQueryKeys.beneficiaries(
-      merchant?.id ?? "",
-      pagination.pageIndex + 1,
-      pagination.pageSize,
-      null,
-    ),
-    queryFn: () =>
-      getPayoutBeneficiaries({
-        merchant_id: merchant!.id,
-        page: pagination.pageIndex + 1,
-        size: pagination.pageSize,
-      }),
+  const { data: beneficiaryResponse, isPending: isBeneficiariesPending } =
+    useQuery({
+      queryKey: payoutQueryKeys.beneficiaries(
+        merchant?.id ?? "",
+        pagination.pageIndex + 1,
+        pagination.pageSize,
+        null,
+      ),
+      queryFn: () =>
+        getPayoutBeneficiaries({
+          merchant_id: merchant!.id,
+          page: pagination.pageIndex + 1,
+          size: pagination.pageSize,
+        }),
+      enabled: !!merchant?.id,
+    })
+
+  const { data: categories = [], isPending: isCategoriesPending } = useQuery<
+    Category[]
+  >({
+    queryKey: payoutQueryKeys.categories(merchant?.id ?? ""),
+    queryFn: () => getPayoutCategories(merchant!.id),
     enabled: !!merchant?.id,
   })
 
+  const categoryNamesById = useMemo(
+    () =>
+      categories.reduce<Record<number, string>>((lookup, category) => {
+        lookup[category.id] = category.name
+        return lookup
+      }, {}),
+    [categories],
+  )
+
   const beneficiaries = useMemo(
-    () => beneficiaryResponse?.beneficiaries ?? [],
-    [beneficiaryResponse?.beneficiaries],
+    () =>
+      (beneficiaryResponse?.beneficiaries ?? []).map<BeneficiaryTableRow>(
+        (beneficiary) => ({
+          ...beneficiary,
+          category_name: beneficiary.category_id
+            ? categoryNamesById[beneficiary.category_id] ?? null
+            : null,
+        }),
+      ),
+    [beneficiaryResponse?.beneficiaries, categoryNamesById],
   )
 
   const totalBeneficiaries =
@@ -53,10 +83,11 @@ export function BeneficiariesContent() {
       ),
     [beneficiaries],
   )
-  
+
   const pageCount =
     beneficiaryResponse?.total_pages ??
     Math.max(Math.ceil(totalBeneficiaries / pagination.pageSize), 1)
+  const isPending = isBeneficiariesPending || isCategoriesPending
 
   return (
     <div className="flex min-h-full w-full flex-col">

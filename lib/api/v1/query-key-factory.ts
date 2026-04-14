@@ -173,6 +173,19 @@ export const payoutQueryKeys = {
       size,
       categoryId ?? null,
     ] as const,
+  bulkPayoutBeneficiaries: (
+    merchantId: string,
+    page: number,
+    size: number,
+    categoryId?: number | null,
+  ) =>
+    [
+      ...payoutQueryKeys.beneficiariesList(merchantId),
+      "bulk-payout-selection",
+      page,
+      size,
+      categoryId ?? null,
+    ] as const,
 }
 
 export const checkoutLinkQueryKeys = {

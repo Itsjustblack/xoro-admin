@@ -7,9 +7,14 @@ export const addBeneficiarySchema = z.object({
   account_number: z.string().length(10, "Account number must be 10 digits"),
   category_id: z.string().optional(),
   default_amount: z
-    .string()
+    .union([z.string(), z.number()])
     .optional()
-    .transform((val) => (val ? parseFloat(val) : 0)),
+    .transform((val) => {
+      if (val === undefined || val === "") return 0
+      if (typeof val === "number") return Number.isNaN(val) ? 0 : val
+      const parsed = parseFloat(val)
+      return Number.isNaN(parsed) ? 0 : parsed
+    }),
   phone_number: z.string().min(7, "Enter a valid phone number"),
   phone_code: z.string().default("+234"),
   whatsapp_number: z.string().optional(),

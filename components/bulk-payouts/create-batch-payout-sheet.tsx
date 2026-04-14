@@ -5,15 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { ReviewBulkPayoutDialog } from "./review-bulk-payout-dialog"
 import { createBulkPayout } from "@/lib/api/v1/payout/actions"
 import {
   getPayoutBeneficiaries,
@@ -25,14 +18,12 @@ import {
 } from "@/lib/api/v1/query-key-factory"
 import { getApiErrorMessage } from "@/lib/get-api-error-message"
 import { BeneficiariesResponse, Beneficiary, Category } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { cn, formatCurrency } from "@/lib/utils"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { CheckCircle2, ChevronLeft, Plus, Search, X } from "lucide-react"
+import { CheckCircle2, Plus, Search, X } from "lucide-react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
-
-type Step = "select" | "details"
 
 const getInitials = (name: string) =>
   name
@@ -64,7 +55,7 @@ export function CreateBatchPayoutSheet() {
   const mode = useCurrentMode()
   const queryClient = useQueryClient()
   const [open, setOpen] = useState(false)
-  const [step, setStep] = useState<Step>("select")
+  const [isReviewOpen, setIsReviewOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCustomers, setSelectedCustomers] = useState<Set<string>>(
@@ -82,7 +73,7 @@ export function CreateBatchPayoutSheet() {
 
   const { data: beneficiaryResponse, isPending: isBeneficiariesPending } =
     useQuery<BeneficiariesResponse>({
-      queryKey: payoutQueryKeys.beneficiaries(
+      queryKey: payoutQueryKeys.bulkPayoutBeneficiaries(
         merchant?.id ?? "",
         beneficiaryPage,
         beneficiaryPageSize,
@@ -134,8 +125,17 @@ export function CreateBatchPayoutSheet() {
       selectedCustomers.has(String(customer.id)),
     )
 
+  const totalSelectedAmount = useMemo(
+    () =>
+      selectedCustomerObjects.reduce(
+        (sum, beneficiary) => sum + (beneficiary.default_amount ?? 0),
+        0,
+      ),
+    [selectedCustomerObjects],
+  )
+
   const resetState = () => {
-    setStep("select")
+    setIsReviewOpen(false)
     setSelectedCategory(null)
     setSearchQuery("")
     setSelectedCustomers(new Set())
@@ -230,244 +230,6 @@ export function CreateBatchPayoutSheet() {
       (category: Category) => String(category.id) === selectedCategory,
     )?.name ?? null
 
-  const renderSelectionStep = () => (
-    <>
-      <div className="flex-1 space-y-8 overflow-y-auto px-8 py-2">
-        <div className="relative">
-          <Search
-            className="absolute left-4 top-1/2 size-4.5 -translate-y-1/2 text-text-muted"
-            strokeWidth={2}
-          />
-          <Input
-            type="text"
-            placeholder="Search beneficiaries..."
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            className="h-13 rounded-lg border-0 bg-black/4 pl-10.5 text-[15px] font-medium placeholder:text-text-muted focus-visible:ring-0 focus-visible:ring-offset-0"
-          />
-        </div>
-
-        <div className="space-y-4">
-          <p className="text-[12px] font-bold tracking-[0.08em] text-text-muted">
-            QUICK SELECT CATEGORIES
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {payoutCategories.map((category: Category) => {
-              const categoryKey = String(category.id)
-              const isSelected = selectedCategory === categoryKey
-
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() =>
-                    setSelectedCategory(isSelected ? null : categoryKey)
-                  }
-                  className={cn(
-                    "flex h-10.5 items-center gap-2 rounded-full px-5 text-[14px] transition-colors",
-                    isSelected
-                      ? "bg-brand-primary-dark font-semibold text-white"
-                      : "bg-black/4 font-medium text-text-secondary hover:bg-black/6",
-                  )}
-                >
-                  <span>{category.name}</span>
-                  {isSelected ? (
-                    <CheckCircle2
-                      className="size-4"
-                      fill="white"
-                      color="#251481"
-                      strokeWidth={1}
-                    />
-                  ) : null}
-                </button>
-              )
-            })}
-            {payoutCategories.length === 0 ? (
-              <p className="text-sm text-text-muted">No categories found</p>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="space-y-4 pb-8">
-          <div className="flex items-center justify-between pb-2">
-            <p className="text-[12px] font-bold tracking-[0.08em] text-text-muted uppercase">
-              ALL BENEFICIARIES
-            </p>
-            <button
-              type="button"
-              onClick={() => handleSelectAll(!areAllSelected)}
-              className="text-[13px] font-bold text-[#251481] hover:underline"
-            >
-              {areAllSelected ? "Deselect All" : "Select All"}
-            </button>
-          </div>
-
-          <div className="space-y-3">
-            {isBeneficiariesPending ? (
-              <p className="py-8 text-center text-sm text-text-muted">
-                Loading beneficiaries...
-              </p>
-            ) : filteredCustomers.length === 0 ? (
-              <p className="py-8 text-center text-sm text-text-muted">
-                No beneficiaries found
-              </p>
-            ) : (
-              filteredCustomers.map((customer) => (
-                <BeneficiaryRow
-                  key={customer.id}
-                  customer={customer}
-                  isSelected={selectedCustomers.has(String(customer.id))}
-                  onToggle={handleCustomerToggle}
-                />
-              ))
-            )}
-          </div>
-        </div>
-      </div>
-
-      <SheetFooter className="mt-auto flex flex-col gap-6 border-t border-border bg-white px-6 py-6 shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
-        {selectedCustomerObjects.length > 0 ? (
-          <div className="space-y-3">
-            <p className="text-[11px] font-semibold tracking-wider text-text-muted">
-              SELECTED RECIPIENTS
-            </p>
-            <div className="flex max-h-22.5 flex-wrap gap-2 overflow-y-auto pb-1">
-              {selectedCustomerObjects.map((customer) => (
-                <Badge
-                  key={customer.id}
-                  variant="secondary"
-                  className="flex h-8 items-center gap-1.5 rounded-full border-0 bg-surface-2 px-3 py-0 font-medium text-text-primary hover:bg-black/5"
-                >
-                  <span>{customer.name}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveSelected(String(customer.id))}
-                    className="ml-0.5 text-text-muted transition-colors hover:text-text-primary"
-                  >
-                    <X className="size-3.5" />
-                  </button>
-                </Badge>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        <div className="flex flex-col">
-          <p className="text-xs text-text-secondary">Summary</p>
-          <p className="text-xl font-bold tracking-tight text-text-primary">
-            Total selected: {selectedCustomerObjects.length} recipient
-            {selectedCustomerObjects.length !== 1 ? "s" : ""}
-          </p>
-        </div>
-
-        <Button
-          type="button"
-          className="h-14 w-full rounded-sm bg-[#251481] text-lg font-bold text-white hover:bg-[#251481]/90 focus-visible:ring-[#251481] disabled:opacity-50"
-          disabled={selectedCustomerObjects.length === 0}
-          onClick={() => setStep("details")}
-        >
-          Continue to Bulk Payout
-        </Button>
-      </SheetFooter>
-    </>
-  )
-
-  const renderDetailsStep = () => (
-    <>
-      <div className="flex-1 space-y-6 overflow-y-auto px-8 py-2">
-        <div className="rounded-3xl border border-surface-3 bg-white p-5 shadow-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-text-muted">
-            Batch Setup
-          </p>
-          <div className="mt-4 space-y-4">
-            <div className="space-y-2">
-              <label
-                htmlFor="bulk-payout-batch-name"
-                className="text-sm font-semibold text-text-primary"
-              >
-                Batch Name
-              </label>
-              <Input
-                id="bulk-payout-batch-name"
-                value={batchName}
-                onChange={(event) => setBatchName(event.target.value)}
-                placeholder="e.g. April salary run"
-                className="h-12 rounded-xl border-surface-3 bg-surface-1"
-              />
-            </div>
-            <div className="flex flex-wrap gap-3 text-sm text-text-secondary">
-              <span>{selectedCustomerObjects.length} beneficiaries selected</span>
-              {selectedCategoryName ? <span>Category: {selectedCategoryName}</span> : null}
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <p className="text-[12px] font-bold tracking-[0.08em] text-text-muted uppercase">
-            Confirm Beneficiaries
-          </p>
-          <div className="space-y-3">
-            {selectedCustomerObjects.map((customer) => (
-              <div
-                key={customer.id}
-                className="flex items-center gap-4 rounded-xl bg-white px-5 py-4 shadow-[0_2px_8px_rgba(0,0,0,0.02)]"
-              >
-                <Avatar className="size-11.5">
-                  <AvatarFallback
-                    className={cn(
-                      "text-[15px] font-bold tracking-tight",
-                      getAvatarColor(customer.name),
-                    )}
-                  >
-                    {getInitials(customer.name)}
-                  </AvatarFallback>
-                </Avatar>
-
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[16px] font-bold text-[#1a1a1a]">
-                    {customer.name}
-                  </p>
-                  <p className="truncate text-[14px] text-[#666666]">
-                    {customer.email}
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleRemoveSelected(String(customer.id))}
-                  className="rounded-full p-2 text-text-muted transition-colors hover:bg-surface-2 hover:text-text-primary"
-                >
-                  <X className="size-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <SheetFooter className="mt-auto flex flex-col gap-4 border-t border-border bg-white px-6 py-6 shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
-        <Button
-          type="button"
-          variant="outline"
-          className="h-12 w-full rounded-xl"
-          onClick={() => setStep("select")}
-          disabled={isSubmitting}
-        >
-          <ChevronLeft className="size-4" />
-          Back to Selection
-        </Button>
-        <Button
-          type="button"
-          className="h-14 w-full rounded-sm bg-[#251481] text-lg font-bold text-white hover:bg-[#251481]/90 focus-visible:ring-[#251481] disabled:opacity-50"
-          disabled={isSubmitting || !batchName.trim() || selectedCustomerObjects.length === 0}
-          onClick={() => submitBulkPayout()}
-        >
-          {isSubmitting ? "Creating Bulk Payout..." : "Create Bulk Payout"}
-        </Button>
-      </SheetFooter>
-    </>
-  )
-
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
@@ -477,21 +239,171 @@ export function CreateBatchPayoutSheet() {
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col bg-[#F9F9F9] p-0 font-manrope data-[side=right]:sm:max-w-125">
-        <SheetHeader className="px-8 pb-4 pt-10">
+        <div className="px-8 pb-4 pt-10">
           <div className="pr-6">
-            <SheetTitle className="font-secondary text-4xl font-bold leading-tight tracking-tight text-text-primary">
-              {step === "select" ? "Bulk Payout" : "Bulk Payout Details"}
-            </SheetTitle>
-            <SheetDescription className="text-[15px] font-medium text-text-secondary">
-              {step === "select"
-                ? "Select categories or beneficiaries to send payments"
-                : "Name this batch and confirm the selected beneficiaries"}
-            </SheetDescription>
+            <h2 className="font-secondary text-4xl font-bold leading-tight tracking-tight text-text-primary">
+              Bulk Payout
+            </h2>
+            <p className="text-[15px] font-medium text-text-secondary">
+              Select categories or beneficiaries to send payments
+            </p>
           </div>
-        </SheetHeader>
+        </div>
 
-        {step === "select" ? renderSelectionStep() : renderDetailsStep()}
+        <div className="flex-1 space-y-8 overflow-y-auto px-8 py-2">
+          <div className="relative">
+            <Search
+              className="absolute left-4 top-1/2 size-4.5 -translate-y-1/2 text-text-muted"
+              strokeWidth={2}
+            />
+            <Input
+              type="text"
+              placeholder="Search beneficiaries..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              className="h-13 rounded-lg border-0 bg-black/4 pl-10.5 text-[15px] font-medium placeholder:text-text-muted focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-[12px] font-bold tracking-[0.08em] text-text-muted">
+              QUICK SELECT CATEGORIES
+            </p>
+            <div className="flex flex-wrap gap-3">
+              {payoutCategories.map((category: Category) => {
+                const categoryKey = String(category.id)
+                const isSelected = selectedCategory === categoryKey
+
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() =>
+                      setSelectedCategory(isSelected ? null : categoryKey)
+                    }
+                    className={cn(
+                      "flex h-10.5 items-center gap-2 rounded-full px-5 text-[14px] transition-colors",
+                      isSelected
+                        ? "bg-brand-primary-dark font-semibold text-white"
+                        : "bg-black/4 font-medium text-text-secondary hover:bg-black/6",
+                    )}
+                  >
+                    <span>{category.name}</span>
+                    {isSelected ? (
+                      <CheckCircle2
+                        className="size-4"
+                        fill="white"
+                        color="#251481"
+                        strokeWidth={1}
+                      />
+                    ) : null}
+                  </button>
+                )
+              })}
+              {payoutCategories.length === 0 ? (
+                <p className="text-sm text-text-muted">No categories found</p>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="space-y-4 pb-8">
+            <div className="flex items-center justify-between pb-2">
+              <p className="text-[12px] font-bold tracking-[0.08em] text-text-muted uppercase">
+                ALL BENEFICIARIES
+              </p>
+              <button
+                type="button"
+                onClick={() => handleSelectAll(!areAllSelected)}
+                className="text-[13px] font-bold text-[#251481] hover:underline"
+              >
+                {areAllSelected ? "Deselect All" : "Select All"}
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {isBeneficiariesPending ? (
+                <p className="py-8 text-center text-sm text-text-muted">
+                  Loading beneficiaries...
+                </p>
+              ) : filteredCustomers.length === 0 ? (
+                <p className="py-8 text-center text-sm text-text-muted">
+                  No beneficiaries found
+                </p>
+              ) : (
+                filteredCustomers.map((customer) => (
+                  <BeneficiaryRow
+                    key={customer.id}
+                    customer={customer}
+                    isSelected={selectedCustomers.has(String(customer.id))}
+                    onToggle={handleCustomerToggle}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-auto flex flex-col gap-6 border-t border-border bg-white px-6 py-6 shadow-[0_-4px_24px_rgba(0,0,0,0.02)]">
+          {selectedCustomerObjects.length > 0 ? (
+            <div className="space-y-3">
+              <p className="text-[11px] font-semibold tracking-wider text-text-muted">
+                SELECTED RECIPIENTS
+              </p>
+              <div className="flex max-h-22.5 flex-wrap gap-2 overflow-y-auto pb-1">
+                {selectedCustomerObjects.map((customer) => (
+                  <Badge
+                    key={customer.id}
+                    variant="secondary"
+                    className="flex h-8 items-center gap-1.5 rounded-full border-0 bg-surface-2 px-3 py-0 font-medium text-text-primary hover:bg-black/5"
+                  >
+                    <span>{customer.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSelected(String(customer.id))}
+                      className="ml-0.5 text-text-muted transition-colors hover:text-text-primary"
+                    >
+                      <X className="size-3.5" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="flex flex-col gap-1">
+            <p className="text-xs text-text-secondary">Summary</p>
+            <p className="text-xl font-bold tracking-tight text-text-primary">
+              Total selected: {selectedCustomerObjects.length} recipient
+              {selectedCustomerObjects.length !== 1 ? "s" : ""}
+            </p>
+            <p className="text-sm text-text-secondary">
+              Total amount: {formatCurrency(totalSelectedAmount, "NGN")}
+            </p>
+          </div>
+
+          <Button
+            type="button"
+            className="h-14 w-full rounded-sm bg-[#251481] text-lg font-bold text-white hover:bg-[#251481]/90 focus-visible:ring-[#251481] disabled:opacity-50"
+            disabled={selectedCustomerObjects.length === 0}
+            onClick={() => setIsReviewOpen(true)}
+          >
+            Continue to Bulk Payout
+          </Button>
+        </div>
       </SheetContent>
+
+      <ReviewBulkPayoutDialog
+        open={isReviewOpen}
+        onOpenChange={setIsReviewOpen}
+        batchName={batchName}
+        isSubmitting={isSubmitting}
+        onBack={() => setIsReviewOpen(false)}
+        onBatchNameChange={setBatchName}
+        onSubmit={() => submitBulkPayout()}
+        selectedCategoryName={selectedCategoryName}
+        selectedCustomerObjects={selectedCustomerObjects}
+        totalSelectedAmount={totalSelectedAmount}
+      />
     </Sheet>
   )
 }

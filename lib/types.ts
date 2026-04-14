@@ -43,6 +43,12 @@ export type SignupCredentials = LoginCredentials & {
   name: string
 }
 
+export interface KoraPayload {
+  account: string
+  bank: string
+  currency: string
+}
+
 export interface IMerchant {
   id: string
   name: string
@@ -148,6 +154,10 @@ export interface Beneficiary extends BankAccount {
   category_id: number | null
   created_at: string
   updated_at: string
+}
+
+export type BeneficiaryTableRow = Beneficiary & {
+  category_name?: string | null
 }
 
 export type BeneficiaryPayload = Omit<
