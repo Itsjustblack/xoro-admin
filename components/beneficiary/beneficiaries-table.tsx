@@ -5,15 +5,10 @@ import { Button } from "@/components/ui/button"
 import type { BeneficiaryTableRow } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
-import {
-  ChevronLeft,
-  ChevronRight,
-  MoreVertical,
-  Plus,
-  UserPlus,
-} from "lucide-react"
+import { ChevronLeft, ChevronRight, Plus, UserPlus } from "lucide-react"
 import type { Dispatch, SetStateAction } from "react"
 import { AddBeneficiarySheet } from "./add-beneficiary-sheet"
+import { BeneficiaryTableActions } from "./beneficiary-table-actions"
 
 const columns: ColumnDef<BeneficiaryTableRow>[] = [
   {
@@ -125,16 +120,9 @@ const columns: ColumnDef<BeneficiaryTableRow>[] = [
         Actions
       </span>
     ),
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex justify-center">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-text-muted hover:text-text-primary"
-        >
-          <MoreVertical className="size-4" />
-          <span className="sr-only">Open beneficiary actions</span>
-        </Button>
+        <BeneficiaryTableActions beneficiary={row.original} />
       </div>
     ),
   },

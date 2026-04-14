@@ -5,7 +5,12 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import { ReviewBulkPayoutDialog } from "./review-bulk-payout-dialog"
 import { createBulkPayout } from "@/lib/api/v1/payout/actions"
 import {
@@ -18,20 +23,12 @@ import {
 } from "@/lib/api/v1/query-key-factory"
 import { getApiErrorMessage } from "@/lib/get-api-error-message"
 import { BeneficiariesResponse, Beneficiary, Category } from "@/lib/types"
-import { cn, formatCurrency } from "@/lib/utils"
+import { cn, formatCurrency, getInitials } from "@/lib/utils"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { CheckCircle2, Plus, Search, X } from "lucide-react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
-
-const getInitials = (name: string) =>
-  name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .substring(0, 2)
-    .toUpperCase()
 
 const getAvatarColor = (name: string) => {
   const colors = [
@@ -239,6 +236,8 @@ export function CreateBatchPayoutSheet() {
         </Button>
       </SheetTrigger>
       <SheetContent className="flex w-full flex-col bg-[#F9F9F9] p-0 font-manrope data-[side=right]:sm:max-w-125">
+        <SheetTitle className="sr-only">Create Bulk Payout</SheetTitle>
+
         <div className="px-8 pb-4 pt-10">
           <div className="pr-6">
             <h2 className="font-secondary text-4xl font-bold leading-tight tracking-tight text-text-primary">

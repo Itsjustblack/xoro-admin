@@ -33,3 +33,16 @@ export function formatCount(value: number) {
 export function formatPercent(value: number) {
   return `${value.toFixed(1)}%`
 }
+
+export function getInitials(name?: string, fallback = "--") {
+  const initials =
+    name
+      ?.trim()
+      .split(/\s+/)
+      .map((part) => part[0] ?? "")
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() ?? ""
+
+  return initials || fallback
+}

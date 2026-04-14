@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Beneficiary } from "@/lib/types"
-import { cn, formatCurrency } from "@/lib/utils"
+import { cn, formatCurrency, getInitials } from "@/lib/utils"
 
 interface ReviewBulkPayoutDialogProps {
   open: boolean
@@ -25,21 +25,13 @@ interface ReviewBulkPayoutDialogProps {
   totalSelectedAmount: number
 }
 
-const getInitials = (name: string) =>
-  name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .substring(0, 2)
-    .toUpperCase()
-
 const getAvatarColor = (name: string) => {
   const colors = [
-    "bg-[#EBE9F8] text-[#251481]",
-    "bg-green-100 text-green-800",
-    "bg-blue-100 text-blue-800",
-    "bg-orange-100 text-orange-800",
-    "bg-black/[0.08] text-text-secondary",
+    "bg-accent-violet-soft text-accent-violet",
+    "bg-status-success-soft text-status-success",
+    "bg-accent-blue-soft text-accent-blue",
+    "bg-status-warning-soft text-status-warning",
+    "bg-surface-3 text-text-secondary",
   ]
   let hash = 0
 
@@ -64,27 +56,24 @@ export function ReviewBulkPayoutDialog({
 }: ReviewBulkPayoutDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] max-w-2xl overflow-hidden border-0 bg-[#F9F9F9] p-0 sm:max-w-2xl">
-        <DialogHeader className="border-b border-border px-6 pb-4 pt-6">
-          <DialogTitle className="font-secondary text-3xl font-bold tracking-tight text-text-primary">
+      <DialogContent className="max-w-2xl overflow-hidden border-0 bg-surface-2 p-0 sm:max-w-2xl">
+        <DialogHeader className="border-b border-surface-3 gap-0 px-8 py-4 bg-white">
+          <DialogTitle className="font-secondary text-2xl font-black tracking-tight text-text-primary">
             Review Bulk Payout
           </DialogTitle>
-          <DialogDescription className="text-[15px] font-medium text-text-secondary">
+          <DialogDescription className="text-sm font-manrope font-medium text-text-secondary">
             Confirm beneficiaries, review their saved payout amounts, and submit
             this batch.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6 overflow-y-auto px-6 py-6">
-          <div className="rounded-3xl border border-surface-3 bg-white p-5 shadow-sm">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-text-muted">
-              Batch Setup
-            </p>
-            <div className="mt-4 space-y-4">
+        <div className="space-y-6 overflow-y-auto px-8 py-2 custom-scrollbar">
+          <div className="rounded-3xl border border-surface-3 bg-white p-6 shadow-sm">
+            <div className=" font-manrope space-y-6">
               <div className="space-y-2">
                 <label
                   htmlFor="bulk-payout-batch-name"
-                  className="text-sm font-semibold text-text-primary"
+                  className="text-sm font-bold text-text-primary"
                 >
                   Batch Name
                 </label>
@@ -93,35 +82,44 @@ export function ReviewBulkPayoutDialog({
                   value={batchName}
                   onChange={(event) => onBatchNameChange(event.target.value)}
                   placeholder="e.g. April salary run"
-                  className="h-12 rounded-xl border-surface-3 bg-surface-1"
+                  className="h-12 mt-1 rounded-xl border-surface-3 bg-surface-2 focus-visible:ring-brand-primary-2/20"
                 />
               </div>
-              <div className="flex flex-wrap gap-3 text-sm text-text-secondary">
-                <span>
-                  {selectedCustomerObjects.length} beneficiaries selected
-                </span>
-                <span>Total: {formatCurrency(totalSelectedAmount, "NGN")}</span>
-                {selectedCategoryName ? (
-                  <span>Category: {selectedCategoryName}</span>
-                ) : null}
+              <div className="flex flex-wrap items-center gap-6">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Beneficiaries</span>
+                  <span className="text-sm font-bold text-text-primary">{selectedCustomerObjects.length} selected</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Total Amount</span>
+                  <span className="font-secondary text-lg font-black text-brand-primary-2">
+                    {formatCurrency(totalSelectedAmount, "NGN")}
+                  </span>
+                </div>
+                {selectedCategoryName && (
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-text-muted">Category</span>
+                    <span className="text-sm font-bold text-text-primary">{selectedCategoryName}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="space-y-3">
-            <p className="text-[12px] font-bold tracking-[0.08em] text-text-muted uppercase">
+          <div className="space-y-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-text-muted">
               Beneficiaries and Amounts
             </p>
             <div className="space-y-3">
               {selectedCustomerObjects.map((customer) => (
                 <div
                   key={customer.id}
-                  className="flex items-center gap-4 rounded-xl bg-white px-5 py-4 shadow-[0_2px_8px_rgba(0,0,0,0.02)]"
+                  className="flex items-center gap-4 rounded-2xl border border-surface-3 bg-white px-6 py-5 shadow-sm transition-colors hover:bg-surface-2"
                 >
-                  <Avatar className="size-11.5">
+                  <Avatar className="size-12">
                     <AvatarFallback
                       className={cn(
-                        "text-[15px] font-bold tracking-tight",
+                        "text-sm font-black uppercase tracking-wider",
                         getAvatarColor(customer.name),
                       )}
                     >
@@ -130,19 +128,19 @@ export function ReviewBulkPayoutDialog({
                   </Avatar>
 
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[16px] font-bold text-[#1a1a1a]">
+                    <p className="truncate text-base font-bold text-text-primary">
                       {customer.name}
                     </p>
-                    <p className="truncate text-[14px] text-[#666666]">
+                    <p className="truncate text-xs font-medium text-text-muted">
                       {customer.email}
                     </p>
                   </div>
 
-                  <div className="text-right">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+                  <div className="text-right space-y-0.5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-text-muted">
                       Amount
                     </p>
-                    <p className="text-base font-bold text-text-primary">
+                    <p className="font-secondary text-base font-black text-text-primary">
                       {formatCurrency(customer.default_amount ?? 0, "NGN")}
                     </p>
                   </div>
@@ -152,11 +150,11 @@ export function ReviewBulkPayoutDialog({
           </div>
         </div>
 
-        <DialogFooter className="border-t border-border bg-white px-6 py-4 sm:justify-between">
+        <DialogFooter className="border-t py-3 border-surface-3 bg-white px-8 sm:justify-end items-center">
           <Button
             type="button"
-            variant="outline"
-            className="h-12 rounded-xl"
+            variant="ghost"
+            className="rounded-lg px-4 py-5"
             onClick={onBack}
             disabled={isSubmitting}
           >
@@ -164,7 +162,7 @@ export function ReviewBulkPayoutDialog({
           </Button>
           <Button
             type="button"
-            className="h-12 rounded-sm bg-[#251481] px-6 text-base font-bold text-white hover:bg-[#251481]/90 focus-visible:ring-[#251481] disabled:opacity-50"
+            className=" rounded-lg bg-brand-primary-2 px-6 py-5 uppercase tracking-widest text-white hover:bg-brand-primary-2/90 shadow-sm"
             disabled={
               isSubmitting ||
               !batchName.trim() ||
@@ -172,7 +170,7 @@ export function ReviewBulkPayoutDialog({
             }
             onClick={onSubmit}
           >
-            {isSubmitting ? "Creating Bulk Payout..." : "Create Bulk Payout"}
+            {isSubmitting ? "Creating..." : "Create Bulk Payout"}
           </Button>
         </DialogFooter>
       </DialogContent>

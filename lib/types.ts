@@ -165,6 +165,10 @@ export type BeneficiaryPayload = Omit<
   "id" | "is_active" | "created_at" | "updated_at"
 >
 
+export type UpdateBeneficiaryPayload = BeneficiaryPayload & {
+  id: number
+}
+
 export interface BeneficiariesResponse {
   beneficiaries: Beneficiary[]
   current_page: number

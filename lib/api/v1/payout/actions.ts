@@ -5,6 +5,7 @@ import {
   Category,
   CreateBulkPayoutPayload,
   PayoutPayload,
+  UpdateBeneficiaryPayload,
 } from "@/lib/types"
 
 export async function createBeneficiary(payload: BeneficiaryPayload) {
@@ -12,7 +13,7 @@ export async function createBeneficiary(payload: BeneficiaryPayload) {
   return res.data
 }
 
-export async function updateBeneficiary(payload: BeneficiaryPayload) {
+export async function updateBeneficiary(payload: UpdateBeneficiaryPayload) {
   const res = await ApiClient.put<Beneficiary>("/payout-beneficiary", payload)
   return res.data
 }

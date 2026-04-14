@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { ITransaction } from "@/lib/types"
-import { cn, formatCurrency } from "@/lib/utils"
+import { cn, formatCurrency, getInitials } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 
 const columns: ColumnDef<ITransaction>[] = [
@@ -119,15 +119,6 @@ function formatDate(value?: string) {
   return new Intl.DateTimeFormat("en-NG", {
     dateStyle: "medium",
   }).format(date)
-}
-
-function getInitials(name?: string) {
-  return name
-    ?.split(" ")
-    .map((part) => part[0] ?? "")
-    .join("")
-    .slice(0, 2)
-    .toUpperCase() || "--"
 }
 
 export function CheckoutLinkDetailsTable({

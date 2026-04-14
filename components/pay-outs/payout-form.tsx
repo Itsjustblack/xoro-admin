@@ -17,7 +17,7 @@ import {
   type IndividualPayoutFormValues,
 } from "@/lib/schemas/payout"
 import type { Beneficiary } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { cn, getInitials } from "@/lib/utils"
 
 interface PayoutFormProps {
   beneficiaries: Beneficiary[]
@@ -100,14 +100,6 @@ export function PayoutForm({
     reset()
     onCancel()
   }
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((part) => part[0] ?? "")
-      .join("")
-      .slice(0, 2)
-      .toUpperCase()
 
   return (
     <form
