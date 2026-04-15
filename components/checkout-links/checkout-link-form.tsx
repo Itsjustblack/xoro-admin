@@ -1,5 +1,6 @@
 "use client"
 
+import { CheckoutLinkExpiryField } from "@/components/checkout-links/checkout-link-expiry-field"
 import { Button } from "@/components/ui/button"
 import {
   Field,
@@ -274,7 +275,7 @@ export function CheckoutLinkForm({
             </div>
 
             {linkType === "recurring" ? (
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <Controller
                   name="max_uses"
                   control={form.control}
@@ -300,19 +301,11 @@ export function CheckoutLinkForm({
                   name="expires_at"
                   control={form.control}
                   render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel className="text-sm font-semibold text-text-subtitle">
-                        Expires At
-                      </FieldLabel>
-                      <Input
-                        {...field}
-                        type="datetime-local"
-                        className="h-11.5 rounded-lg border-border-light bg-surface-1 transition-colors"
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
+                    <CheckoutLinkExpiryField
+                      value={field.value}
+                      onChange={field.onChange}
+                      error={fieldState.error}
+                    />
                   )}
                 />
               </div>
@@ -338,7 +331,6 @@ export function CheckoutLinkForm({
                 </Field>
               )}
             />
-
           </FieldGroup>
         </form>
       </div>
