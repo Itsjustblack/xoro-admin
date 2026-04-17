@@ -42,3 +42,6 @@ next-env.d.ts
 /.codex-staging
 #claude
 /.claude/
+
+# local OpenAPI snapshots
+.tmp-*-openapi.json
