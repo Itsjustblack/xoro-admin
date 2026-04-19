@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import type { ITransaction } from "@/lib/types"
-import { cn, formatCurrency } from "@/lib/utils"
+import { cn, formatChartDateTime, formatCurrency } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
   ArrowDownCircle,
@@ -18,10 +18,10 @@ import {
 import type { Dispatch, SetStateAction } from "react"
 import { useMemo } from "react"
 
+import { applyBalanceFilters } from "../../lib/balance-filter-utils"
 import { useAppliedBalanceFilters } from "../../store/balance-filter-store"
 import { StatusBadge } from "../dashboard/transactions-table"
 import { BalanceFilterPanel } from "./balance-filter-panel"
-import { applyBalanceFilters } from "../../lib/balance-filter-utils"
 
 type TransactionTypeConfig = {
   icon: LucideIcon
@@ -86,7 +86,7 @@ const columns: ColumnDef<ITransaction>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="font-mono text-sm text-text-secondary">
+      <span className="font-secondary font-medium text-sm text-text-secondary">
         {row.getValue("reference")}
       </span>
     ),
@@ -111,7 +111,7 @@ const columns: ColumnDef<ITransaction>[] = [
       return (
         <span
           className={cn(
-            "font-bold",
+            "font-bold font-secondary",
             numericAmount < 0 ? "text-red-500" : "text-text-primary",
           )}
         >
@@ -123,7 +123,7 @@ const columns: ColumnDef<ITransaction>[] = [
   {
     accessorKey: "status",
     header: () => (
-      <span className="text-[12px] font-semibold uppercase text-text-muted">
+      <span className="text-[12px] text-right font-semibold uppercase text-text-muted">
         Status
       </span>
     ),
@@ -137,8 +137,8 @@ const columns: ColumnDef<ITransaction>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-text-secondary">
-        {row.original.date || row.original.created_at}
+      <span className="text-text-secondary text-right">
+        {formatChartDateTime(row.original.created_at)}
       </span>
     ),
   },
@@ -186,6 +186,18 @@ export default function BalanceTransactionsTable({
     Boolean(appliedFilters.dateRange.type) ||
     Boolean(appliedFilters.amount.min) ||
     Boolean(appliedFilters.amount.max)
+  const visibleCount = filteredData.length
+  const effectiveTotalCount = hasActiveFilters ? visibleCount : totalCount
+  const visiblePageNumbers = Array.from(
+    { length: pageCount },
+    (_, index) => index,
+  ).slice(
+    Math.max(0, Math.min(pagination.pageIndex - 1, Math.max(0, pageCount - 3))),
+    Math.max(
+      0,
+      Math.min(pagination.pageIndex - 1, Math.max(0, pageCount - 3)),
+    ) + 3,
+  )
 
   return (
     <div className="flex flex-col rounded-3xl border border-surface-6 bg-surface-2">
@@ -227,6 +239,7 @@ export default function BalanceTransactionsTable({
           data={filteredData}
           columns={columns}
           isPending={isPending}
+          loaders={pagination.pageSize}
           getRowId={(row) => String(row.id)}
           withPagination={false}
           tableWrapperClassName="w-full overflow-x-auto"
@@ -239,16 +252,17 @@ export default function BalanceTransactionsTable({
         />
       </section>
 
-      <div className="flex items-center justify-between rounded-b-3xl border-t border-surface-6 p-6">
+      <div className="flex items-center justify-between rounded-b-3xl border-t border-surface-6 px-6 py-4">
         <p className="text-sm font-medium text-text-secondary">
-          Showing {startRange} to {endRange} of {totalCount} transactions
+          Showing {startRange} to {endRange} of {effectiveTotalCount}{" "}
+          transactions
         </p>
 
         <div className="flex items-center gap-1">
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 hover:bg-surface-1 bg-transparent rounded-full"
+            className="h-8 w-8 disabled:cursor-not-allowed hover:bg-surface-1 bg-transparent rounded-full"
             disabled={pagination.pageIndex === 0}
             onClick={() =>
               setPagination((current) => ({
@@ -260,12 +274,12 @@ export default function BalanceTransactionsTable({
             <ChevronLeft className="size-4" />
           </Button>
           {hasKnownPageCount ? (
-            Array.from({ length: pageCount }).map((_, index) => (
+            visiblePageNumbers.map((index) => (
               <Button
                 key={index}
                 variant={pagination.pageIndex === index ? "default" : "outline"}
                 className={cn(
-                  "h-8 w-8 bg-transparent rounded-full",
+                  "h-8 w-8 bg-transparent  rounded-full",
                   pagination.pageIndex === index
                     ? "bg-indigo-900 text-white"
                     : "hover:bg-surface-1",

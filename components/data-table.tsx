@@ -207,7 +207,20 @@ export function DataTable<TData>({
           </TableHeader>
           <TableBody>
             {isPending ? (
-              <RowsSkeleton length={loaders} columnCount={columns.length} />
+              <RowsSkeleton
+                length={loaders}
+                columnCount={columns.length}
+                rowClassName={
+                  typeof bodyRowClassName === "string"
+                    ? bodyRowClassName
+                    : undefined
+                }
+                cellClassName={
+                  typeof bodyCellClassName === "string"
+                    ? bodyCellClassName
+                    : undefined
+                }
+              />
             ) : table.getRowModel().rows.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow

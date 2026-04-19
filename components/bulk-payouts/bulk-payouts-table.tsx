@@ -5,7 +5,7 @@ import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { BulkPayout } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { cn, formatChartDateTime } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import { ChevronLeft, ChevronRight, FilterIcon, Search } from "lucide-react"
 import { Dispatch, SetStateAction, useMemo, useState } from "react"
@@ -37,7 +37,7 @@ const columns: ColumnDef<BulkPayout>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="font-mono text-sm text-text-secondary">
+      <span className="font-secondary font-medium text-sm text-text-secondary">
         {row.getValue("reference")}
       </span>
     ),
@@ -52,20 +52,12 @@ const columns: ColumnDef<BulkPayout>[] = [
       </div>
     ),
     cell: ({ row }) => (
-      <div className="w-full text-center text-text-secondary">
+      <div className="w-full font-secondary text-center text-text-secondary">
         {row.original.transaction_details.length}
       </div>
     ),
   },
-  {
-    id: "amount",
-    header: () => (
-      <span className="text-xs font-semibold uppercase text-text-muted">
-        Total Amount
-      </span>
-    ),
-    cell: () => <span className="font-bold text-text-primary">N/A</span>,
-  },
+
   {
     accessorKey: "status",
     header: () => (
@@ -83,7 +75,9 @@ const columns: ColumnDef<BulkPayout>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-text-secondary">{row.getValue("created_at")}</span>
+      <span className="text-text-secondary">
+        {formatChartDateTime(row.getValue("created_at"))}
+      </span>
     ),
   },
 ]

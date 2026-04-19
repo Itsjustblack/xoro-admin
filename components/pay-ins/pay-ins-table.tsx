@@ -4,7 +4,7 @@ import { DataTable } from "@/components/data-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { PayInTransaction } from "@/lib/types"
-import { cn } from "@/lib/utils"
+import { cn, formatTransactionDate } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
   Bitcoin,
@@ -20,23 +20,23 @@ const columns: ColumnDef<PayInTransaction>[] = [
   {
     accessorKey: "customerName",
     header: () => (
-      <span className="text-xs font-bold uppercase tracking-widest text-text-muted">
+      <span className="text-xs uppercase tracking-widest text-text-muted">
         Customer
       </span>
     ),
     cell: ({ row }) => {
-      const initials = row.original.customerName
+      const initials = row.original.customer.name
         .split(" ")
         .map((n) => n[0])
         .join("")
       return (
         <div className="flex items-center gap-3">
-          <div className="flex size-10 items-center justify-center rounded-full bg-brand-primary-2/10 text-brand-primary-2 text-xs font-black uppercase">
+          <div className="flex size-9 items-center justify-center rounded-full bg-brand-primary-2/10 text-brand-primary-2 text-xs font-black uppercase">
             {initials}
           </div>
           <div>
-            <span className="font-bold text-text-primary">
-              {row.original.customerName}
+            <span className="font-medium text-sm text-text-primary">
+              {row.original.customer.email}
             </span>
           </div>
         </div>
@@ -51,7 +51,7 @@ const columns: ColumnDef<PayInTransaction>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-sm font-medium text-text-muted">
+      <span className="text-xs font-secondary font-medium text-text-muted">
         {row.getValue("reference")}
       </span>
     ),
@@ -64,7 +64,7 @@ const columns: ColumnDef<PayInTransaction>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="text-sm font-black text-text-primary">
+      <span className="text-sm font-secondary font-black text-text-primary">
         {row.getValue("amount")}
       </span>
     ),
@@ -132,7 +132,7 @@ const columns: ColumnDef<PayInTransaction>[] = [
     ),
     cell: ({ row }) => (
       <span className="text-sm font-medium text-text-muted">
-        {row.getValue("date")}
+        {formatTransactionDate(String(row.getValue("date")))}
       </span>
     ),
   },
@@ -179,6 +179,16 @@ export function PayInsTable({
   const startRange =
     data.length === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
   const endRange = data.length === 0 ? 0 : startRange + data.length - 1
+  const visiblePageNumbers = Array.from(
+    { length: Math.max(pageCount, 1) },
+    (_, index) => index,
+  ).slice(
+    Math.max(0, Math.min(pagination.pageIndex - 1, Math.max(0, pageCount - 3))),
+    Math.max(
+      0,
+      Math.min(pagination.pageIndex - 1, Math.max(0, pageCount - 3)),
+    ) + 3,
+  )
 
   return (
     <div className="flex flex-col rounded-4xl border border-surface-3 bg-surface-1 shadow-sm overflow-hidden">
@@ -187,6 +197,7 @@ export function PayInsTable({
           data={data}
           columns={columns}
           isPending={isPending}
+          loaders={pagination.pageSize}
           getRowId={(row) => row.id}
           withPagination={false}
           tableWrapperClassName="w-full"
@@ -216,6 +227,23 @@ export function PayInsTable({
           >
             <ChevronLeft size={16} />
           </Button>
+          {visiblePageNumbers.map((index) => (
+            <Button
+              key={index}
+              variant={pagination.pageIndex === index ? "default" : "outline"}
+              className={cn(
+                "h-auto py-1 px-3 rounded-xl border-surface-3 font-bold",
+                pagination.pageIndex === index
+                  ? "bg-brand-primary-dark text-white hover:bg-brand-primary-dark/90"
+                  : "bg-surface-1 text-text-secondary hover:bg-surface-2",
+              )}
+              onClick={() =>
+                setPagination((current) => ({ ...current, pageIndex: index }))
+              }
+            >
+              {index + 1}
+            </Button>
+          ))}
           <Button
             variant="outline"
             className="h-auto py-1 px-3 rounded-xl border-surface-3 bg-surface-1 text-text-secondary font-bold hover:bg-surface-2"

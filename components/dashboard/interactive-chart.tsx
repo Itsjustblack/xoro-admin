@@ -2,7 +2,9 @@
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 import type { IRevenueAnalytics } from "@/lib/types"
+import { formatChartDate, formatChartDateTime } from "@/lib/utils"
 import { Download } from "lucide-react"
 import {
   Bar,
@@ -17,6 +19,12 @@ import {
 
 type InteractiveChartProps = {
   revenueAnalytics?: IRevenueAnalytics | null
+  isLoading?: boolean
+}
+
+type RevenueChartPoint = IRevenueAnalytics["time_series"][number] & {
+  axisLabel: string
+  tooltipLabel: string
 }
 
 const formatAxisCurrency = (value: number, currency?: string) => {
@@ -49,6 +57,9 @@ const formatTooltipCurrency = (value: number, currency?: string) => {
   }
 }
 
+const formatTooltipCount = (value: number) =>
+  new Intl.NumberFormat("en-NG").format(value)
+
 const RevenueTooltip = ({
   active,
   payload,
@@ -61,11 +72,13 @@ const RevenueTooltip = ({
 
   const revenue = payload.find((item) => item.dataKey === "value")?.value ?? 0
   const count = payload.find((item) => item.dataKey === "count")?.value ?? 0
+  const point = payload[0]?.payload as RevenueChartPoint | undefined
+  const tooltipLabel = point?.tooltipLabel ?? String(label ?? "")
 
   return (
     <div className="min-w-41 rounded-2xl bg-surface-dark px-4 py-3 text-xs text-surface-1 shadow-lg">
       <p className="mb-2 font-semibold tracking-[0.02em] text-surface-1/90">
-        {label}
+        {tooltipLabel}
       </p>
       <div className="space-y-1.5 text-surface-1/90">
         <div className="flex items-center justify-between gap-4">
@@ -83,7 +96,7 @@ const RevenueTooltip = ({
             Transactions:
           </span>
           <span className="font-semibold">
-            {Number(count).toLocaleString()}
+            {formatTooltipCount(Number(count))}
           </span>
         </div>
       </div>
@@ -91,8 +104,16 @@ const RevenueTooltip = ({
   )
 }
 
-const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
-  const chartData = revenueAnalytics?.time_series ?? []
+const InteractiveChart = ({
+  revenueAnalytics,
+  isLoading,
+}: InteractiveChartProps) => {
+  const chartData: RevenueChartPoint[] =
+    revenueAnalytics?.time_series.map((point) => ({
+      ...point,
+      axisLabel: formatChartDate(point.date),
+      tooltipLabel: formatChartDateTime(point.date),
+    })) ?? []
   const currency = revenueAnalytics?.currency
 
   return (
@@ -111,6 +132,7 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
           <Button
             variant="ghost"
             type="button"
+            disabled={isLoading}
             aria-label="Download revenue report"
             className="flex size-10 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-5 hover:text-text-primary focus-visible:outline-none"
           >
@@ -119,7 +141,19 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
         </div>
 
         <div className="h-72 w-full overflow-x-auto overflow-y-hidden">
-          {chartData.length > 0 ? (
+          {isLoading ? (
+            <div className="flex h-full w-full items-end justify-between px-4 pb-9.5 pt-12 sm:gap-2 lg:gap-4 lg:px-6">
+              {[40, 70, 45, 90, 65, 55, 85, 30, 60, 80, 50, 95].map(
+                (height, i) => (
+                  <Skeleton
+                    key={i}
+                    className="w-full max-w-6 lg:max-w-10 rounded-b-none rounded-t-md bg-surface-3/50"
+                    style={{ height: `${height}%` }}
+                  />
+                ),
+              )}
+            </div>
+          ) : chartData.length > 0 ? (
             <div className="h-full min-w-max sm:min-w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -139,7 +173,7 @@ const InteractiveChart = ({ revenueAnalytics }: InteractiveChartProps) => {
                   />
                   <XAxis
                     axisLine={false}
-                    dataKey="date"
+                    dataKey="axisLabel"
                     tick={{
                       fill: "var(--color-text-muted)",
                       fontSize: 12,

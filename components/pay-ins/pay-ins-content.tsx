@@ -2,20 +2,19 @@
 
 import MetricCard from "@/components/dashboard/metric-card"
 import { PayInsTable } from "@/components/pay-ins/pay-ins-table"
-import { getMerchantTransactions } from "@/lib/api/v1/transaction/queries"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { transactionQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { getMerchantTransactions } from "@/lib/api/v1/transaction/queries"
 import { PAGE_SIZE } from "@/lib/constants"
 import type {
   ITransaction,
   PayInTransaction,
   PaymentChannel,
 } from "@/lib/types"
-import { formatCurrency } from "@/lib/utils"
+import { cn, formatCurrency } from "@/lib/utils"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
-import { useQuery } from "@tanstack/react-query"
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { cn } from "@/lib/utils"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Download } from "lucide-react"
 import { useMemo, useState } from "react"
 
@@ -47,7 +46,11 @@ export function PayInsContent() {
     pageSize: PAGE_SIZE,
   })
 
-  const { data: transactionResponse, isPending } = useQuery({
+  const {
+    data: transactionResponse,
+    isPending,
+    isFetching: isTransactionsFetching,
+  } = useQuery({
     queryKey: transactionQueryKeys.merchantPayIns(
       merchant?.id ?? "",
       mode,
@@ -64,6 +67,7 @@ export function PayInsContent() {
         transaction_type: "credit",
       }),
     enabled: !!merchant?.id,
+    placeholderData: keepPreviousData,
   })
 
   const transactions = useMemo(
@@ -81,7 +85,10 @@ export function PayInsContent() {
 
       return {
         id: String(transaction.id),
-        customerName: transaction.customer?.name || "",
+        customer: {
+          name: transaction.customer?.name || "",
+          email: transaction.customer?.email || "",
+        },
         email: transaction.customer?.email || "",
         reference: transaction.reference,
         amount: Number.isFinite(amount)
@@ -188,7 +195,7 @@ export function PayInsContent() {
 
       <PayInsTable
         data={filteredTableData}
-        isPending={isPending}
+        isPending={isPending || isTransactionsFetching}
         pagination={pagination}
         setPagination={setPagination}
         pageCount={pageCount}

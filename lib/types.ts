@@ -382,7 +382,10 @@ export interface MonthlyPayoutPoint {
 
 export interface PayInTransaction {
   id: string
-  customerName: string
+  customer: {
+    email: string
+    name: string
+  }
   email: string
   reference: string
   amount: string

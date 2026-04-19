@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import type { MonthlyPayoutPoint } from "@/lib/types"
+import { formatChartDate } from "@/lib/utils"
 import { MoreVertical } from "lucide-react"
 import {
   Bar,
@@ -58,7 +59,7 @@ const PayoutTooltip = ({
     <div className="relative min-w-36 rounded-2xl border border-surface-3 bg-white p-4 shadow-sm">
       <div className="flex flex-col gap-1">
         <span className="text-[10px] font-bold uppercase tracking-wider text-text-muted">
-          MONTH: {label}
+          MONTH: {formatChartDate(label)}
         </span>
         <div className="flex flex-col gap-0.5 ring-offset-0">
           <span className="text-xs font-bold text-text-primary">Volume:</span>
@@ -139,6 +140,7 @@ export default function MonthlyPayoutVolumeChart({
                       fontSize: 12,
                       fontWeight: 600,
                     }}
+                    tickFormatter={(value) => formatChartDate(value)}
                     tickLine={false}
                     tickMargin={12}
                   />
