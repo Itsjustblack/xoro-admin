@@ -2,8 +2,9 @@
 
 import MetricCard from "@/components/dashboard/metric-card"
 import { PayOutsTable } from "@/components/pay-outs/pay-outs-table"
-import { getMerchantTransactions } from "@/lib/api/v1/transaction/queries"
+import { Button } from "@/components/ui/button"
 import { transactionQueryKeys } from "@/lib/api/v1/query-key-factory"
+import { getMerchantTransactions } from "@/lib/api/v1/transaction/queries"
 import { PAGE_SIZE } from "@/lib/constants"
 import type {
   ITransaction,
@@ -12,8 +13,7 @@ import type {
 } from "@/lib/types"
 import { formatCurrency } from "@/lib/utils"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
-import { useQuery } from "@tanstack/react-query"
-import { Button } from "@/components/ui/button"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Plus } from "lucide-react"
 import { useMemo, useState } from "react"
 import { SiteFooter } from "../shared/site-footer"
@@ -27,7 +27,11 @@ export function PayOutsContent() {
     pageSize: PAGE_SIZE,
   })
 
-  const { data: transactionResponse, isPending } = useQuery({
+  const {
+    data: transactionResponse,
+    isPending,
+    isFetching: isTransactionsFetching,
+  } = useQuery({
     queryKey: transactionQueryKeys.merchantPayOuts(
       merchant?.id ?? "",
       mode,
@@ -44,6 +48,7 @@ export function PayOutsContent() {
         transaction_type: "debit",
       }),
     enabled: !!merchant?.id,
+    placeholderData: keepPreviousData,
   })
 
   const transactions = useMemo(
@@ -165,7 +170,7 @@ export function PayOutsContent() {
 
         <PayOutsTable
           data={tableData}
-          isPending={isPending}
+          isPending={isPending || isTransactionsFetching}
           pagination={pagination}
           setPagination={setPagination}
           pageCount={pageCount}

@@ -21,6 +21,7 @@ export async function signupUser(payload: SignUpFormValues) {
 
 export async function loginUser(payload: LoginFormValues) {
   const res = await ApiClient.post("/auth/login", payload)
+  console.log("Login response:", res.data)
   return res.data
 }
 

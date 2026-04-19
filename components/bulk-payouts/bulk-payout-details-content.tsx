@@ -15,23 +15,12 @@ import { Button } from "@/components/ui/button"
 import { getBulkPayoutByReference } from "@/lib/api/v1/payout/queries"
 import { bulkPayoutQueryKeys } from "@/lib/api/v1/query-key-factory"
 import type { IBulkTransactionData } from "@/lib/types"
+import { formatTransactionDate } from "@/lib/utils"
 import { useQuery } from "@tanstack/react-query"
 import { BulkPayoutDetailsTable } from "./bulk-payout-details-table"
 
 interface BulkPayoutDetailsContentProps {
   reference: string
-}
-
-function formatDate(value?: string) {
-  if (!value) return "-"
-
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return value
-
-  return new Intl.DateTimeFormat("en-NG", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date)
 }
 
 function normalizeStatus(status?: string) {
@@ -202,7 +191,9 @@ export function BulkPayoutDetailsContent({
               <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">
                 Created Date
               </p>
-              <p className="text-lg font-bold">{formatDate(detail?.created_at)}</p>
+              <p className="text-lg font-bold">
+                {formatTransactionDate(detail?.created_at)}
+              </p>
             </div>
             <div className="space-y-1">
               <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">

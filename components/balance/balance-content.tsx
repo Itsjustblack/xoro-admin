@@ -12,15 +12,11 @@ import {
   getWalletBalanceSummary,
 } from "@/lib/api/v1/wallet/queries"
 import { PAGE_SIZE } from "@/lib/constants"
-import {
-  ITransaction,
-  MerchantTransactionsResponse,
-  Wallet,
-} from "@/lib/types"
+import { TransactionsResponse, Wallet } from "@/lib/types"
 import { formatCount, formatCurrency } from "@/lib/utils"
 import { useAppliedBalanceFilters } from "@/store/balance-filter-store"
 import { useCurrentMerchant, useCurrentMode } from "@/store/merchant"
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { Landmark } from "lucide-react"
 import { useState } from "react"
 
@@ -126,40 +122,33 @@ const BalanceContent = () => {
   const {
     data: merchantTransactions,
     isPending: isTransactionsPending,
-  } =
-    useQuery({
-      queryKey: transactionQueryKeys.merchantTransactions(
-        merchant?.id ?? "",
+    isFetching: isTransactionsFetching,
+  } = useQuery<TransactionsResponse>({
+    queryKey: transactionQueryKeys.merchantTransactions(
+      merchant?.id ?? "",
+      mode,
+      transactionPagination.pageIndex + 1,
+      transactionPagination.pageSize,
+      null,
+      serverCurrencyFilter,
+      null,
+    ),
+    queryFn: () =>
+      getMerchantTransactions({
+        merchant_id: merchant!.id,
         mode,
-        transactionPagination.pageIndex + 1,
-        transactionPagination.pageSize,
-        null,
-        serverCurrencyFilter,
-        null,
-      ),
-      queryFn: () =>
-        getMerchantTransactions({
-          merchant_id: merchant!.id,
-          mode,
-          page: transactionPagination.pageIndex + 1,
-          page_size: transactionPagination.pageSize,
-          currency: serverCurrencyFilter,
-        }),
-      enabled: !!merchant?.id,
-    })
+        page: transactionPagination.pageIndex + 1,
+        page_size: transactionPagination.pageSize,
+        currency: serverCurrencyFilter,
+      }),
+    enabled: !!merchant?.id,
+    placeholderData: keepPreviousData,
+  })
 
   const currencyCards = wallets?.map(buildCurrencyCard) ?? []
-  const transactionsResponse = merchantTransactions as
-    | MerchantTransactionsResponse
-    | undefined
-  const balanceTransactions: ITransaction[] = Array.isArray(
-    transactionsResponse?.data,
-  )
-    ? (transactionsResponse.data as ITransaction[])
-    : ((transactionsResponse?.transactions ??
-        transactionsResponse?.items ??
-        transactionsResponse?.results ??
-        []) as ITransaction[])
+  const balanceTransactions = merchantTransactions?.transactions ?? []
+  const transactionsPageCount = merchantTransactions?.total_pages ?? 1
+  const transactionsTotalCount = merchantTransactions?.total_items ?? 0
 
   return (
     <section className="p-4 sm:p-6 lg:p-8">
@@ -206,9 +195,9 @@ const BalanceContent = () => {
         <div className="mt-4">
           <BalanceTransactionsTable
             data={balanceTransactions}
-            isPending={isTransactionsPending}
-            pageCount={1}
-            totalCount={balanceTransactions.length}
+            isPending={isTransactionsPending || isTransactionsFetching}
+            pageCount={transactionsPageCount}
+            totalCount={transactionsTotalCount}
             hasKnownPageCount={true}
             pagination={transactionPagination}
             setPagination={setTransactionPagination}

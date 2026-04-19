@@ -19,7 +19,7 @@ const columns: ColumnDef<BeneficiaryTableRow>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block font-bold text-text-primary">
+      <span className="block font-bold text-sm text-text-primary">
         {row.getValue("name")}
       </span>
     ),
@@ -32,7 +32,7 @@ const columns: ColumnDef<BeneficiaryTableRow>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block font-mono text-sm text-text-secondary">
+      <span className="block font-secondary font-medium text-sm text-text-secondary">
         {row.getValue("account_number")}
       </span>
     ),
@@ -62,7 +62,7 @@ const columns: ColumnDef<BeneficiaryTableRow>[] = [
 
       return (
         <span className="block text-sm text-text-secondary">
-          {categoryName || "Uncategorized"}
+          {categoryName}
         </span>
       )
     },
@@ -95,7 +95,7 @@ const columns: ColumnDef<BeneficiaryTableRow>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block text-sm text-text-secondary">
+      <span className="block font-secondary font-medium text-sm text-text-secondary">
         {row.getValue("phone_number") || "-"}
       </span>
     ),
@@ -108,7 +108,7 @@ const columns: ColumnDef<BeneficiaryTableRow>[] = [
       </span>
     ),
     cell: ({ row }) => (
-      <span className="block text-sm text-text-secondary">
+      <span className="block font-secondary font-medium text-sm text-text-secondary">
         {row.getValue("whatsapp_number") || "-"}
       </span>
     ),

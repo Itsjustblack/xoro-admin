@@ -124,7 +124,7 @@ const DashboardContent = () => {
           ))}
         </div>
 
-        <InteractiveChart revenueAnalytics={revenueAnalytics} />
+        <InteractiveChart isLoading={isLoading} revenueAnalytics={revenueAnalytics} />
         <TransactionsTable />
       </div>
     </section>

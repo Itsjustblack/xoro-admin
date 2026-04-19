@@ -1,5 +1,5 @@
-import { Metadata } from "next"
 import { PayInsContent } from "@/components/pay-ins/pay-ins-content"
+import { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Pay-Ins | Xoro Admin",

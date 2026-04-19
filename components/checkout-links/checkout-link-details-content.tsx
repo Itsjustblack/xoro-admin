@@ -20,11 +20,11 @@ import type { CheckoutLink, CheckoutLinkDetails } from "@/lib/types"
 import { cn, formatCurrency } from "@/lib/utils"
 import { useCurrentMerchant } from "@/store/merchant"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 import { SiteFooter } from "../shared/site-footer"
 import { CheckoutLinkDetailsGrid } from "./checkout-link-details-grid"
 import { CheckoutLinkDetailsTable } from "./checkout-link-details-table"
 import { PaymentActivityChart } from "./payment-activity-chart"
-import { toast } from "sonner"
 
 interface CheckoutLinkDetailsContentProps {
   id: string

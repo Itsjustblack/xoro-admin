@@ -11,7 +11,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { ReviewBulkPayoutDialog } from "./review-bulk-payout-dialog"
 import { createBulkPayout } from "@/lib/api/v1/payout/actions"
 import {
   getPayoutBeneficiaries,
@@ -29,6 +28,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { CheckCircle2, Plus, Search, X } from "lucide-react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
+import { ReviewBulkPayoutDialog } from "./review-bulk-payout-dialog"
 
 const getAvatarColor = (name: string) => {
   const colors = [
