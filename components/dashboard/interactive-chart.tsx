@@ -1,224 +1,230 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
+import type { IRevenueAnalytics } from "@/lib/types"
+import { formatChartDate, formatChartDateTime } from "@/lib/utils"
+import { Download } from "lucide-react"
 import {
-	Card,
-	CardAction,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "../ui/card";
-import {
-	ChartConfig,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from "../ui/chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  type TooltipProps,
+} from "recharts"
 
-const chartData = [
-	{ date: "2024-04-01", desktop: 222, mobile: 150 },
-	{ date: "2024-04-02", desktop: 97, mobile: 180 },
-	{ date: "2024-04-03", desktop: 167, mobile: 120 },
-	{ date: "2024-04-04", desktop: 242, mobile: 260 },
-	{ date: "2024-04-05", desktop: 373, mobile: 290 },
-	{ date: "2024-04-06", desktop: 301, mobile: 340 },
-	{ date: "2024-04-07", desktop: 245, mobile: 180 },
-	{ date: "2024-04-08", desktop: 409, mobile: 320 },
-	{ date: "2024-04-09", desktop: 59, mobile: 110 },
-	{ date: "2024-04-10", desktop: 261, mobile: 190 },
-	{ date: "2024-04-11", desktop: 327, mobile: 350 },
-	{ date: "2024-04-12", desktop: 292, mobile: 210 },
-	{ date: "2024-04-13", desktop: 342, mobile: 380 },
-	{ date: "2024-04-14", desktop: 137, mobile: 220 },
-	{ date: "2024-04-15", desktop: 120, mobile: 170 },
-];
-
-const chartConfig = {
-	desktop: {
-		label: "Desktop",
-		color: "var(--primary)",
-	},
-	mobile: {
-		label: "Mobile",
-		color: "var(--primary)",
-	},
-} satisfies ChartConfig;
-
-export function ChartAreaInteractive() {
-	const [timeRange, setTimeRange] = useState("90d");
-
-	const filteredData = chartData.filter((item) => {
-		const date = new Date(item.date);
-		const referenceDate = new Date("2024-04-15");
-		let daysToSubtract = 90;
-		if (timeRange === "30d") {
-			daysToSubtract = 30;
-		} else if (timeRange === "7d") {
-			daysToSubtract = 7;
-		}
-		const startDate = new Date(referenceDate);
-		startDate.setDate(startDate.getDate() - daysToSubtract);
-		return date >= startDate;
-	});
-
-	return (
-		<Card className="@container/card">
-			<CardHeader>
-				<CardTitle>Total Visitors</CardTitle>
-				<CardDescription>
-					<span className="hidden @[540px]/card:block">
-						Total for the last 3 months
-					</span>
-					<span className="@[540px]/card:hidden">Last 3 months</span>
-				</CardDescription>
-				<CardAction>
-					<ToggleGroup
-						type="multiple"
-						value={[timeRange]}
-						onValueChange={(value: string[]) => {
-							if (value.length > 0) {
-								setTimeRange(value[0]);
-							}
-						}}
-						variant="outline"
-						className="hidden *:data-[slot=toggle-group-item]:px-4! @[767px]/card:flex"
-					>
-						<ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-						<ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-						<ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
-					</ToggleGroup>
-					<Select
-						value={timeRange}
-						onValueChange={(value) => {
-							if (value) {
-								setTimeRange(value);
-							}
-						}}
-					>
-						<SelectTrigger
-							className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
-							size="sm"
-							aria-label="Select a value"
-						>
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent className="rounded-xl">
-							<SelectItem
-								value="90d"
-								className="rounded-lg"
-							>
-								Last 3 months
-							</SelectItem>
-							<SelectItem
-								value="30d"
-								className="rounded-lg"
-							>
-								Last 30 days
-							</SelectItem>
-							<SelectItem
-								value="7d"
-								className="rounded-lg"
-							>
-								Last 7 days
-							</SelectItem>
-						</SelectContent>
-					</Select>
-				</CardAction>
-			</CardHeader>
-			<CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-				<ChartContainer
-					config={chartConfig}
-					className="aspect-auto h-[250px] w-full"
-				>
-					<AreaChart data={filteredData}>
-						<defs>
-							<linearGradient
-								id="fillDesktop"
-								x1="0"
-								y1="0"
-								x2="0"
-								y2="1"
-							>
-								<stop
-									offset="5%"
-									stopColor="var(--color-desktop)"
-									stopOpacity={1.0}
-								/>
-								<stop
-									offset="95%"
-									stopColor="var(--color-desktop)"
-									stopOpacity={0.1}
-								/>
-							</linearGradient>
-							<linearGradient
-								id="fillMobile"
-								x1="0"
-								y1="0"
-								x2="0"
-								y2="1"
-							>
-								<stop
-									offset="5%"
-									stopColor="var(--color-mobile)"
-									stopOpacity={0.8}
-								/>
-								<stop
-									offset="95%"
-									stopColor="var(--color-mobile)"
-									stopOpacity={0.1}
-								/>
-							</linearGradient>
-						</defs>
-						<CartesianGrid vertical={false} />
-						<XAxis
-							dataKey="date"
-							tickLine={false}
-							axisLine={false}
-							tickMargin={8}
-							minTickGap={32}
-							tickFormatter={(value) => {
-								const date = new Date(value);
-								return date.toLocaleDateString("en-US", {
-									month: "short",
-									day: "numeric",
-								});
-							}}
-						/>
-						<ChartTooltip
-							cursor={false}
-							content={
-								<ChartTooltipContent
-									labelFormatter={(value) => {
-										return new Date(value).toLocaleDateString("en-US", {
-											month: "short",
-											day: "numeric",
-										});
-									}}
-									indicator="dot"
-								/>
-							}
-						/>
-						<Area
-							dataKey="mobile"
-							type="natural"
-							fill="url(#fillMobile)"
-							stroke="var(--color-mobile)"
-							stackId="a"
-						/>
-						<Area
-							dataKey="desktop"
-							type="natural"
-							fill="url(#fillDesktop)"
-							stroke="var(--color-desktop)"
-							stackId="a"
-						/>
-					</AreaChart>
-				</ChartContainer>
-			</CardContent>
-		</Card>
-	);
+type InteractiveChartProps = {
+  revenueAnalytics?: IRevenueAnalytics | null
+  isLoading?: boolean
 }
+
+type RevenueChartPoint = IRevenueAnalytics["time_series"][number] & {
+  axisLabel: string
+  tooltipLabel: string
+}
+
+const formatAxisCurrency = (value: number, currency?: string) => {
+  try {
+    return new Intl.NumberFormat("en-NG", {
+      notation: "compact",
+      maximumFractionDigits: 1,
+      style: currency ? "currency" : "decimal",
+      currency,
+    }).format(value)
+  } catch {
+    return new Intl.NumberFormat("en-NG", {
+      notation: "compact",
+      maximumFractionDigits: 1,
+    }).format(value)
+  }
+}
+
+const formatTooltipCurrency = (value: number, currency?: string) => {
+  try {
+    return new Intl.NumberFormat("en-NG", {
+      style: currency ? "currency" : "decimal",
+      currency,
+      maximumFractionDigits: 2,
+    }).format(value)
+  } catch {
+    return new Intl.NumberFormat("en-NG", {
+      maximumFractionDigits: 2,
+    }).format(value)
+  }
+}
+
+const formatTooltipCount = (value: number) =>
+  new Intl.NumberFormat("en-NG").format(value)
+
+const RevenueTooltip = ({
+  active,
+  payload,
+  label,
+  currency,
+}: TooltipProps<number, string> & { currency?: string }) => {
+  if (!active || !payload?.length) {
+    return null
+  }
+
+  const revenue = payload.find((item) => item.dataKey === "value")?.value ?? 0
+  const count = payload.find((item) => item.dataKey === "count")?.value ?? 0
+  const point = payload[0]?.payload as RevenueChartPoint | undefined
+  const tooltipLabel = point?.tooltipLabel ?? String(label ?? "")
+
+  return (
+    <div className="min-w-41 rounded-2xl bg-surface-dark px-4 py-3 text-xs text-surface-1 shadow-lg">
+      <p className="mb-2 font-semibold tracking-[0.02em] text-surface-1/90">
+        {tooltipLabel}
+      </p>
+      <div className="space-y-1.5 text-surface-1/90">
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-brand-primary" />
+            Revenue:
+          </span>
+          <span className="font-semibold">
+            {formatTooltipCurrency(Number(revenue), currency)}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-2">
+            <span className="size-2 rounded-full bg-legal" />
+            Transactions:
+          </span>
+          <span className="font-semibold">
+            {formatTooltipCount(Number(count))}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const InteractiveChart = ({
+  revenueAnalytics,
+  isLoading,
+}: InteractiveChartProps) => {
+  const chartData: RevenueChartPoint[] =
+    revenueAnalytics?.time_series.map((point) => ({
+      ...point,
+      axisLabel: formatChartDate(point.date),
+      tooltipLabel: formatChartDateTime(point.date),
+    })) ?? []
+  const currency = revenueAnalytics?.currency
+
+  return (
+    <Card className="rounded-3xl border border-brand-primary-dark/5 bg-surface-1 p-0 ring-0 shadow-sm">
+      <div className="flex flex-col gap-5 p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-1">
+            <h2 className="text-lg leading-none font-bold text-text-primary">
+              Revenue Analytics
+            </h2>
+            <p className="text-sm text-text-secondary">
+              Revenue performance over time
+            </p>
+          </div>
+
+          <Button
+            variant="ghost"
+            type="button"
+            disabled={isLoading}
+            aria-label="Download revenue report"
+            className="flex size-10 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-5 hover:text-text-primary focus-visible:outline-none"
+          >
+            <Download className="size-4" strokeWidth={3} />
+          </Button>
+        </div>
+
+        <div className="h-72 w-full overflow-x-auto overflow-y-hidden">
+          {isLoading ? (
+            <div className="flex h-full w-full items-end justify-between px-4 pb-9.5 pt-12 sm:gap-2 lg:gap-4 lg:px-6">
+              {[40, 70, 45, 90, 65, 55, 85, 30, 60, 80, 50, 95].map(
+                (height, i) => (
+                  <Skeleton
+                    key={i}
+                    className="w-full max-w-6 lg:max-w-10 rounded-b-none rounded-t-md bg-surface-3/50"
+                    style={{ height: `${height}%` }}
+                  />
+                ),
+              )}
+            </div>
+          ) : chartData.length > 0 ? (
+            <div className="h-full min-w-max sm:min-w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartData}
+                  barCategoryGap="70%"
+                  barGap={8}
+                  margin={{
+                    top: 28,
+                    right: 10,
+                    left: 0,
+                    bottom: 8,
+                  }}
+                >
+                  <CartesianGrid
+                    vertical={false}
+                    stroke="var(--color-surface-2)"
+                  />
+                  <XAxis
+                    axisLine={false}
+                    dataKey="axisLabel"
+                    tick={{
+                      fill: "var(--color-text-muted)",
+                      fontSize: 12,
+                      fontWeight: 600,
+                    }}
+                    tickLine={false}
+                    tickMargin={16}
+                  />
+                  <YAxis
+                    axisLine={{ stroke: "var(--color-surface-2)" }}
+                    tick={{
+                      fill: "var(--color-text-muted)",
+                      fontSize: 12,
+                      fontWeight: 600,
+                    }}
+                    tickFormatter={(value) =>
+                      formatAxisCurrency(Number(value), currency)
+                    }
+                    tickLine={false}
+                    tickMargin={14}
+                    width={58}
+                  />
+                  <Tooltip
+                    content={<RevenueTooltip currency={currency} />}
+                    cursor={{ fill: "transparent" }}
+                  />
+                  <Bar
+                    dataKey="value"
+                    fill="var(--color-brand-primary)"
+                    maxBarSize={16}
+                    radius={[6, 6, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-surface-3 text-sm text-text-muted">
+              No revenue data available yet.
+            </div>
+          )}
+        </div>
+
+        <div className="flex flex-wrap items-center gap-6 border-t border-surface-2 pt-4 text-xs font-semibold text-text-secondary">
+          <div className="flex items-center gap-2">
+            <span className="size-3 rounded-xs bg-brand-primary" />
+            Revenue
+          </div>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+export default InteractiveChart

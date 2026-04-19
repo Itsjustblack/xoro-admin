@@ -20,16 +20,19 @@ This separation keeps read and write logic distinct, making it easier to locate 
 ## Naming Conventions
 
 **Files** use kebab-case (lowercase with dashes):
+
 - `query-key-factory.ts`
 - `use-merchant-data.ts`
 - `payment-channels.ts`
 
 **Hooks** follow the `use-[description].ts` pattern where the name describes what the hook does:
+
 - `use-merchant-data.ts` — fetches merchant data
 - `use-create-beneficiary.ts` — creates a beneficiary
 - `use-transaction-filters.ts` — manages transaction filter state
 
 **Functions** use camelCase and should clearly indicate their action:
+
 - Queries: `get[Resource]` or `getAll[Resources]` (e.g., `getMerchant`, `getAllTransactions`)
 - Mutations: `create[Resource]`, `update[Resource]`, `delete[Resource]`
 - Other actions: `[verb][Resource]` (e.g., `approvePayout`, `generatePaymentLink`)
@@ -41,6 +44,7 @@ This separation keeps read and write logic distinct, making it easier to locate 
 Query keys follow a hierarchical pattern defined in `lib/api/v1/query-key-factory.ts`. This approach enables granular cache invalidation—invalidating a parent key automatically clears all nested caches.
 
 Each resource typically has:
+
 - A base key (e.g., `["merchants"]`)
 - An item key that includes an ID
 - Sub-resource keys that nest under the item (e.g., transactions, beneficiaries)
@@ -62,9 +66,11 @@ When making API calls, import the default `apiClient` from `@/lib/api/v1/axios` 
 All sensitive configuration (API base URLs, keys, secrets) must be stored in `.env` files—never hardcoded in source files.
 
 **Required variables:**
+
 - `NEXT_PUBLIC_API_BASE_URL` — Base URL for API requests (used by axios client)
 
 **Rules:**
+
 - Add all environment variables to `.env.local` for local development
 - Use `.env.example` to document required variables (without actual values)
 - Never commit `.env` or `.env.local` to version control
@@ -78,6 +84,7 @@ All sensitive configuration (API base URLs, keys, secrets) must be stored in `.e
 Query files contain functions for fetching data. The naming convention typically follows `get[Resource]` or `getAll[Resources]` (e.g., `getMerchantData`, `getAllTransactions`).
 
 Each function:
+
 - Uses a GET request via `apiClient`
 - Accepts parameters for filtering, pagination, or identification
 - Returns typed response data
@@ -103,10 +110,13 @@ The structure mirrors query files: import the client, define a typed async funct
 ```typescript
 export async function createBeneficiary(payload: BeneficiaryPayload) {
   try {
-    const res = await apiClient.post<Beneficiary>("/payout-beneficiary", payload);
-    return res.data;
+    const res = await apiClient.post<Beneficiary>(
+      "/payout-beneficiary",
+      payload,
+    )
+    return res.data
   } catch (error) {
-    throw error as AxiosError;
+    throw error as AxiosError
   }
 }
 ```
@@ -130,6 +140,7 @@ When adding new API endpoints, define types here to keep them discoverable and r
 ## React Query Usage
 
 React Query is configured in `providers/react-query-client-provider.tsx` with sensible defaults:
+
 - Data stays fresh for 10 minutes before becoming stale
 - Garbage collection occurs after 30 minutes
 - Failed requests retry twice
@@ -155,13 +166,13 @@ To skip the global error handler for a specific mutation, set `meta: { skipGloba
 
 ## Libraries
 
-| Library               | Purpose                    |
-|-----------------------|----------------------------|
-| axios                 | HTTP client                |
-| @tanstack/react-query | Server state management    |
-| sonner                | Toast notifications        |
-| zod                   | Schema validation          |
-| react-hook-form       | Form handling              |
+| Library               | Purpose                 |
+| --------------------- | ----------------------- |
+| axios                 | HTTP client             |
+| @tanstack/react-query | Server state management |
+| sonner                | Toast notifications     |
+| zod                   | Schema validation       |
+| react-hook-form       | Form handling           |
 
 ---
 

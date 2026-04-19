@@ -1,4 +1,0 @@
-interface:
-  display_name: "Design Intelligence"
-  short_description: "Elevate UI from references to polished code"
-  default_prompt: "Use $design-intelligence to recreate or elevate this UI into production-grade frontend code."
