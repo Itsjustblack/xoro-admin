@@ -2,7 +2,7 @@
 
 import { DataTable } from "@/components/data-table"
 import { Button } from "@/components/ui/button"
-import type { ITransaction } from "@/lib/types"
+import { BalanceTransaction } from "@/lib/types"
 import { cn, formatCurrency } from "@/lib/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 import {
@@ -99,14 +99,7 @@ const columns: ColumnDef<ITransaction>[] = [
       </span>
     ),
     cell: ({ row }) => {
-      const amount = row.getValue("amount")
-      const numericAmount =
-        typeof amount === "number"
-          ? amount
-          : Number.parseFloat(String(amount).replace(/[^0-9.-]+/g, ""))
-      const displayAmount = Number.isFinite(numericAmount)
-        ? formatCurrency(numericAmount, row.original.currency)
-        : String(amount)
+      const amount = (row.getValue("amount") as number).toString()
 
       return (
         <span
@@ -115,7 +108,7 @@ const columns: ColumnDef<ITransaction>[] = [
             numericAmount < 0 ? "text-red-500" : "text-text-primary",
           )}
         >
-          {displayAmount}
+          {formatCurrency(Number(amount), row.getValue("currency"))}
         </span>
       )
     },
